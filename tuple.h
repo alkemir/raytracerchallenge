@@ -10,6 +10,8 @@ typedef struct tuple_s {
     float w;
 } tuple;
 
+tuple newTuple(float x, float y, float z, float w);
+
 tuple newPoint(float x, float y, float z);
 
 tuple newVector(float x, float y, float z);

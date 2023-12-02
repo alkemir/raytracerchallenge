@@ -1,32 +1,27 @@
 #include "tuple.h"
 
-#include <math.h>
+#include "floats.h"
 
-const float EPSILON = 0.00001;
 const float POINT_W = 1.0;
 const float VECTOR_W = 0.0;
 const float COLOR_W = 0.0;
 
-tuple newPoint(float x, float y, float z) {
-    tuple t = {x, y, z, POINT_W};
+tuple newTuple(float x, float y, float z, float w) {
+    tuple t = {x, y, z, w};
     return t;
 }
+
+tuple newPoint(float x, float y, float z) { return newTuple(x, y, z, POINT_W); }
 
 tuple newVector(float x, float y, float z) {
-    tuple t = {x, y, z, VECTOR_W};
-    return t;
+    return newTuple(x, y, z, VECTOR_W);
 }
 
-tuple newColor(float r, float g, float b) {
-    tuple t = {r, g, b, COLOR_W};
-    return t;
-}
+tuple newColor(float r, float g, float b) { return newTuple(r, g, b, COLOR_W); }
 
 bool isPoint(tuple t) { return t.w == 1.0; }
 
 bool isVector(tuple t) { return t.w == 0.0; }
-
-bool equalFloat(float a, float b) { return fabsf(a - b) < EPSILON; }
 
 bool equalTuple(tuple a, tuple b) {
     return equalFloat(a.x, b.x) && equalFloat(a.y, b.y) &&

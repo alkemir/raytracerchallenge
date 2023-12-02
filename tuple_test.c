@@ -3,6 +3,8 @@
 #include <assert.h>
 #include <math.h>
 
+#include "floats.h"
+
 void test_tupleIsPoint() {
     tuple t = newPoint(4.3, -4.2, 3.1);
 
@@ -61,29 +63,29 @@ void test_substractVectorFromZero() {
 }
 
 void test_negateTuple() {
-    tuple t = {1, -2, 3, -4};
-    tuple nt = {-1, 2, -3, 4};
+    tuple t = newTuple(1, -2, 3, -4);
+    tuple nt = newTuple(-1, 2, -3, 4);
 
     assert(equalTuple(negateTuple(t), nt));
 }
 
 void test_multiplyTupleByScalar() {
-    tuple t = {1, -2, 3, -4};
-    tuple p = {3.5, -7, 10.5, -14};
+    tuple t = newTuple(1, -2, 3, -4);
+    tuple p = newTuple(3.5, -7, 10.5, -14);
 
     assert(equalTuple(multiplyTuple(t, 3.5), p));
 }
 
 void test_multiplyTupleByFraction() {
-    tuple t = {1, -2, 3, -4};
-    tuple p = {0.5, -1, 1.5, -2};
+    tuple t = newTuple(1, -2, 3, -4);
+    tuple p = newTuple(0.5, -1, 1.5, -2);
 
     assert(equalTuple(multiplyTuple(t, 0.5), p));
 }
 
 void test_divideTupleByScalar() {
-    tuple t = {1, -2, 3, -4};
-    tuple d = {0.5, -1, 1.5, -2};
+    tuple t = newTuple(1, -2, 3, -4);
+    tuple d = newTuple(0.5, -1, 1.5, -2);
 
     assert(equalTuple(divideTuple(t, 2), d));
 }
