@@ -69,10 +69,19 @@ void test_canvasToPPMPixeldataLimited() {
                   "153 255 204 153 255 204 153\n") == 0);
 }
 
+void test_canvasToPPMTerminatesInNewLine() {
+    canvas c = newCanvas(5, 3);
+
+    char* canvasPPM = canvasToPPM(c);
+
+    assert(canvasPPM[strlen(canvasPPM) - 1] == '\n');
+}
+
 int main() {
     test_canvasIsInitialized();
     test_canvasWrite();
     test_canvasToPPMHeader();
     test_canvasToPPMPixeldata();
     test_canvasToPPMPixeldataLimited();
+    test_canvasToPPMTerminatesInNewLine();
 }
