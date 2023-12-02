@@ -11,6 +11,7 @@
 #define MAX(X, Y) (((X) < (Y)) ? (Y) : (X))
 
 const int PPM_BUFFER_SIZE = 32 * 1024 * 1024;
+const char* PPM_MAGIC_NUMBER = "P3";
 
 canvas newCanvas(int width, int height) {
     tuple* pixels = malloc(width * height * sizeof(tuple));
@@ -42,30 +43,29 @@ tuple scale(tuple t) {
     return t;
 }
 
-// TODO: using strlen and strcat is inefficient, I should keep my own accounting
 char* canvasToPPM(canvas c) {
     char* buf = malloc(PPM_BUFFER_SIZE * sizeof(char));
+    int strLen = 0;
     buf[0] = '\0';
 
-    strcat_s(buf, PPM_BUFFER_SIZE, "P3\n");
-    sprintf(buf + strlen(buf), "%d %d\n", c.width, c.height);
-    strcat_s(buf, PPM_BUFFER_SIZE, "255\n");
+    strLen += sprintf(buf + strLen, "%s\n", PPM_MAGIC_NUMBER);
+    strLen += sprintf(buf + strLen, "%d %d\n", c.width, c.height);
+    strLen += sprintf(buf + strLen, "%s\n", "255");
 
     tuple p;
     for (int y = 0; y < c.height; y++) {
         for (int x = 0; x < c.width - 1; x++) {
             p = scale(getPixel(c, x, y));
-            sprintf(buf + strlen(buf), "%d %d %d ", (int)p.x, (int)p.y,
-                    (int)p.z);
+            strLen += sprintf(buf + strLen, "%d %d %d ", (int)p.x, (int)p.y,
+                              (int)p.z);
         }
         p = scale(getPixel(c, c.width - 1, y));
-        sprintf(buf + strlen(buf), "%d %d %d\n", (int)p.x, (int)p.y, (int)p.z);
+        strLen += sprintf(buf + strlen(buf), "%d %d %d\n", (int)p.x, (int)p.y,
+                          (int)p.z);
     }
 
-    int size = strlen(buf);
-
-    char* ret = malloc(size + 1);
-    strcpy_s(ret, size + 1, buf);
+    char* ret = malloc(strLen + 1);
+    strcpy_s(ret, strLen + 1, buf);
     free(buf);
 
     return ret;
