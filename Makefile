@@ -18,7 +18,6 @@ tuple.o : tuple.h floats.h
 matrix.o : floats.h matrix.h
 canvas.o : canvas.h tuple.h
 
-
 test : matrix_test.exe tuple_test.exe canvas_test.exe
 	matrix_test.exe
 	tuple_test.exe
