@@ -85,4 +85,5 @@ int main() {
     test_canvasToPPMPixeldata();
     test_canvasToPPMPixeldataLimited();
     test_canvasToPPMTerminatesInNewLine();
+    printf("Canvas module tests successful\n");
 }

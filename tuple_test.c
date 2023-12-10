@@ -2,6 +2,7 @@
 
 #include <assert.h>
 #include <math.h>
+#include <stdio.h>
 
 #include "floats.h"
 
@@ -164,4 +165,5 @@ int main() {
     test_crossProduct();
     test_colorsIsTuple();
     test_colorsMultiply();
+    printf("Tuple module tests successful\n");
 }
