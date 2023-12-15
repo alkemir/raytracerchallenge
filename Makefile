@@ -13,15 +13,19 @@ matrix_test.exe : matrix_test.o matrix.o floats.o tuple.o
 canvas_test.exe : canvas_test.o canvas.o tuple.o floats.o
 	$(CC) -o canvas_test.exe canvas_test.o canvas.o tuple.o floats.o
 
+transformations_test.exe : transformations_test.o tuple.o matrix.o floats.o transformations.o
+	$(CC) -o transformations_test.exe transformations_test.o tuple.o matrix.o floats.o transformations.o
+
 floats.o : floats.h
 tuple.o : tuple.h floats.h
 matrix.o : floats.h matrix.h
 canvas.o : canvas.h tuple.h
 
-test : matrix_test.exe tuple_test.exe canvas_test.exe
+test : matrix_test.exe tuple_test.exe canvas_test.exe transformations_test.exe
 	matrix_test.exe
 	tuple_test.exe
 	canvas_test.exe
+	transformations_test.exe
 
 
 clean :
