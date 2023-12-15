@@ -2,6 +2,8 @@
 
 #include "tuple.h"
 
+#pragma once
+
 typedef struct matrix_s {
     int rows;
     int cols;
