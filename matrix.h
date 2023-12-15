@@ -31,4 +31,8 @@ float minor(matrix m, int row, int col);
 
 float cofactor(matrix m, int row, int col);
 
+bool isInvertible(matrix m);
+
+matrix inverse(matrix m);
+
 void printMatrix(matrix m);

@@ -211,6 +211,91 @@ void test_determinant4x4() {
     assert(equalFloat(det, -4071));
 }
 
+void test_isInvertible_yes() {
+    matrix m = newMatrix(4, 4,
+                         (float*)(float[4][4]){6, 4, 4, 4, 5, 5, 7, 6, 4, -9, 3,
+                                               -7, 9, 1, 7, -6});
+
+    assert(equalFloat(determinant(m), -2120));
+    assert(isInvertible(m));
+}
+
+void test_isInvertible_no() {
+    matrix m = newMatrix(4, 4,
+                         (float*)(float[4][4]){-4, 2, -2, -3, 9, 6, 2, 6, 0, -5,
+                                               1, -5, 0, 0, 0, 0});
+
+    assert(equalFloat(determinant(m), 0));
+    assert(!isInvertible(m));
+}
+
+void test_inverse() {
+    matrix m = newMatrix(4, 4,
+                         (float*)(float[4][4]){-5, 2, 6, -8, 1, -5, 1, 8, 7, 7,
+                                               -6, -7, 1, -3, 7, 4});
+    matrix inv_exp =
+        newMatrix(4, 4,
+                  (float*)(float[4][4]){0.21805, 0.45113, 0.24060, -0.04511,
+                                        -0.80827, -1.45677, -0.44361, 0.52068,
+                                        -0.07895, -0.22368, -0.05263, 0.19737,
+                                        -0.52256, -0.81391, -0.30075, 0.30639});
+
+    matrix m_inv = inverse(m);
+
+    assert(equalFloat(determinant(m), 532));
+    assert(equalFloat(cofactor(m, 2, 3), -160));
+    assert(equalFloat(get(m_inv, 3, 2), -160.0 / 532));
+    assert(equalFloat(cofactor(m, 3, 2), 105));
+    assert(equalFloat(get(m_inv, 2, 3), 105.0 / 532));
+    assert(equalMatrix(m_inv, inv_exp));
+}
+
+void test_inverse_second() {
+    matrix m = newMatrix(4, 4,
+                         (float*)(float[4][4]){8, -5, 9, 2, 7, 5, 6, 1, -6, 0,
+                                               9, 6, -3, 0, -9, -4});
+    matrix inv_exp =
+        newMatrix(4, 4,
+                  (float*)(float[4][4]){
+                      -0.15385, -0.15385, -0.28205, -0.53846, -0.07692, 0.12308,
+                      0.02564, 0.03077, 0.35897, 0.35897, 0.43590, 0.92308,
+                      -0.69231, -0.69231, -0.76923, -1.92308});
+
+    matrix m_inv = inverse(m);
+
+    assert(equalMatrix(m_inv, inv_exp));
+}
+
+void test_inverse_third() {
+    matrix m = newMatrix(4, 4,
+                         (float*)(float[4][4]){9, 3, 0, 9, -5, -2, -6, -3, -4,
+                                               9, 6, 4, -7, 6, 6, 2});
+    matrix inv_exp =
+        newMatrix(4, 4,
+                  (float*)(float[4][4]){-0.04074, -0.07778, 0.14444, -0.22222,
+                                        -0.07778, 0.03333, 0.36667, -0.33333,
+                                        -0.02901, -0.14630, -0.10926, 0.12963,
+                                        0.17778, 0.06667, -0.26667, 0.33333});
+
+    matrix m_inv = inverse(m);
+
+    assert(equalMatrix(m_inv, inv_exp));
+}
+
+void test_inverse_multiply() {
+    matrix a = newMatrix(4, 4,
+                         (float*)(float[4][4]){3, -9, 7, 3, 3, -8, 2, -9, -4, 4,
+                                               4, 1, -6, 5, -1, 1});
+    matrix b = newMatrix(4, 4,
+                         (float*)(float[4][4]){8, 2, 2, 2, 3, -1, 7, 0, 7, 0, 5,
+                                               4, 6, -2, 0, 5});
+    matrix c = multiplyMatrices(a, b);
+
+    matrix b_inv = inverse(b);
+
+    assert(equalMatrix(multiplyMatrices(c, b_inv), a));
+}
+
 int main() {
     test_matrixSubscriptable4x4();
     test_matrixSubscriptable2x2();
@@ -229,5 +314,11 @@ int main() {
     test_cofactor3x3();
     test_determinant3x3();
     test_determinant4x4();
+    test_isInvertible_yes();
+    test_isInvertible_no();
+    test_inverse();
+    test_inverse_second();
+    test_inverse_third();
+    test_inverse_multiply();
     printf("Matrix module tests successful\n");
 }

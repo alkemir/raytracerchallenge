@@ -142,6 +142,23 @@ float cofactor(matrix m, int row, int col) {
     return factor * minor(m, row, col);
 }
 
+bool isInvertible(matrix m) { return !equalFloat(determinant(m), 0); }
+
+matrix inverse(matrix m) {
+    float det = determinant(m);
+    if (equalFloat(det, 0)) {
+        return newMatrix(0, 0, NULL);
+    }
+
+    matrix inv = newMatrix(m.rows, m.cols, NULL);
+    for (int row = 0; row < inv.rows; row++) {
+        for (int col = 0; col < inv.cols; col++) {
+            inv.data[row + col * inv.cols] = cofactor(m, row, col) / det;
+        }
+    }
+    return inv;
+}
+
 void printMatrix(matrix m) {
     for (int y = 0; y < m.rows; y++) {
         for (int x = 0; x < m.cols; x++) {
