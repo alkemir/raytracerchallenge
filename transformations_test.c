@@ -81,8 +81,8 @@ void test_reflectionIsNegativeScaling() {
 }
 
 void test_rotationX() {
-    matrix half_quarter = rotateX(M_PI_4);
-    matrix full_quarter = rotateX(M_PI_2);
+    matrix half_quarter = rotationX(M_PI_4);
+    matrix full_quarter = rotationX(M_PI_2);
     tuple p = newPoint(0, 1, 0);
 
     tuple r1 = multiplyMatrixTuple(half_quarter, p);
@@ -93,7 +93,7 @@ void test_rotationX() {
 }
 
 void test_rotationX_reverse() {
-    matrix half_quarter = rotateX(M_PI_4);
+    matrix half_quarter = rotationX(M_PI_4);
     matrix r_inv = inverse(half_quarter);
     tuple p = newPoint(0, 1, 0);
 
@@ -103,8 +103,8 @@ void test_rotationX_reverse() {
 }
 
 void test_rotationY() {
-    matrix half_quarter = rotateY(M_PI_4);
-    matrix full_quarter = rotateY(M_PI_2);
+    matrix half_quarter = rotationY(M_PI_4);
+    matrix full_quarter = rotationY(M_PI_2);
     tuple p = newPoint(0, 0, 1);
 
     tuple r1 = multiplyMatrixTuple(half_quarter, p);
@@ -115,8 +115,8 @@ void test_rotationY() {
 }
 
 void test_rotationZ() {
-    matrix half_quarter = rotateZ(M_PI_4);
-    matrix full_quarter = rotateZ(M_PI_2);
+    matrix half_quarter = rotationZ(M_PI_4);
+    matrix full_quarter = rotationZ(M_PI_2);
     tuple p = newPoint(0, 1, 0);
 
     tuple r1 = multiplyMatrixTuple(half_quarter, p);
@@ -124,6 +124,60 @@ void test_rotationZ() {
 
     assert(equalTuple(r1, newPoint(-1 * M_SQRT2 / 2, M_SQRT2 / 2, 0)));
     assert(equalTuple(r2, newPoint(-1, 0, 0)));
+}
+
+void test_shearing_xtoy() {
+    matrix s = shearing(1, 0, 0, 0, 0, 0);
+    tuple p = newPoint(2, 3, 4);
+
+    tuple r = multiplyMatrixTuple(s, p);
+
+    assert(equalTuple(r, newPoint(5, 3, 4)));
+}
+
+void test_shearing_xtoz() {
+    matrix s = shearing(0, 1, 0, 0, 0, 0);
+    tuple p = newPoint(2, 3, 4);
+
+    tuple r = multiplyMatrixTuple(s, p);
+
+    assert(equalTuple(r, newPoint(6, 3, 4)));
+}
+
+void test_shearing_ytox() {
+    matrix s = shearing(0, 0, 1, 0, 0, 0);
+    tuple p = newPoint(2, 3, 4);
+
+    tuple r = multiplyMatrixTuple(s, p);
+
+    assert(equalTuple(r, newPoint(2, 5, 4)));
+}
+
+void test_shearing_ytoz() {
+    matrix s = shearing(0, 0, 0, 1, 0, 0);
+    tuple p = newPoint(2, 3, 4);
+
+    tuple r = multiplyMatrixTuple(s, p);
+
+    assert(equalTuple(r, newPoint(2, 7, 4)));
+}
+
+void test_shearing_ztox() {
+    matrix s = shearing(0, 0, 0, 0, 1, 0);
+    tuple p = newPoint(2, 3, 4);
+
+    tuple r = multiplyMatrixTuple(s, p);
+
+    assert(equalTuple(r, newPoint(2, 3, 6)));
+}
+
+void test_shearing_ztoy() {
+    matrix s = shearing(0, 0, 0, 0, 0, 1);
+    tuple p = newPoint(2, 3, 4);
+
+    tuple r = multiplyMatrixTuple(s, p);
+
+    assert(equalTuple(r, newPoint(2, 3, 7)));
 }
 
 int main() {
@@ -138,5 +192,11 @@ int main() {
     test_rotationX_reverse();
     test_rotationY();
     test_rotationZ();
+    test_shearing_xtoy();
+    test_shearing_xtoz();
+    test_shearing_ytox();
+    test_shearing_ytoz();
+    test_shearing_ztox();
+    test_shearing_ztoy();
     printf("Transformations module tests successful\n");
 }
