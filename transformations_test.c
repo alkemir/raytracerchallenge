@@ -180,6 +180,43 @@ void test_shearing_ztoy() {
     assert(equalTuple(r, newPoint(2, 3, 7)));
 }
 
+void test_individual_transformations() {
+    tuple p = newPoint(1, 0, 1);
+    matrix A = rotationX(M_PI_2);
+    matrix B = scaling(5, 5, 5);
+    matrix C = translation(10, 5, 7);
+
+    tuple p2 = multiplyMatrixTuple(A, p);
+    tuple p3 = multiplyMatrixTuple(B, p2);
+    tuple p4 = multiplyMatrixTuple(C, p3);
+
+    assert(equalTuple(p2, newPoint(1, -1, 0)));
+    assert(equalTuple(p3, newPoint(5, -5, 0)));
+    assert(equalTuple(p4, newPoint(15, 0, 7)));
+}
+
+void test_chained_transformations() {
+    tuple p = newPoint(1, 0, 1);
+    matrix A = rotationX(M_PI_2);
+    matrix B = scaling(5, 5, 5);
+    matrix C = translation(10, 5, 7);
+
+    matrix T = multiplyMatrices(C, multiplyMatrices(B, A));
+    tuple r = multiplyMatrixTuple(T, p);
+
+    assert(equalTuple(r, newPoint(15, 0, 7)));
+}
+
+void test_fluent_transformations() {
+    tuple p = newPoint(1, 0, 1);
+
+    matrix T =
+        translate(10, 5, 7, scale(5, 5, 5, rotateX(M_PI_2, identityMatrix)));
+    tuple r = multiplyMatrixTuple(T, p);
+
+    assert(equalTuple(r, newPoint(15, 0, 7)));
+}
+
 int main() {
     test_translatePoint();
     test_translatePoint_reverse();
@@ -198,5 +235,8 @@ int main() {
     test_shearing_ytoz();
     test_shearing_ztox();
     test_shearing_ztoy();
+    test_individual_transformations();
+    test_chained_transformations();
+    test_fluent_transformations();
     printf("Transformations module tests successful\n");
 }
