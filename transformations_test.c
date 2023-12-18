@@ -34,8 +34,40 @@ void test_translateVector() {
     assert(equalTuple(r, v));
 }
 
+void test_scalePoint() {
+    matrix s = scaling(2, 3, 4);
+    tuple p = newPoint(-4, 6, 8);
+
+    tuple r = multiplyMatrixTuple(s, p);
+
+    assert(equalTuple(r, newPoint(-8, 18, 32)));
+}
+
+void test_scaleVector() {
+    matrix s = scaling(2, 3, 4);
+    tuple v = newVector(-4, 6, 8);
+
+    tuple r = multiplyMatrixTuple(s, v);
+
+    assert(equalTuple(r, newVector(-8, 18, 32)));
+}
+
+void test_scaleVector_reverse() {
+    matrix s = scaling(2, 3, 4);
+    matrix s_inv = inverse(s);
+    tuple v = newVector(-4, 6, 8);
+
+    tuple r = multiplyMatrixTuple(s_inv, v);
+
+    assert(equalTuple(r, newVector(-2, 2, 2)));
+}
+
 int main() {
     test_translatePoint();
     test_translatePoint_reverse();
+    test_translateVector();
+    test_scalePoint();
+    test_scaleVector();
+    test_scaleVector_reverse();
     printf("Transformations module tests successful\n");
 }
