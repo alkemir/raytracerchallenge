@@ -16,16 +16,19 @@ canvas_test.exe : canvas_test.o canvas.o tuple.o floats.o
 transformations_test.exe : transformations_test.o tuple.o matrix.o floats.o transformations.o
 	$(CC) -o transformations_test.exe transformations_test.o tuple.o matrix.o floats.o transformations.o
 
-floats.o : floats.h
-tuple.o : tuple.h floats.h
-matrix.o : floats.h matrix.h
-canvas.o : canvas.h tuple.h
+ray_test.exe : ray_test.o ray.o tuple.o floats.o sphere.o
+	$(CC) -o ray_test.exe ray_test.o ray.o tuple.o floats.o sphere.o
 
-test : matrix_test.exe tuple_test.exe canvas_test.exe transformations_test.exe
+intersection_test.exe : intersection_test.o sphere.o intersection.o floats.o
+	$(CC) -o intersection_test.exe intersection_test.o sphere.o intersection.o floats.o
+
+test : matrix_test.exe tuple_test.exe canvas_test.exe transformations_test.exe ray_test.exe intersection_test.exe
 	matrix_test.exe
 	tuple_test.exe
 	canvas_test.exe
 	transformations_test.exe
+	ray_test.exe
+	intersection_test.exe
 
 
 clean :
