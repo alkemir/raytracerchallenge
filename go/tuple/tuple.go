@@ -37,6 +37,10 @@ func (a Tuple) Add(b Tuple) Tuple {
 	return Tuple{a.x + b.x, a.y + b.y, a.z + b.z, a.w + b.w}
 }
 
+func (a Tuple) Sub(b Tuple) Tuple {
+	return Tuple{a.x - b.x, a.y - b.y, a.z - b.z, a.w - b.w}
+}
+
 func abs(a float64) float64 {
 	if a < 0 {
 		return -a
