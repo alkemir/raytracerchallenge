@@ -1,6 +1,9 @@
 package tuple
 
-import "testing"
+import (
+	"math"
+	"testing"
+)
 
 func TestTupleIsPoint(t *testing.T) {
 	a := NewTuple(4.3, -4.2, 3.1, 1.0)
@@ -150,5 +153,95 @@ func TestNeg(t *testing.T) {
 
 	if !na.Equals(NewTuple(-1, 2, -3, 4)) {
 		t.Fatal("Tuple negation is wrong")
+	}
+}
+
+func TestMulByScalar(t *testing.T) {
+	a := NewTuple(1, -2, 3, -4)
+
+	m := a.Mul(3.5)
+
+	if !m.Equals(NewTuple(3.5, -7, 10.5, -14)) {
+		t.Fatal("Multiplication by scalar is wrong")
+	}
+}
+
+func TestMulByFraction(t *testing.T) {
+	a := NewTuple(1, -2, 3, -4)
+
+	m := a.Mul(0.5)
+
+	if !m.Equals(NewTuple(0.5, -1, 1.5, -2)) {
+		t.Fatal("Multiplication by fraction is wrong")
+	}
+}
+
+func TestDivideByScalar(t *testing.T) {
+	a := NewTuple(1, -2, 3, -4)
+
+	m := a.Div(2)
+
+	if !m.Equals(NewTuple(0.5, -1, 1.5, -2)) {
+		t.Fatal("Division by scalar is wrong")
+	}
+}
+
+func TestMag(t *testing.T) {
+	v1 := NewVector(1, 0, 0)
+	v2 := NewVector(0, 1, 0)
+	v3 := NewVector(0, 0, 1)
+	v4 := NewVector(1, 2, 3)
+	v5 := NewVector(-1, -2, -3)
+
+	if v1.Mag() != 1.0 {
+		t.Fatal("Magnitude is wrong")
+	}
+	if v2.Mag() != 1.0 {
+		t.Fatal("Magnitude is wrong")
+	}
+	if v3.Mag() != 1.0 {
+		t.Fatal("Magnitude is wrong")
+	}
+	if v4.Mag() != math.Sqrt(14) {
+		t.Fatal("Magnitude is wrong")
+	}
+	if v5.Mag() != math.Sqrt(14) {
+		t.Fatal("Magnitude is wrong")
+	}
+}
+
+func TestNorm(t *testing.T) {
+	v1 := NewVector(4, 0, 0)
+	v2 := NewVector(1, 2, 3)
+
+	if !v1.Norm().Equals(NewVector(1, 0, 0)) {
+		t.Fatal("Normalization is wrong")
+	}
+	if !v2.Norm().Equals(NewVector(1, 2, 3).Div(math.Sqrt(14))) {
+		t.Fatal("Normalization is wrong")
+	}
+	if v2.Norm().Mag() != 1 {
+		t.Fatal("Normalization is wrong")
+	}
+}
+
+func TestDot(t *testing.T) {
+	v1 := NewVector(1, 2, 3)
+	v2 := NewVector(2, 3, 4)
+
+	if v1.Dot(v2) != 20 {
+		t.Fatal("Dot product is wrong")
+	}
+}
+
+func TestCross(t *testing.T) {
+	v1 := NewVector(1, 2, 3)
+	v2 := NewVector(2, 3, 4)
+
+	if !v1.Cross(v2).Equals(NewVector(-1, 2, -1)) {
+		t.Fatal("Cross product is wrong")
+	}
+	if !v2.Cross(v1).Neg().Equals(NewVector(-1, 2, -1)) {
+		t.Fatal("Cross product is not antisymmetric")
 	}
 }
