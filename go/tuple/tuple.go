@@ -33,6 +33,10 @@ func (a Tuple) IsVector() bool {
 	return abs(a.w) < EPSILON
 }
 
+func (a Tuple) Add(b Tuple) Tuple {
+	return Tuple{a.x + b.x, a.y + b.y, a.z + b.z, a.w + b.w}
+}
+
 func abs(a float64) float64 {
 	if a < 0 {
 		return -a
