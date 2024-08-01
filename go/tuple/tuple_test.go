@@ -82,8 +82,21 @@ func TestAdd(t *testing.T) {
 	if !a1.Equals(a2) {
 		t.Fatal("Addition is not symmetric")
 	}
-
 	if !a1.Equals(NewTuple(1, 1, 6, 1)) {
 		t.Fatal("Addition is wrong")
+	}
+}
+
+func TestSub(t *testing.T) {
+	p1 := NewPoint(3, 2, 1)
+	p2 := NewPoint(5, 6, 7)
+
+	v := p1.Sub(p2)
+
+	if !v.IsVector() {
+		t.Fatal("Point minus point should yield a vector")
+	}
+	if !v.Equals(NewVector(-2, -4, -6)) {
+		t.Fatal("Substraction is wrong")
 	}
 }
