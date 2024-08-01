@@ -100,3 +100,55 @@ func TestSub(t *testing.T) {
 		t.Fatal("Substraction is wrong")
 	}
 }
+
+func TestSubPointVector(t *testing.T) {
+	p := NewPoint(3, 2, 1)
+	v := NewVector(5, 6, 7)
+
+	rp := p.Sub(v)
+
+	if !rp.IsPoint() {
+		t.Fatal("Point minus vector should yield a point")
+	}
+	if !rp.Equals(NewPoint(-2, -4, -6)) {
+		t.Fatal("Substraction is wrong")
+	}
+}
+
+func TestSubVectors(t *testing.T) {
+	v1 := NewVector(3, 2, 1)
+	v2 := NewVector(5, 6, 7)
+
+	rv := v1.Sub(v2)
+
+	if !rv.IsVector() {
+		t.Fatal("Vector minus vector should yield a vector")
+	}
+	if !rv.Equals(NewVector(-2, -4, -6)) {
+		t.Fatal("Substraction is wrong")
+	}
+}
+
+func TestSubFromZero(t *testing.T) {
+	z := NewVector(0, 0, 0)
+	v := NewVector(1, -2, 3)
+
+	rv := z.Sub(v)
+
+	if !rv.IsVector() {
+		t.Fatal("Vector minus vector should yield a vector")
+	}
+	if !rv.Equals(NewVector(-1, 2, -3)) {
+		t.Fatal("Substraction from zero is wrong")
+	}
+}
+
+func TestNeg(t *testing.T) {
+	a := NewTuple(1, -2, 3, -4)
+
+	na := a.Neg()
+
+	if !na.Equals(NewTuple(-1, 2, -3, 4)) {
+		t.Fatal("Tuple negation is wrong")
+	}
+}
