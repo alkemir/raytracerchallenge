@@ -245,3 +245,52 @@ func TestCross(t *testing.T) {
 		t.Fatal("Cross product is not antisymmetric")
 	}
 }
+
+func TestColorIsTuple(t *testing.T) {
+	c := NewColor(-0.5, 0.4, 1.7)
+
+	if c.x != -0.5 {
+		t.Fatal("Color red component is wrong")
+	}
+	if c.y != 0.4 {
+		t.Fatal("Color green component is wrong")
+	}
+	if c.z != 1.7 {
+		t.Fatal("Color blue component is wrong")
+	}
+}
+
+func TestColorAdd(t *testing.T) {
+	c1 := NewColor(0.9, 0.6, 0.75)
+	c2 := NewColor(0.7, 0.1, 0.25)
+
+	if !c1.Add(c2).Equals(NewColor(1.6, 0.7, 1.0)) {
+		t.Fatal("Color addition is wrong")
+	}
+}
+
+func TestColorSub(t *testing.T) {
+	c1 := NewColor(0.9, 0.6, 0.75)
+	c2 := NewColor(0.7, 0.1, 0.25)
+
+	if !c1.Sub(c2).Equals(NewColor(0.2, 0.5, 0.5)) {
+		t.Fatal("Color substraction is wrong")
+	}
+}
+
+func TestColorMul(t *testing.T) {
+	c1 := NewColor(0.2, 0.3, 0.4)
+
+	if !c1.Mul(2).Equals(NewColor(0.4, 0.6, 0.8)) {
+		t.Fatal("Color multiplication by scalar is wrong")
+	}
+}
+
+func TestColorsMultiply(t *testing.T) {
+	c1 := NewColor(1, 0.2, 0.4)
+	c2 := NewColor(0.9, 1, 0.1)
+
+	if !c1.Hadamard(c2).Equals(NewColor(0.9, 0.2, 0.04)) {
+		t.Fatal("Color multiplication is wrong")
+	}
+}

@@ -20,6 +20,10 @@ func NewVector(x, y, z float64) Tuple {
 	return Tuple{x, y, z, 0}
 }
 
+func NewColor(r, g, b float64) Tuple {
+	return Tuple{r, g, b, 0}
+}
+
 func (a Tuple) Equals(b Tuple) bool {
 	return abs(a.x-b.x) < EPSILON &&
 		abs(a.y-b.y) < EPSILON &&
@@ -71,6 +75,10 @@ func (a Tuple) Dot(b Tuple) float64 {
 func (a Tuple) Cross(b Tuple) Tuple {
 	return Tuple{a.y*b.z - a.z*b.y, a.z*b.x - a.x*b.z,
 		a.x*b.y - a.y*b.x, 0}
+}
+
+func (a Tuple) Hadamard(b Tuple) Tuple {
+	return Tuple{a.x * b.x, a.y * b.y, a.z * b.z, 0}
 }
 
 func abs(a float64) float64 {
