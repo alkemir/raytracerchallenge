@@ -1,8 +1,11 @@
 package tuple
 
-import "math"
+import (
+	"math"
+)
 
 const EPSILON = 0.0000001
+const max16bits = 0xffff
 
 type Tuple struct {
 	x, y, z, w float64
@@ -81,10 +84,31 @@ func (a Tuple) Hadamard(b Tuple) Tuple {
 	return Tuple{a.x * b.x, a.y * b.y, a.z * b.z, 0}
 }
 
+func (a Tuple) RGBA() (r, g, b, alpha uint32) {
+	return premultiply(a.x, max16bits), // alpha channel not implemented
+		premultiply(a.y, max16bits),
+		premultiply(a.z, max16bits),
+		uint32(max16bits)
+
+}
+
 func abs(a float64) float64 {
 	if a < 0 {
 		return -a
 	} else {
 		return a
 	}
+}
+
+func premultiply(c, a float64) uint32 {
+	if c < 0 || a < 0 {
+		return 0
+	}
+
+	ret := uint32(c * a)
+	if ret > max16bits {
+		return max16bits
+	}
+
+	return ret
 }
