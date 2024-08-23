@@ -42,6 +42,22 @@ func (a Tuple) IsVector() bool {
 	return abs(a.w) < EPSILON
 }
 
+func (a Tuple) X() float64 {
+	return a.x
+}
+
+func (a Tuple) Y() float64 {
+	return a.y
+}
+
+func (a Tuple) Z() float64 {
+	return a.z
+}
+
+func (a Tuple) W() float64 {
+	return a.w
+}
+
 func (a Tuple) Add(b Tuple) Tuple {
 	return Tuple{a.x + b.x, a.y + b.y, a.z + b.z, a.w + b.w}
 }
