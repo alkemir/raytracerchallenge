@@ -15,10 +15,10 @@ func TestSphereIntersect(t *testing.T) {
 	if len(points) != 2 {
 		t.Fatal("Wrong number of intersections")
 	}
-	if points[0] != 4 {
+	if points[0].t != 4 {
 		t.Fatal("Wrong intersection")
 	}
-	if points[1] != 6 {
+	if points[1].t != 6 {
 		t.Fatal("Wrong intersection")
 	}
 }
@@ -32,10 +32,10 @@ func TestSphereIntersect_tangent(t *testing.T) {
 	if len(points) != 2 {
 		t.Fatal("Wrong number of intersections")
 	}
-	if points[0] != 5 {
+	if points[0].t != 5 {
 		t.Fatal("Wrong intersection")
 	}
-	if points[1] != 5 {
+	if points[1].t != 5 {
 		t.Fatal("Wrong intersection")
 	}
 }
@@ -60,10 +60,10 @@ func TestSphereIntersect_inside(t *testing.T) {
 	if len(points) != 2 {
 		t.Fatal("Wrong number of intersections")
 	}
-	if points[0] != -1 {
+	if points[0].t != -1 {
 		t.Fatal("Wrong intersection")
 	}
-	if points[1] != 1 {
+	if points[1].t != 1 {
 		t.Fatal("Wrong intersection")
 	}
 }
@@ -77,10 +77,10 @@ func TestSphereIntersect_behind(t *testing.T) {
 	if len(points) != 2 {
 		t.Fatal("Wrong number of intersections")
 	}
-	if points[0] != -6 {
+	if points[0].t != -6 {
 		t.Fatal("Wrong intersection")
 	}
-	if points[1] != -4 {
+	if points[1].t != -4 {
 		t.Fatal("Wrong intersection")
 	}
 }

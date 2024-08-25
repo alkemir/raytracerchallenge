@@ -13,7 +13,7 @@ func NewSphere() *Sphere {
 	return &Sphere{}
 }
 
-func (s *Sphere) Intersect(r *ray.Ray) []float64 {
+func (s *Sphere) Intersect(r *ray.Ray) []*Intersection {
 	sphereToRay := r.Origin().Sub(tuple.NewPoint(0, 0, 0))
 
 	a := r.Direction().Dot(r.Direction())
@@ -26,9 +26,9 @@ func (s *Sphere) Intersect(r *ray.Ray) []float64 {
 		return nil
 	}
 
-	res := make([]float64, 2)
+	res := make([]*Intersection, 2)
 
-	res[0] = (-1*b - math.Sqrt(discriminant)) / (2 * a)
-	res[1] = (-1*b + math.Sqrt(discriminant)) / (2 * a)
+	res[0] = NewIntersection((-1*b-math.Sqrt(discriminant))/(2*a), s)
+	res[1] = NewIntersection((-1*b+math.Sqrt(discriminant))/(2*a), s)
 	return res
 }
