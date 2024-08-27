@@ -2,22 +2,34 @@ package shape
 
 import (
 	"math"
+	"raytracerchallenge/matrix"
 	"raytracerchallenge/ray"
 	"raytracerchallenge/tuple"
 )
 
 type Sphere struct {
+	transform *matrix.Matrix
 }
 
 func NewSphere() *Sphere {
-	return &Sphere{}
+	return &Sphere{matrix.Identity}
+}
+
+func (s *Sphere) SetTransform(m *matrix.Matrix) {
+	s.transform = m
 }
 
 func (s *Sphere) Intersect(r *ray.Ray) []*Intersection {
-	sphereToRay := r.Origin().Sub(tuple.NewPoint(0, 0, 0))
+	mInv, err := s.transform.Inverse()
+	if err != nil {
+		panic(err)
+	}
 
-	a := r.Direction().Dot(r.Direction())
-	b := 2 * r.Direction().Dot(sphereToRay)
+	tr := r.Transform(mInv)
+	sphereToRay := tr.Origin().Sub(tuple.NewPoint(0, 0, 0))
+
+	a := tr.Direction().Dot(tr.Direction())
+	b := 2 * tr.Direction().Dot(sphereToRay)
 	c := sphereToRay.Dot(sphereToRay) - 1
 
 	discriminant := b*b - 4*a*c
