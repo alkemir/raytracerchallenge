@@ -1,6 +1,7 @@
 package ray
 
 import (
+	"raytracerchallenge/matrix"
 	"raytracerchallenge/tuple"
 	"testing"
 )
@@ -38,5 +39,33 @@ func TestRayProject(t *testing.T) {
 	}
 	if !p4.Equals(tuple.NewPoint(4.5, 3, 4)) {
 		t.Fatal("Projection is wrong")
+	}
+}
+
+func TestRayTranslate(t *testing.T) {
+	r := NewRay(tuple.NewPoint(1, 2, 3), tuple.NewVector(0, 1, 0))
+	m := matrix.Translation(3, 4, 5)
+
+	r2 := r.Transform(m)
+
+	if !r2.origin.Equals(tuple.NewPoint(4, 6, 8)) {
+		t.Fatal("Translated origin is wrong")
+	}
+	if !r2.direction.Equals(tuple.NewVector(0, 1, 0)) {
+		t.Fatal("Translated direction is wrong")
+	}
+}
+
+func TestRayScaling(t *testing.T) {
+	r := NewRay(tuple.NewPoint(1, 2, 3), tuple.NewVector(0, 1, 0))
+	m := matrix.Scaling(2, 3, 4)
+
+	r2 := r.Transform(m)
+
+	if !r2.origin.Equals(tuple.NewPoint(2, 6, 12)) {
+		t.Fatal("Scaled origin is wrong")
+	}
+	if !r2.direction.Equals(tuple.NewVector(0, 3, 0)) {
+		t.Fatal("Scaled direction is wrong")
 	}
 }

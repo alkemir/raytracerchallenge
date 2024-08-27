@@ -1,6 +1,9 @@
 package ray
 
-import "raytracerchallenge/tuple"
+import (
+	"raytracerchallenge/matrix"
+	"raytracerchallenge/tuple"
+)
 
 type Ray struct {
 	origin    tuple.Tuple
@@ -21,4 +24,11 @@ func (r *Ray) Direction() tuple.Tuple {
 
 func (r *Ray) Project(distance float64) tuple.Tuple {
 	return r.direction.Mul(distance).Add(r.origin)
+}
+
+func (r *Ray) Transform(m *matrix.Matrix) *Ray {
+	return &Ray{
+		origin:    m.MultiplyTuple(r.origin),
+		direction: m.MultiplyTuple(r.direction),
+	}
 }
