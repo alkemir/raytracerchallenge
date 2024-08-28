@@ -1,6 +1,9 @@
 package shape
 
-import "raytracerchallenge/tuple"
+import (
+	"math"
+	"raytracerchallenge/tuple"
+)
 
 type Material struct {
 	color     tuple.Tuple
@@ -20,4 +23,23 @@ var DefaultMaterial *Material = &Material{
 
 func NewMaterial(color tuple.Tuple, ambient, diffuse, specular, shininess float64) *Material {
 	return &Material{color, ambient, diffuse, specular, shininess}
+}
+
+func (m *Material) Lightning(l *Light, p, eye, normal tuple.Tuple) tuple.Tuple {
+	rCol := m.color.Hadamard(l.intensity)
+	lVec := l.position.Sub(p).Norm()
+
+	ambientContrib := rCol.Mul(m.ambient)
+	diffuseContrib := tuple.NewColor(0, 0, 0)
+	specularContrib := tuple.NewColor(0, 0, 0)
+
+	if lightDotNormal := lVec.Dot(normal); lightDotNormal > 0 {
+		diffuseContrib = rCol.Mul(m.diffuse * lightDotNormal)
+
+		if reflectDotEye := lVec.Mul(-1).Reflect(normal).Dot(eye); reflectDotEye > 0 {
+			specularContrib = l.intensity.Mul(m.specular * math.Pow(reflectDotEye, m.shininess))
+		}
+	}
+
+	return ambientContrib.Add(diffuseContrib).Add(specularContrib)
 }
