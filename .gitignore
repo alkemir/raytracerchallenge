@@ -1,3 +1,4 @@
 .vscode
 go/canvas/canvasTest*.png
-go/examples/chapter5*.png
+go/examples/chapter5/example.png
+go/examples/chapter6/example.png

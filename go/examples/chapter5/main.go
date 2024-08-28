@@ -45,7 +45,7 @@ func main() {
 		}
 	}
 
-	f, err := os.CreateTemp("./", "chapter5*.png")
+	f, err := os.Create("example.png")
 	if err != nil {
 		panic(err)
 	}
