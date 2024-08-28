@@ -20,6 +20,10 @@ func (s *Sphere) SetTransform(m *matrix.Matrix) {
 	s.transform = m
 }
 
+func (s Sphere) Material() *Material {
+	return s.material
+}
+
 func (s *Sphere) SetMaterial(m *Material) {
 	s.material = m
 }

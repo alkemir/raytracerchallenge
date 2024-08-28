@@ -9,6 +9,14 @@ func NewIntersection(t float64, obj any) *Intersection {
 	return &Intersection{t, obj}
 }
 
+func (i *Intersection) Object() any {
+	return i.obj
+}
+
+func (i *Intersection) T() float64 {
+	return i.t
+}
+
 func Hit(ii []*Intersection) *Intersection {
 	var currentHit *Intersection = nil
 

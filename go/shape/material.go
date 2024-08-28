@@ -25,6 +25,22 @@ func NewMaterial(color tuple.Tuple, ambient, diffuse, specular, shininess float6
 	return &Material{color, ambient, diffuse, specular, shininess}
 }
 
+func (m *Material) Ambient() float64 {
+	return m.ambient
+}
+
+func (m *Material) Diffuse() float64 {
+	return m.diffuse
+}
+
+func (m *Material) Specular() float64 {
+	return m.specular
+}
+
+func (m *Material) Shininess() float64 {
+	return m.shininess
+}
+
 func (m *Material) Lightning(l *Light, p, eye, normal tuple.Tuple) tuple.Tuple {
 	rCol := m.color.Hadamard(l.intensity)
 	lVec := l.position.Sub(p).Norm()
