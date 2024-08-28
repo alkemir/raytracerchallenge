@@ -9,14 +9,31 @@ import (
 
 type Sphere struct {
 	transform *matrix.Matrix
+	material  *Material
 }
 
 func NewSphere() *Sphere {
-	return &Sphere{matrix.Identity}
+	return &Sphere{matrix.Identity, DefaultMaterial}
 }
 
 func (s *Sphere) SetTransform(m *matrix.Matrix) {
 	s.transform = m
+}
+
+func (s *Sphere) SetMaterial(m *Material) {
+	s.material = m
+}
+
+func (s *Sphere) Normal(p tuple.Tuple) tuple.Tuple {
+	mInv, err := s.transform.Inverse()
+	if err != nil {
+		panic(err)
+	}
+
+	objP := mInv.MultiplyTuple(p)
+	objN := objP.Sub(tuple.NewPoint(0, 0, 0))
+	worldN := mInv.Transpose().MultiplyTuple(objN).ZeroW()
+	return worldN.Norm()
 }
 
 func (s *Sphere) Intersect(r *ray.Ray) []*Intersection {
