@@ -108,6 +108,14 @@ func (a Tuple) RGBA() (r, g, b, alpha uint32) {
 
 }
 
+func (a Tuple) ZeroW() Tuple {
+	return Tuple{a.x, a.y, a.z, 0}
+}
+
+func (a Tuple) Reflect(n Tuple) Tuple {
+	return a.Sub(n.Mul(2 * a.Dot(n)))
+}
+
 func abs(a float64) float64 {
 	if a < 0 {
 		return -a

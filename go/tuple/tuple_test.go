@@ -294,3 +294,25 @@ func TestColorsMultiply(t *testing.T) {
 		t.Fatal("Color multiplication is wrong")
 	}
 }
+
+func TestVectorsReflect(t *testing.T) {
+	v := NewVector(1, -1, 0)
+	n := NewVector(0, 1, 0)
+
+	r := v.Reflect(n)
+
+	if !r.Equals(NewVector(1, 1, 0)) {
+		t.Fatal("Vector reflection is wrong")
+	}
+}
+
+func TestVectorsReflect_slanted(t *testing.T) {
+	v := NewVector(0, -1, 0)
+	n := NewVector(math.Sqrt2/2, math.Sqrt2/2, 0)
+
+	r := v.Reflect(n)
+
+	if !r.Equals(NewVector(1, 0, 0)) {
+		t.Fatal("Vector reflection is wrong")
+	}
+}
