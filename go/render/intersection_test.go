@@ -1,8 +1,6 @@
-package shape
+package render
 
 import (
-	"raytracerchallenge/ray"
-	"raytracerchallenge/tuple"
 	"testing"
 )
 
@@ -37,7 +35,7 @@ func TestIntersectionCollection(t *testing.T) {
 }
 
 func TestSphereIntersectObject(t *testing.T) {
-	r := ray.NewRay(tuple.NewPoint(0, 0, 5), tuple.NewVector(0, 0, 1))
+	r := NewRay(NewPoint(0, 0, 5), NewVector(0, 0, 1))
 	s := NewSphere()
 
 	points := s.Intersect(r)
@@ -112,7 +110,7 @@ func TestHit_many(t *testing.T) {
 }
 
 func TestPrecompute(t *testing.T) {
-	r := ray.NewRay(tuple.NewPoint(0, 0, -5), tuple.NewVector(0, 0, 1))
+	r := NewRay(NewPoint(0, 0, -5), NewVector(0, 0, 1))
 	shape := NewSphere()
 	i := NewIntersection(4, shape)
 
@@ -124,19 +122,19 @@ func TestPrecompute(t *testing.T) {
 	if comps.object != shape {
 		t.Fatal("Object is wrong")
 	}
-	if !comps.point.Equals(tuple.NewPoint(0, 0, -1)) {
+	if !comps.point.Equals(NewPoint(0, 0, -1)) {
 		t.Fatal("Point is wrong")
 	}
-	if !comps.eye.Equals(tuple.NewVector(0, 0, -1)) {
+	if !comps.eye.Equals(NewVector(0, 0, -1)) {
 		t.Fatal("Eye is wrong")
 	}
-	if !comps.normal.Equals(tuple.NewVector(0, 0, -1)) {
+	if !comps.normal.Equals(NewVector(0, 0, -1)) {
 		t.Fatal("Normal is wrong")
 	}
 }
 
 func TestPrecompute_outside(t *testing.T) {
-	r := ray.NewRay(tuple.NewPoint(0, 0, -5), tuple.NewVector(0, 0, 1))
+	r := NewRay(NewPoint(0, 0, -5), NewVector(0, 0, 1))
 	shape := NewSphere()
 	i := NewIntersection(4, shape)
 
@@ -148,7 +146,7 @@ func TestPrecompute_outside(t *testing.T) {
 }
 
 func TestPrecompute_inside(t *testing.T) {
-	r := ray.NewRay(tuple.NewPoint(0, 0, 0), tuple.NewVector(0, 0, 1))
+	r := NewRay(NewPoint(0, 0, 0), NewVector(0, 0, 1))
 	shape := NewSphere()
 	i := NewIntersection(1, shape)
 
@@ -157,13 +155,13 @@ func TestPrecompute_inside(t *testing.T) {
 	if !comps.inside {
 		t.Fatal("Inside was wrong")
 	}
-	if !comps.point.Equals(tuple.NewPoint(0, 0, 1)) {
+	if !comps.point.Equals(NewPoint(0, 0, 1)) {
 		t.Fatal("Point is wrong")
 	}
-	if !comps.eye.Equals(tuple.NewVector(0, 0, -1)) {
+	if !comps.eye.Equals(NewVector(0, 0, -1)) {
 		t.Fatal("Eye is wrong")
 	}
-	if !comps.normal.Equals(tuple.NewVector(0, 0, -1)) {
+	if !comps.normal.Equals(NewVector(0, 0, -1)) {
 		t.Fatal("Normal is wrong")
 	}
 }

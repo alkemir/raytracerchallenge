@@ -2,10 +2,7 @@ package main
 
 import (
 	"os"
-	"raytracerchallenge/canvas"
-	"raytracerchallenge/ray"
-	"raytracerchallenge/shape"
-	"raytracerchallenge/tuple"
+	"raytracerchallenge/render"
 )
 
 func main() {
@@ -17,29 +14,29 @@ func main() {
 	resX := 1000
 	resY := 1000
 
-	image := canvas.NewCanvas(resX, resY)
+	image := render.NewCanvas(resX, resY)
 
 	// Create a sphere
-	sphere := shape.NewSphere()
+	sphere := render.NewSphere()
 
 	// Color
-	red := tuple.NewColor(0.5, 0, 0)
+	red := render.NewColor(0.5, 0, 0)
 
 	// Set the camera a bit away
-	cameraOrigin := tuple.NewPoint(0, 0, -2)
-	cameraUpperLeft := tuple.NewVector(3, 3, 1)
+	cameraOrigin := render.NewPoint(0, 0, -2)
+	cameraUpperLeft := render.NewVector(3, 3, 1)
 
-	angleXDelta := tuple.NewVector(-fovX/float64(resX), 0, 0)
-	angleYDelta := tuple.NewVector(0, -fovY/float64(resY), 0)
+	angleXDelta := render.NewVector(-fovX/float64(resX), 0, 0)
+	angleYDelta := render.NewVector(0, -fovY/float64(resY), 0)
 
 	// Cast all rays
 	for x := 0; x < resX; x++ {
 		for y := 0; y < resY; y++ {
 			cameraDirection := cameraUpperLeft.Add(angleXDelta.Mul(float64(x))).Add(angleYDelta.Mul(float64(y)))
 
-			r := ray.NewRay(cameraOrigin, cameraDirection)
+			r := render.NewRay(cameraOrigin, cameraDirection)
 
-			if shape.Hit(sphere.Intersect(r)) != nil {
+			if render.Hit(sphere.Intersect(r)) != nil {
 				image.SetAt(x, y, red)
 			}
 		}

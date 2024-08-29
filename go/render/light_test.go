@@ -1,13 +1,12 @@
-package shape
+package render
 
 import (
-	"raytracerchallenge/tuple"
 	"testing"
 )
 
 func TestLightConstructor(t *testing.T) {
-	i := tuple.NewColor(1, 1, 1)
-	p := tuple.NewPoint(0, 0, 0)
+	i := NewColor(1, 1, 1)
+	p := NewPoint(0, 0, 0)
 
 	l := NewPointLight(p, i)
 

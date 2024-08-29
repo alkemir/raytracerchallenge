@@ -1,9 +1,4 @@
-package shape
-
-import (
-	"raytracerchallenge/ray"
-	"raytracerchallenge/tuple"
-)
+package render
 
 type Intersection struct {
 	t   float64
@@ -37,15 +32,15 @@ func Hit(ii []*Intersection) *Intersection {
 type Comps struct {
 	t      float64
 	object any
-	point  tuple.Tuple
-	eye    tuple.Tuple
-	normal tuple.Tuple
+	point  Tuple
+	eye    Tuple
+	normal Tuple
 	inside bool
 }
 
-func (i *Intersection) Precompute(ray *ray.Ray) *Comps {
+func (i *Intersection) Precompute(ray *Ray) *Comps {
 	point := ray.Project(i.t)
-	eye := ray.Direction().Mul(-1)
+	eye := ray.direction.Mul(-1)
 	normal := i.obj.(*Sphere).Normal(point)
 	inside := false
 

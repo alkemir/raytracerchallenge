@@ -1,8 +1,7 @@
-package canvas
+package render
 
 import (
 	"os"
-	"raytracerchallenge/tuple"
 	"testing"
 )
 
@@ -12,7 +11,7 @@ func TestCanvasIsBlack(t *testing.T) {
 	for x := 0; x < 10; x++ {
 		for y := 0; y < 20; y++ {
 			t.Log(x, y)
-			if !c.GetAt(x, y).Equals(tuple.NewColor(0, 0, 0)) {
+			if !c.GetAt(x, y).Equals(NewColor(0, 0, 0)) {
 				t.Fatal("Pixel initialized to non-black")
 			}
 		}
@@ -21,7 +20,7 @@ func TestCanvasIsBlack(t *testing.T) {
 
 func TestWriteToCanvas(t *testing.T) {
 	c := NewCanvas(10, 20)
-	red := tuple.NewColor(1, 0, 0)
+	red := NewColor(1, 0, 0)
 
 	c.SetAt(2, 3, red)
 
@@ -32,9 +31,9 @@ func TestWriteToCanvas(t *testing.T) {
 
 func TestCanvasToFile(t *testing.T) {
 	c := NewCanvas(5, 3)
-	color1 := tuple.NewColor(1.5, 0, 0)
-	color2 := tuple.NewColor(0, 0.5, 0)
-	color3 := tuple.NewColor(-0.5, 0, 1)
+	color1 := NewColor(1.5, 0, 0)
+	color2 := NewColor(0, 0.5, 0)
+	color3 := NewColor(-0.5, 0, 1)
 
 	c.SetAt(0, 0, color1)
 	c.SetAt(2, 1, color2)

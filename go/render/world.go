@@ -1,9 +1,6 @@
-package shape
+package render
 
 import (
-	"raytracerchallenge/matrix"
-	"raytracerchallenge/ray"
-	"raytracerchallenge/tuple"
 	"slices"
 )
 
@@ -15,27 +12,19 @@ type World struct {
 var DefaultWorld = NewWorld()
 
 func init() {
-	DefaultWorld.AddLight(NewPointLight(tuple.NewPoint(-10, 10, -10), tuple.NewColor(1, 1, 1)))
+	DefaultWorld.AddLight(NewPointLight(NewPoint(-10, 10, -10), NewColor(1, 1, 1)))
 
 	s1 := NewSphere()
-	s1.SetMaterial(NewMaterial(tuple.NewColor(0.8, 1.0, 0.6), DefaultMaterial.ambient, 0.7, 0.2, DefaultMaterial.shininess))
+	s1.SetMaterial(NewMaterial(NewColor(0.8, 1.0, 0.6), DefaultMaterial.ambient, 0.7, 0.2, DefaultMaterial.shininess))
 	DefaultWorld.AddObject(s1)
 
 	s2 := NewSphere()
-	s2.SetTransform(matrix.Scaling(0.5, 0.5, 0.5))
+	s2.SetTransform(Scaling(0.5, 0.5, 0.5))
 	DefaultWorld.AddObject(s2)
 }
 
 func NewWorld() *World {
 	return &World{}
-}
-
-func (w *World) Objects() []*Sphere {
-	return w.objs
-}
-
-func (w *World) Lights() []*Light {
-	return w.lights
 }
 
 func (w *World) AddObject(obj *Sphere) {
@@ -46,7 +35,7 @@ func (w *World) AddLight(light *Light) {
 	w.lights = append(w.lights, light)
 }
 
-func (w *World) Intersect(ray *ray.Ray) []*Intersection {
+func (w *World) Intersect(ray *Ray) []*Intersection {
 	allIntersections := make([]*Intersection, 0)
 
 	for _, obj := range w.objs {
@@ -63,18 +52,18 @@ func (w *World) Intersect(ray *ray.Ray) []*Intersection {
 	return allIntersections
 }
 
-func (w *World) ShadeHit(comps *Comps) tuple.Tuple {
-	res := tuple.NewColor(0, 0, 0)
+func (w *World) ShadeHit(comps *Comps) Tuple {
+	res := NewColor(0, 0, 0)
 	for l := range w.lights {
 		res = res.Add(comps.object.(*Sphere).material.Lightning(w.lights[l], comps.point, comps.eye, comps.normal))
 	}
 	return res
 }
 
-func (w *World) Shade(ray *ray.Ray) tuple.Tuple {
+func (w *World) Shade(ray *Ray) Tuple {
 	i := Hit(w.Intersect(ray)) // Can optimize since w.Intersect is sorted
 	if i == nil {
-		return tuple.NewColor(0, 0, 0)
+		return NewColor(0, 0, 0)
 	}
 
 	comps := i.Precompute(ray)

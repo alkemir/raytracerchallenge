@@ -1,56 +1,49 @@
-package shape
+package render
 
 import (
 	"math"
-	"raytracerchallenge/matrix"
-	"raytracerchallenge/ray"
-	"raytracerchallenge/tuple"
 )
 
 type Sphere struct {
-	transform *matrix.Matrix
+	transform *Matrix
 	material  *Material
 }
 
 func NewSphere() *Sphere {
-	return &Sphere{matrix.Identity, DefaultMaterial}
+	return &Sphere{IdentityMatrix(), DefaultMaterial}
 }
 
-func (s *Sphere) SetTransform(m *matrix.Matrix) {
+func (s *Sphere) SetTransform(m *Matrix) {
 	s.transform = m
-}
-
-func (s Sphere) Material() *Material {
-	return s.material
 }
 
 func (s *Sphere) SetMaterial(m *Material) {
 	s.material = m
 }
 
-func (s *Sphere) Normal(p tuple.Tuple) tuple.Tuple {
+func (s *Sphere) Normal(p Tuple) Tuple {
 	mInv, err := s.transform.Inverse()
 	if err != nil {
 		panic(err)
 	}
 
 	objP := mInv.MultiplyTuple(p)
-	objN := objP.Sub(tuple.NewPoint(0, 0, 0))
+	objN := objP.Sub(NewPoint(0, 0, 0))
 	worldN := mInv.Transpose().MultiplyTuple(objN).ZeroW()
 	return worldN.Norm()
 }
 
-func (s *Sphere) Intersect(r *ray.Ray) []*Intersection {
+func (s *Sphere) Intersect(r *Ray) []*Intersection {
 	mInv, err := s.transform.Inverse()
 	if err != nil {
 		panic(err)
 	}
 
 	tr := r.Transform(mInv)
-	sphereToRay := tr.Origin().Sub(tuple.NewPoint(0, 0, 0))
+	sphereToRay := tr.origin.Sub(NewPoint(0, 0, 0))
 
-	a := tr.Direction().Dot(tr.Direction())
-	b := 2 * tr.Direction().Dot(sphereToRay)
+	a := tr.direction.Dot(tr.direction)
+	b := 2 * tr.direction.Dot(sphereToRay)
 	c := sphereToRay.Dot(sphereToRay) - 1
 
 	discriminant := b*b - 4*a*c

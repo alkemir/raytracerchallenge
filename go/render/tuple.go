@@ -1,10 +1,10 @@
-package tuple
+package render
 
 import (
 	"math"
 )
 
-const EPSILON = 0.0000001
+const EPSILON = 0.00001
 const max16bits = 0xffff
 
 type Tuple struct {
@@ -114,14 +114,6 @@ func (a Tuple) ZeroW() Tuple {
 
 func (a Tuple) Reflect(n Tuple) Tuple {
 	return a.Sub(n.Mul(2 * a.Dot(n)))
-}
-
-func abs(a float64) float64 {
-	if a < 0 {
-		return -a
-	} else {
-		return a
-	}
 }
 
 func premultiply(c, a float64) uint32 {

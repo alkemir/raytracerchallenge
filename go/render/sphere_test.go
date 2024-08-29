@@ -1,15 +1,12 @@
-package shape
+package render
 
 import (
 	"math"
-	"raytracerchallenge/matrix"
-	"raytracerchallenge/ray"
-	"raytracerchallenge/tuple"
 	"testing"
 )
 
 func TestSphereIntersect(t *testing.T) {
-	r := ray.NewRay(tuple.NewPoint(0, 0, -5), tuple.NewVector(0, 0, 1))
+	r := NewRay(NewPoint(0, 0, -5), NewVector(0, 0, 1))
 	s := NewSphere()
 
 	points := s.Intersect(r)
@@ -26,7 +23,7 @@ func TestSphereIntersect(t *testing.T) {
 }
 
 func TestSphereIntersect_tangent(t *testing.T) {
-	r := ray.NewRay(tuple.NewPoint(0, 1, -5), tuple.NewVector(0, 0, 1))
+	r := NewRay(NewPoint(0, 1, -5), NewVector(0, 0, 1))
 	s := NewSphere()
 
 	points := s.Intersect(r)
@@ -43,7 +40,7 @@ func TestSphereIntersect_tangent(t *testing.T) {
 }
 
 func TestSphereIntersect_miss(t *testing.T) {
-	r := ray.NewRay(tuple.NewPoint(0, 2, -5), tuple.NewVector(0, 0, 1))
+	r := NewRay(NewPoint(0, 2, -5), NewVector(0, 0, 1))
 	s := NewSphere()
 
 	points := s.Intersect(r)
@@ -54,7 +51,7 @@ func TestSphereIntersect_miss(t *testing.T) {
 }
 
 func TestSphereIntersect_inside(t *testing.T) {
-	r := ray.NewRay(tuple.NewPoint(0, 0, 0), tuple.NewVector(0, 0, 1))
+	r := NewRay(NewPoint(0, 0, 0), NewVector(0, 0, 1))
 	s := NewSphere()
 
 	points := s.Intersect(r)
@@ -71,7 +68,7 @@ func TestSphereIntersect_inside(t *testing.T) {
 }
 
 func TestSphereIntersect_behind(t *testing.T) {
-	r := ray.NewRay(tuple.NewPoint(0, 0, 5), tuple.NewVector(0, 0, 1))
+	r := NewRay(NewPoint(0, 0, 5), NewVector(0, 0, 1))
 	s := NewSphere()
 
 	points := s.Intersect(r)
@@ -90,14 +87,14 @@ func TestSphereIntersect_behind(t *testing.T) {
 func TestSphereTransform_default(t *testing.T) {
 	s := NewSphere()
 
-	if !s.transform.Equals(matrix.Identity) {
+	if !s.transform.Equals(IdentityMatrix()) {
 		t.Fatal("Default sphere transform is not the identity")
 	}
 }
 
 func TestSphereTransform_changed(t *testing.T) {
 	s := NewSphere()
-	m := matrix.Translation(2, 3, 4)
+	m := Translation(2, 3, 4)
 
 	s.SetTransform(m)
 
@@ -107,9 +104,9 @@ func TestSphereTransform_changed(t *testing.T) {
 }
 
 func TestSphereIntersect_scaled(t *testing.T) {
-	r := ray.NewRay(tuple.NewPoint(0, 0, -5), tuple.NewVector(0, 0, 1))
+	r := NewRay(NewPoint(0, 0, -5), NewVector(0, 0, 1))
 	s := NewSphere()
-	s.SetTransform(matrix.Scaling(2, 2, 2))
+	s.SetTransform(Scaling(2, 2, 2))
 
 	points := s.Intersect(r)
 
@@ -125,9 +122,9 @@ func TestSphereIntersect_scaled(t *testing.T) {
 }
 
 func TestSphereIntersect_translated(t *testing.T) {
-	r := ray.NewRay(tuple.NewPoint(0, 0, -5), tuple.NewVector(0, 0, 1))
+	r := NewRay(NewPoint(0, 0, -5), NewVector(0, 0, 1))
 	s := NewSphere()
-	s.SetTransform(matrix.Translation(5, 0, 0))
+	s.SetTransform(Translation(5, 0, 0))
 
 	points := s.Intersect(r)
 
@@ -139,9 +136,9 @@ func TestSphereIntersect_translated(t *testing.T) {
 func TestSphereNormal_xaxis(t *testing.T) {
 	s := NewSphere()
 
-	n := s.Normal(tuple.NewPoint(1, 0, 0))
+	n := s.Normal(NewPoint(1, 0, 0))
 
-	if !n.Equals(tuple.NewVector(1, 0, 0)) {
+	if !n.Equals(NewVector(1, 0, 0)) {
 		t.Fatal("Normal is wrong")
 	}
 }
@@ -149,27 +146,27 @@ func TestSphereNormal_xaxis(t *testing.T) {
 func TestSphereNormal_yaxis(t *testing.T) {
 	s := NewSphere()
 
-	n := s.Normal(tuple.NewPoint(0, 1, 0))
+	n := s.Normal(NewPoint(0, 1, 0))
 
-	if !n.Equals(tuple.NewVector(0, 1, 0)) {
+	if !n.Equals(NewVector(0, 1, 0)) {
 		t.Fatal("Normal is wrong")
 	}
 }
 func TestSphereNormal_zaxis(t *testing.T) {
 	s := NewSphere()
 
-	n := s.Normal(tuple.NewPoint(0, 0, 1))
+	n := s.Normal(NewPoint(0, 0, 1))
 
-	if !n.Equals(tuple.NewVector(0, 0, 1)) {
+	if !n.Equals(NewVector(0, 0, 1)) {
 		t.Fatal("Normal is wrong")
 	}
 }
 func TestSphereNormal_offAxis(t *testing.T) {
 	s := NewSphere()
 
-	n := s.Normal(tuple.NewPoint(math.Sqrt(3)/3, math.Sqrt(3)/3, math.Sqrt(3)/3))
+	n := s.Normal(NewPoint(math.Sqrt(3)/3, math.Sqrt(3)/3, math.Sqrt(3)/3))
 
-	if !n.Equals(tuple.NewVector(math.Sqrt(3)/3, math.Sqrt(3)/3, math.Sqrt(3)/3)) {
+	if !n.Equals(NewVector(math.Sqrt(3)/3, math.Sqrt(3)/3, math.Sqrt(3)/3)) {
 		t.Fatal("Normal is wrong")
 	}
 }
@@ -177,7 +174,7 @@ func TestSphereNormal_offAxis(t *testing.T) {
 func TestSphereNormal_normalized(t *testing.T) {
 	s := NewSphere()
 
-	n := s.Normal(tuple.NewPoint(math.Sqrt(3)/3, math.Sqrt(3)/3, math.Sqrt(3)/3))
+	n := s.Normal(NewPoint(math.Sqrt(3)/3, math.Sqrt(3)/3, math.Sqrt(3)/3))
 
 	if !n.Equals(n.Norm()) {
 		t.Fatal("Normal is not normal")
@@ -186,21 +183,21 @@ func TestSphereNormal_normalized(t *testing.T) {
 
 func TestSphereNormal_translated(t *testing.T) {
 	s := NewSphere()
-	s.SetTransform(matrix.Translation(0, 1, 0))
+	s.SetTransform(Translation(0, 1, 0))
 
-	n := s.Normal(tuple.NewPoint(0, 1.70710678, -0.70710678))
+	n := s.Normal(NewPoint(0, 1.70710678, -0.70710678))
 
-	if !n.Equals(tuple.NewVector(0, 0.70710678, -0.70710678)) {
+	if !n.Equals(NewVector(0, 0.70710678, -0.70710678)) {
 		t.Fatal("Normal is wrong")
 	}
 }
 func TestSphereNormal_scaledRotated(t *testing.T) {
 	s := NewSphere()
-	s.SetTransform(matrix.Scaling(1, 0.5, 1).Multiply(matrix.RotationZ(math.Pi / 5)))
+	s.SetTransform(Scaling(1, 0.5, 1).Multiply(RotationZ(math.Pi / 5)))
 
-	n := s.Normal(tuple.NewPoint(0, math.Sqrt2/2, -math.Sqrt2/2))
+	n := s.Normal(NewPoint(0, math.Sqrt2/2, -math.Sqrt2/2))
 
-	if !n.Equals(tuple.NewVector(0, 0.970142500, -0.24253562)) {
+	if !n.Equals(NewVector(0, 0.970142500, -0.24253562)) {
 		t.Fatal("Normal is wrong")
 	}
 }

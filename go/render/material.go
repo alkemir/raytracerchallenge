@@ -1,12 +1,11 @@
-package shape
+package render
 
 import (
 	"math"
-	"raytracerchallenge/tuple"
 )
 
 type Material struct {
-	color     tuple.Tuple
+	color     Tuple
 	ambient   float64
 	diffuse   float64
 	specular  float64
@@ -14,40 +13,24 @@ type Material struct {
 }
 
 var DefaultMaterial *Material = &Material{
-	color:     tuple.NewColor(1, 1, 1),
+	color:     NewColor(1, 1, 1),
 	ambient:   0.1,
 	diffuse:   0.9,
 	specular:  0.9,
 	shininess: 200,
 }
 
-func NewMaterial(color tuple.Tuple, ambient, diffuse, specular, shininess float64) *Material {
+func NewMaterial(color Tuple, ambient, diffuse, specular, shininess float64) *Material {
 	return &Material{color, ambient, diffuse, specular, shininess}
 }
 
-func (m *Material) Ambient() float64 {
-	return m.ambient
-}
-
-func (m *Material) Diffuse() float64 {
-	return m.diffuse
-}
-
-func (m *Material) Specular() float64 {
-	return m.specular
-}
-
-func (m *Material) Shininess() float64 {
-	return m.shininess
-}
-
-func (m *Material) Lightning(l *Light, p, eye, normal tuple.Tuple) tuple.Tuple {
+func (m *Material) Lightning(l *Light, p, eye, normal Tuple) Tuple {
 	rCol := m.color.Hadamard(l.intensity)
 	lVec := l.position.Sub(p).Norm()
 
 	ambientContrib := rCol.Mul(m.ambient)
-	diffuseContrib := tuple.NewColor(0, 0, 0)
-	specularContrib := tuple.NewColor(0, 0, 0)
+	diffuseContrib := NewColor(0, 0, 0)
+	specularContrib := NewColor(0, 0, 0)
 
 	if lightDotNormal := lVec.Dot(normal); lightDotNormal > 0 {
 		diffuseContrib = rCol.Mul(m.diffuse * lightDotNormal)

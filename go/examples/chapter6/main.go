@@ -2,10 +2,7 @@ package main
 
 import (
 	"os"
-	"raytracerchallenge/canvas"
-	"raytracerchallenge/ray"
-	"raytracerchallenge/shape"
-	"raytracerchallenge/tuple"
+	"raytracerchallenge/render"
 )
 
 func main() {
@@ -17,44 +14,39 @@ func main() {
 	resX := 1000
 	resY := 1000
 
-	image := canvas.NewCanvas(resX, resY)
+	image := render.NewCanvas(resX, resY)
 
 	// Create a sphere
-	purple := tuple.NewColor(1, 0.2, 1)
-	material := shape.NewMaterial(
-		purple,
-		shape.DefaultMaterial.Ambient(),
-		shape.DefaultMaterial.Diffuse(),
-		shape.DefaultMaterial.Specular(),
-		shape.DefaultMaterial.Shininess())
+	purple := render.NewColor(1, 0.2, 1)
+	material := render.NewMaterial(purple, 0.1, 0.9, 0.9, 200)
 
-	sphere := shape.NewSphere()
+	sphere := render.NewSphere()
 	sphere.SetMaterial(material)
 
 	// Create a light source
-	lPos := tuple.NewPoint(-10, 10, -10)
-	lColor := tuple.NewColor(1, 1, 1)
-	light := shape.NewPointLight(lPos, lColor)
+	lPos := render.NewPoint(-10, 10, -10)
+	lColor := render.NewColor(1, 1, 1)
+	light := render.NewPointLight(lPos, lColor)
 
 	// Set the camera a bit away
-	cameraOrigin := tuple.NewPoint(0, 0, -2)
-	cameraUpperLeft := tuple.NewVector(3, 3, 1)
+	cameraOrigin := render.NewPoint(0, 0, -2)
+	cameraUpperLeft := render.NewVector(3, 3, 1)
 
-	angleXDelta := tuple.NewVector(-fovX/float64(resX), 0, 0)
-	angleYDelta := tuple.NewVector(0, -fovY/float64(resY), 0)
+	angleXDelta := render.NewVector(-fovX/float64(resX), 0, 0)
+	angleYDelta := render.NewVector(0, -fovY/float64(resY), 0)
 
 	// Cast all rays
 	for x := 0; x < resX; x++ {
 		for y := 0; y < resY; y++ {
 			cameraDirection := cameraUpperLeft.Add(angleXDelta.Mul(float64(x))).Add(angleYDelta.Mul(float64(y))).Norm()
 
-			r := ray.NewRay(cameraOrigin, cameraDirection)
+			r := render.NewRay(cameraOrigin, cameraDirection)
 
-			if hit := shape.Hit(sphere.Intersect(r)); hit != nil {
+			if hit := render.Hit(sphere.Intersect(r)); hit != nil {
 				p := r.Project(hit.T())
-				n := hit.Object().(*shape.Sphere).Normal(p)
-				eye := r.Direction().Mul(-1)
-				image.SetAt(x, y, hit.Object().(*shape.Sphere).Material().Lightning(light, p, eye, n))
+				n := hit.Object().(*render.Sphere).Normal(p)
+				eye := cameraDirection.Mul(-1)
+				image.SetAt(x, y, material.Lightning(light, p, eye, n))
 			}
 		}
 	}

@@ -1,32 +1,31 @@
-package matrix
+package render
 
 import (
-	"raytracerchallenge/tuple"
 	"testing"
 )
 
 func TestMatrixSubscriptable4x4(t *testing.T) {
 	m := NewMatrix(4, 4, []float64{1, 2, 3, 4, 5.5, 6.5, 7.5, 8.5, 9, 10, 11, 12, 13.5, 14.5, 15.5, 16.5})
 
-	if m.Get(0, 0) != 1 {
+	if m.get(0, 0) != 1 {
 		t.Fatal("Element 0,0 was wrong")
 	}
-	if m.Get(0, 3) != 4 {
+	if m.get(0, 3) != 4 {
 		t.Fatal("Element 0,3 was wrong")
 	}
-	if m.Get(1, 0) != 5.5 {
+	if m.get(1, 0) != 5.5 {
 		t.Fatal("Element 1,0 was wrong")
 	}
-	if m.Get(1, 2) != 7.5 {
+	if m.get(1, 2) != 7.5 {
 		t.Fatal("Element 1,2 was wrong")
 	}
-	if m.Get(2, 2) != 11 {
+	if m.get(2, 2) != 11 {
 		t.Fatal("Element 2,2 was wrong")
 	}
-	if m.Get(3, 0) != 13.5 {
+	if m.get(3, 0) != 13.5 {
 		t.Fatal("Element 3,0 was wrong")
 	}
-	if m.Get(3, 2) != 15.5 {
+	if m.get(3, 2) != 15.5 {
 		t.Fatal("Element 3,2 was wrong")
 	}
 }
@@ -34,16 +33,16 @@ func TestMatrixSubscriptable4x4(t *testing.T) {
 func TestMatrixSubscriptable2x2(t *testing.T) {
 	m := NewMatrix(2, 2, []float64{-3, 5, 1, -2})
 
-	if m.Get(0, 0) != -3 {
+	if m.get(0, 0) != -3 {
 		t.Fatal("Element 0,0 was wrong")
 	}
-	if m.Get(0, 1) != 5 {
+	if m.get(0, 1) != 5 {
 		t.Fatal("Element 0,1 was wrong")
 	}
-	if m.Get(1, 0) != 1 {
+	if m.get(1, 0) != 1 {
 		t.Fatal("Element 1,0 was wrong")
 	}
-	if m.Get(1, 1) != -2 {
+	if m.get(1, 1) != -2 {
 		t.Fatal("Element 1,1 was wrong")
 	}
 }
@@ -51,13 +50,13 @@ func TestMatrixSubscriptable2x2(t *testing.T) {
 func TestMatrixSubscriptable3x3(t *testing.T) {
 	m := NewMatrix(3, 3, []float64{-3, 5, 0, 1, -2, -7, 0, 1, 1})
 
-	if m.Get(0, 0) != -3 {
+	if m.get(0, 0) != -3 {
 		t.Fatal("Element 0,0 was wrong")
 	}
-	if m.Get(1, 1) != -2 {
+	if m.get(1, 1) != -2 {
 		t.Fatal("Element 1,1 was wrong")
 	}
-	if m.Get(2, 2) != 1 {
+	if m.get(2, 2) != 1 {
 		t.Fatal("Element 2,2 was wrong")
 	}
 }
@@ -93,9 +92,9 @@ func TestMultiplyMatrices(t *testing.T) {
 
 func TestMultiplyMatrixByTuple(t *testing.T) {
 	m := NewMatrix(4, 4, []float64{1, 2, 3, 4, 2, 4, 4, 2, 8, 6, 4, 1, 0, 0, 0, 1})
-	tu := tuple.NewTuple(1, 2, 3, 1)
+	tu := NewTuple(1, 2, 3, 1)
 
-	p := tuple.NewTuple(18, 24, 33, 1)
+	p := NewTuple(18, 24, 33, 1)
 
 	if !p.Equals(m.MultiplyTuple(tu)) {
 		t.Fatal("Matrix should equal its product by a tuple")
@@ -105,15 +104,15 @@ func TestMultiplyMatrixByTuple(t *testing.T) {
 func TestMultiplyIdentityByMatrix(t *testing.T) {
 	m := NewMatrix(4, 4, []float64{0, 1, 2, 4, 1, 2, 4, 8, 2, 4, 8, 16, 4, 8, 16, 32})
 
-	if !m.Equals(m.Multiply(Identity)) {
+	if !m.Equals(m.Multiply(IdentityMatrix())) {
 		t.Fatal("Matrix should equal its product by the identity matrix")
 	}
 }
 
 func TestMultiplyIdentityByTuple(t *testing.T) {
-	tu := tuple.NewTuple(1, 2, 3, 4)
+	tu := NewTuple(1, 2, 3, 4)
 
-	if !tu.Equals(Identity.MultiplyTuple(tu)) {
+	if !tu.Equals(IdentityMatrix().MultiplyTuple(tu)) {
 		t.Fatal("Matrix should equal its product by the identity tuple")
 	}
 }
@@ -130,9 +129,9 @@ func TestTransposeMatrix(t *testing.T) {
 }
 
 func TestTransposeIdentity(t *testing.T) {
-	tr := Identity.Transpose()
+	tr := IdentityMatrix().Transpose()
 
-	if !tr.Equals(Identity) {
+	if !tr.Equals(IdentityMatrix()) {
 		t.Fatal("The transpose of the identity should be itself")
 	}
 }
@@ -296,13 +295,13 @@ func TestInverse(t *testing.T) {
 	if m.Cofactor(2, 3) != -160 {
 		t.Fatal("Cofactor is wrong")
 	}
-	if mInv.Get(3, 2) != -160.0/532 {
+	if mInv.get(3, 2) != -160.0/532 {
 		t.Fatal("Inverse is wrong")
 	}
 	if m.Cofactor(3, 2) != 105 {
 		t.Fatal("Cofactor is wrong")
 	}
-	if mInv.Get(2, 3) != 105.0/532 {
+	if mInv.get(2, 3) != 105.0/532 {
 		t.Fatal("Inverse is wrong")
 	}
 	if !mInv.Equals(invExp) {

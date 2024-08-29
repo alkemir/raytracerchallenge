@@ -1,13 +1,8 @@
-package matrix
+package render
 
 import (
 	"fmt"
-	"raytracerchallenge/tuple"
 )
-
-const EPSILON = 0.00001
-
-var Identity = NewMatrix(4, 4, []float64{1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1})
 
 type Matrix struct {
 	cols int
@@ -17,6 +12,10 @@ type Matrix struct {
 
 func NewMatrix(rows, cols int, data []float64) *Matrix {
 	return &Matrix{rows: rows, cols: cols, data: data}
+}
+
+func IdentityMatrix() *Matrix {
+	return NewMatrix(4, 4, []float64{1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1})
 }
 
 func (m *Matrix) Equals(o *Matrix) bool {
@@ -37,7 +36,7 @@ func (m *Matrix) Equals(o *Matrix) bool {
 	return true
 }
 
-func (m *Matrix) Get(row, col int) float64 {
+func (m *Matrix) get(row, col int) float64 {
 	return m.data[row*m.cols+col]
 }
 
@@ -57,7 +56,7 @@ func (m *Matrix) Multiply(o *Matrix) *Matrix {
 	return NewMatrix(rows, cols, resData)
 }
 
-func (m *Matrix) MultiplyTuple(t tuple.Tuple) tuple.Tuple {
+func (m *Matrix) MultiplyTuple(t Tuple) Tuple {
 	x := m.data[0+0*m.cols]*t.X() + m.data[1+0*m.cols]*t.Y() +
 		m.data[2+0*m.cols]*t.Z() + m.data[3+0*m.cols]*t.W()
 
@@ -70,7 +69,7 @@ func (m *Matrix) MultiplyTuple(t tuple.Tuple) tuple.Tuple {
 	w := m.data[0+3*m.cols]*t.X() + m.data[1+3*m.cols]*t.Y() +
 		m.data[2+3*m.cols]*t.Z() + m.data[3+3*m.cols]*t.W()
 
-	return tuple.NewTuple(x, y, z, w)
+	return NewTuple(x, y, z, w)
 }
 
 func (m *Matrix) Transpose() *Matrix {
@@ -123,7 +122,7 @@ func (m *Matrix) Det() float64 {
 
 	det := float64(0)
 	for y := 0; y < m.cols; y++ {
-		det += m.Get(0, y) * m.Cofactor(0, y)
+		det += m.data[y] * m.Cofactor(0, y)
 	}
 	return det
 }
@@ -165,13 +164,5 @@ func (m *Matrix) Print() {
 			fmt.Printf("%.10f ", m.data[x+y*m.cols])
 		}
 		fmt.Println()
-	}
-}
-
-func abs(a float64) float64 {
-	if a < 0 {
-		return -a
-	} else {
-		return a
 	}
 }

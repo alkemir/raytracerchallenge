@@ -1,27 +1,26 @@
-package canvas
+package render
 
 import (
 	"image"
 	"image/png"
 	"io"
-	"raytracerchallenge/tuple"
 )
 
 type Canvas struct {
 	width  int
 	height int
-	data   []tuple.Tuple
+	data   []Tuple
 }
 
 func NewCanvas(width, height int) *Canvas {
-	return &Canvas{width, height, make([]tuple.Tuple, width*height)}
+	return &Canvas{width, height, make([]Tuple, width*height)}
 }
 
-func (c *Canvas) GetAt(x, y int) tuple.Tuple {
+func (c *Canvas) GetAt(x, y int) Tuple {
 	return c.data[y*c.width+x]
 }
 
-func (c *Canvas) SetAt(x, y int, t tuple.Tuple) {
+func (c *Canvas) SetAt(x, y int, t Tuple) {
 	c.data[y*c.width+x] = t
 }
 
