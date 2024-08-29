@@ -9,22 +9,24 @@ type World struct {
 	objs   []*Sphere
 }
 
-var DefaultWorld = NewWorld()
+func NewWorld() *World {
+	return &World{}
+}
 
-func init() {
-	DefaultWorld.AddLight(NewPointLight(NewPoint(-10, 10, -10), NewColor(1, 1, 1)))
+func DefaultWorld() *World {
+	w := NewWorld()
+
+	w.AddLight(NewPointLight(NewPoint(-10, 10, -10), NewColor(1, 1, 1)))
 
 	s1 := NewSphere()
-	s1.SetMaterial(NewMaterial(NewColor(0.8, 1.0, 0.6), DefaultMaterial.ambient, 0.7, 0.2, DefaultMaterial.shininess))
-	DefaultWorld.AddObject(s1)
+	s1.SetMaterial(NewMaterial(NewColor(0.8, 1.0, 0.6), 0.1, 0.7, 0.2, 200))
+	w.AddObject(s1)
 
 	s2 := NewSphere()
 	s2.SetTransform(Scaling(0.5, 0.5, 0.5))
-	DefaultWorld.AddObject(s2)
-}
+	w.AddObject(s2)
 
-func NewWorld() *World {
-	return &World{}
+	return w
 }
 
 func (w *World) AddObject(obj *Sphere) {

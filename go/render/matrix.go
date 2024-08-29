@@ -11,7 +11,11 @@ type Matrix struct {
 }
 
 func NewMatrix(rows, cols int, data []float64) *Matrix {
-	return &Matrix{rows: rows, cols: cols, data: data}
+	return &Matrix{
+		rows: rows,
+		cols: cols,
+		data: data,
+	}
 }
 
 func IdentityMatrix() *Matrix {

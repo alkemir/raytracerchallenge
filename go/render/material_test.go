@@ -6,7 +6,7 @@ import (
 )
 
 func TestMaterialDefault(t *testing.T) {
-	m := DefaultMaterial
+	m := DefaultMaterial()
 
 	if !m.color.Equals(NewColor(1, 1, 1)) {
 		t.Fatal("Color is wrong")
@@ -26,7 +26,7 @@ func TestMaterialDefault(t *testing.T) {
 }
 
 func TestMaterialLightning_eyeBetweenLightSurface(t *testing.T) {
-	m := DefaultMaterial
+	m := DefaultMaterial()
 	p := NewPoint(0, 0, 0)
 	eye := NewVector(0, 0, -1)
 	normal := NewVector(0, 0, -1)
@@ -40,7 +40,7 @@ func TestMaterialLightning_eyeBetweenLightSurface(t *testing.T) {
 }
 
 func TestMaterialLightning_eyeBetweenLightSurface_EyeOffset(t *testing.T) {
-	m := DefaultMaterial
+	m := DefaultMaterial()
 	p := NewPoint(0, 0, 0)
 	eye := NewVector(0, math.Sqrt2/2, math.Sqrt2/2)
 	normal := NewVector(0, 0, -1)
@@ -54,7 +54,7 @@ func TestMaterialLightning_eyeBetweenLightSurface_EyeOffset(t *testing.T) {
 }
 
 func TestMaterialLightning_eyeBetweenLightSurface_LightOffset(t *testing.T) {
-	m := DefaultMaterial
+	m := DefaultMaterial()
 	p := NewPoint(0, 0, 0)
 	eye := NewVector(0, 0, -1)
 	normal := NewVector(0, 0, -1)
@@ -68,7 +68,7 @@ func TestMaterialLightning_eyeBetweenLightSurface_LightOffset(t *testing.T) {
 }
 
 func TestMaterialLightning_eyeInReflectionPath(t *testing.T) {
-	m := DefaultMaterial
+	m := DefaultMaterial()
 	p := NewPoint(0, 0, 0)
 	eye := NewVector(0, -math.Sqrt2/2, -math.Sqrt2/2)
 	normal := NewVector(0, 0, -1)
@@ -82,7 +82,7 @@ func TestMaterialLightning_eyeInReflectionPath(t *testing.T) {
 }
 
 func TestMaterialLightning_eyeBehindSurface(t *testing.T) {
-	m := DefaultMaterial
+	m := DefaultMaterial()
 	p := NewPoint(0, 0, 0)
 	eye := NewVector(0, 0, -1)
 	normal := NewVector(0, 0, -1)

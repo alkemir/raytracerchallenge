@@ -6,5 +6,8 @@ type Light struct {
 }
 
 func NewPointLight(p Tuple, i Tuple) *Light {
-	return &Light{p, i}
+	return &Light{
+		position:  p,
+		intensity: i,
+	}
 }

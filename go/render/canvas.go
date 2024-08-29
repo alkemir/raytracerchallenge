@@ -13,7 +13,11 @@ type Canvas struct {
 }
 
 func NewCanvas(width, height int) *Canvas {
-	return &Canvas{width, height, make([]Tuple, width*height)}
+	return &Canvas{
+		width:  width,
+		height: height,
+		data:   make([]Tuple, width*height),
+	}
 }
 
 func (c *Canvas) GetAt(x, y int) Tuple {

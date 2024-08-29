@@ -6,7 +6,10 @@ type Intersection struct {
 }
 
 func NewIntersection(t float64, obj any) *Intersection {
-	return &Intersection{t, obj}
+	return &Intersection{
+		t:   t,
+		obj: obj,
+	}
 }
 
 func (i *Intersection) Object() any {

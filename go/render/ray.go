@@ -6,7 +6,10 @@ type Ray struct {
 }
 
 func NewRay(origin, direction Tuple) *Ray {
-	return &Ray{origin, direction}
+	return &Ray{
+		origin:    origin,
+		direction: direction,
+	}
 }
 
 func (r *Ray) Project(distance float64) Tuple {

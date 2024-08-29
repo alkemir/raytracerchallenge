@@ -10,7 +10,10 @@ type Sphere struct {
 }
 
 func NewSphere() *Sphere {
-	return &Sphere{IdentityMatrix(), DefaultMaterial}
+	return &Sphere{
+		transform: IdentityMatrix(),
+		material:  DefaultMaterial(),
+	}
 }
 
 func (s *Sphere) SetTransform(m *Matrix) {

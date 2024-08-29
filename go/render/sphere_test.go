@@ -205,31 +205,31 @@ func TestSphereNormal_scaledRotated(t *testing.T) {
 func TestSphereMaterial_default(t *testing.T) {
 	s := NewSphere()
 
-	if s.material != DefaultMaterial {
+	if !s.material.Equals(DefaultMaterial()) {
 		t.Fatal("Material is wrong")
 	}
 }
 
 func TestSphereMaterial_set(t *testing.T) {
 	s := NewSphere()
-	m := NewMaterial(DefaultMaterial.color, DefaultMaterial.ambient, DefaultMaterial.diffuse, DefaultMaterial.specular, DefaultMaterial.shininess)
+	m := DefaultMaterial()
 	m.ambient = 1
 
 	s.SetMaterial(m)
 
-	if !s.material.color.Equals(DefaultMaterial.color) {
+	if !s.material.color.Equals(DefaultMaterial().color) {
 		t.Fatal("Material color is wrong")
 	}
 	if s.material.ambient != 1 {
 		t.Fatal("Material ambient is wrong")
 	}
-	if s.material.diffuse != DefaultMaterial.diffuse {
+	if s.material.diffuse != DefaultMaterial().diffuse {
 		t.Fatal("Material difusse is wrong")
 	}
-	if s.material.specular != DefaultMaterial.specular {
+	if s.material.specular != DefaultMaterial().specular {
 		t.Fatal("Material specular is wrong")
 	}
-	if s.material.shininess != DefaultMaterial.shininess {
+	if s.material.shininess != DefaultMaterial().shininess {
 		t.Fatal("Material shininess is wrong")
 	}
 }
