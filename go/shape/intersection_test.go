@@ -110,3 +110,60 @@ func TestHit_many(t *testing.T) {
 		t.Fatal("Wrong intersection selected as hit")
 	}
 }
+
+func TestPrecompute(t *testing.T) {
+	r := ray.NewRay(tuple.NewPoint(0, 0, -5), tuple.NewVector(0, 0, 1))
+	shape := NewSphere()
+	i := NewIntersection(4, shape)
+
+	comps := i.Precompute(r)
+
+	if comps.t != i.t {
+		t.Fatal("T is wrong")
+	}
+	if comps.object != shape {
+		t.Fatal("Object is wrong")
+	}
+	if !comps.point.Equals(tuple.NewPoint(0, 0, -1)) {
+		t.Fatal("Point is wrong")
+	}
+	if !comps.eye.Equals(tuple.NewVector(0, 0, -1)) {
+		t.Fatal("Eye is wrong")
+	}
+	if !comps.normal.Equals(tuple.NewVector(0, 0, -1)) {
+		t.Fatal("Normal is wrong")
+	}
+}
+
+func TestPrecompute_outside(t *testing.T) {
+	r := ray.NewRay(tuple.NewPoint(0, 0, -5), tuple.NewVector(0, 0, 1))
+	shape := NewSphere()
+	i := NewIntersection(4, shape)
+
+	comps := i.Precompute(r)
+
+	if comps.inside {
+		t.Fatal("Inside was wrong")
+	}
+}
+
+func TestPrecompute_inside(t *testing.T) {
+	r := ray.NewRay(tuple.NewPoint(0, 0, 0), tuple.NewVector(0, 0, 1))
+	shape := NewSphere()
+	i := NewIntersection(1, shape)
+
+	comps := i.Precompute(r)
+
+	if !comps.inside {
+		t.Fatal("Inside was wrong")
+	}
+	if !comps.point.Equals(tuple.NewPoint(0, 0, 1)) {
+		t.Fatal("Point is wrong")
+	}
+	if !comps.eye.Equals(tuple.NewVector(0, 0, -1)) {
+		t.Fatal("Eye is wrong")
+	}
+	if !comps.normal.Equals(tuple.NewVector(0, 0, -1)) {
+		t.Fatal("Normal is wrong")
+	}
+}
