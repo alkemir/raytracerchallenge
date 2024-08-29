@@ -92,3 +92,32 @@ func TestDefaultWorldIntersect(t *testing.T) {
 		t.Fatal("Fourth intersection is wrong")
 	}
 }
+
+func TestWorldShadeHit(t *testing.T) {
+	r := ray.NewRay(tuple.NewPoint(0, 0, -5), tuple.NewVector(0, 0, 1))
+	shape := DefaultWorld.objs[0]
+	i := NewIntersection(4, shape)
+
+	comps := i.Precompute(r)
+	c := DefaultWorld.ShadeHit(comps)
+
+	if !c.Equals(tuple.NewColor(0.38066119, 0.47582649, 0.2854958)) {
+		t.Fatal("Color is wrong")
+	}
+}
+
+func TestWorldShadeHit_inside(t *testing.T) {
+	r := ray.NewRay(tuple.NewPoint(0, 0, 0), tuple.NewVector(0, 0, 1))
+	l := NewPointLight(tuple.NewPoint(0, 0.25, 0), tuple.NewColor(1, 1, 1))
+	DefaultWorld.lights[0] = l // Grrr
+
+	shape := DefaultWorld.objs[1]
+	i := NewIntersection(0.5, shape)
+
+	comps := i.Precompute(r)
+	c := DefaultWorld.ShadeHit(comps)
+
+	if !c.Equals(tuple.NewColor(0.90498447, 0.90498447, 0.90498447)) {
+		t.Fatal("Color is wrong")
+	}
+}

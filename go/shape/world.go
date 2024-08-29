@@ -63,6 +63,6 @@ func (w *World) Intersect(ray *ray.Ray) []*Intersection {
 	return allIntersections
 }
 
-func (w *World) Precompute() {
-
+func (w *World) ShadeHit(comps *Comps) tuple.Tuple {
+	return comps.object.(*Sphere).material.Lightning(w.lights[0], comps.point, comps.eye, comps.normal)
 }
