@@ -109,7 +109,9 @@ func TestWorldShadeHit(t *testing.T) {
 func TestWorldShadeHit_inside(t *testing.T) {
 	r := ray.NewRay(tuple.NewPoint(0, 0, 0), tuple.NewVector(0, 0, 1))
 	l := NewPointLight(tuple.NewPoint(0, 0.25, 0), tuple.NewColor(1, 1, 1))
-	DefaultWorld.lights[0] = l // Grrr
+	ol := DefaultWorld.lights[0]
+	defer func() { DefaultWorld.lights[0] = ol }() // restore original light
+	DefaultWorld.lights[0] = l                     // Grrr
 
 	shape := DefaultWorld.objs[1]
 	i := NewIntersection(0.5, shape)
@@ -119,5 +121,39 @@ func TestWorldShadeHit_inside(t *testing.T) {
 
 	if !c.Equals(tuple.NewColor(0.90498447, 0.90498447, 0.90498447)) {
 		t.Fatal("Color is wrong")
+	}
+}
+
+func TestWorldShade_miss(t *testing.T) {
+	r := ray.NewRay(tuple.NewPoint(0, 0, -5), tuple.NewVector(0, 1, 0))
+
+	c := DefaultWorld.Shade(r)
+
+	if !c.Equals(tuple.NewColor(0, 0, 0)) {
+		t.Fatal("Color was wrong")
+	}
+}
+
+func TestWorldShade_hit(t *testing.T) {
+	r := ray.NewRay(tuple.NewPoint(0, 0, -5), tuple.NewVector(0, 0, 1))
+
+	c := DefaultWorld.Shade(r)
+
+	if !c.Equals(tuple.NewColor(0.38066119, 0.47582649, 0.2854958)) {
+		t.Fatal("Color was wrong")
+	}
+}
+
+func TestWorldShade_hitInside(t *testing.T) {
+	outer := DefaultWorld.objs[0]
+	outer.material.ambient = 1
+	inner := DefaultWorld.objs[1]
+	inner.material.ambient = 1
+	r := ray.NewRay(tuple.NewPoint(0, 0, 0.75), tuple.NewVector(0, 0, -1))
+
+	c := DefaultWorld.Shade(r)
+
+	if !c.Equals(inner.material.color) {
+		t.Fatal("Color was wrong")
 	}
 }
