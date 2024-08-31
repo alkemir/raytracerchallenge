@@ -57,7 +57,7 @@ func (w *World) Intersect(ray *Ray) []*Intersection {
 func (w *World) ShadeHit(comps *Comps) Tuple {
 	res := NewColor(0, 0, 0)
 	for l := range w.lights {
-		res = res.Add(comps.object.(*Sphere).material.Lightning(w.lights[l], comps.point, comps.eye, comps.normal))
+		res = res.Add(comps.object.(*Sphere).material.Lightning(w.lights[l], comps.point, comps.eye, comps.normal, w.IsShadowed(w.lights[l], comps.point)))
 	}
 	return res
 }
@@ -70,4 +70,16 @@ func (w *World) Shade(ray *Ray) Tuple {
 
 	comps := i.Precompute(ray)
 	return w.ShadeHit(comps)
+}
+
+func (w *World) IsShadowed(l *Light, p Tuple) bool {
+	v := l.position.Sub(p)
+	distance := v.Mag()
+	direction := v.Norm()
+
+	r := NewRay(p, direction)
+	ii := w.Intersect(r)
+
+	h := Hit(ii)
+	return h != nil && h.t < distance
 }

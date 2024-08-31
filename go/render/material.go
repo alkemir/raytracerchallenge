@@ -40,14 +40,17 @@ func (m *Material) Equals(o *Material) bool {
 		abs(m.shininess-o.shininess) < EPSILON
 }
 
-func (m *Material) Lightning(l *Light, p, eye, normal Tuple) Tuple {
+func (m *Material) Lightning(l *Light, p, eye, normal Tuple, shadowed bool) Tuple {
 	rCol := m.color.Hadamard(l.intensity)
 	lVec := l.position.Sub(p).Norm()
 
 	ambientContrib := rCol.Mul(m.ambient)
+	if shadowed {
+		return ambientContrib
+	}
+
 	diffuseContrib := NewColor(0, 0, 0)
 	specularContrib := NewColor(0, 0, 0)
-
 	if lightDotNormal := lVec.Dot(normal); lightDotNormal > 0 {
 		diffuseContrib = rCol.Mul(m.diffuse * lightDotNormal)
 

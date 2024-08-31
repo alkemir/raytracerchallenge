@@ -46,7 +46,7 @@ func main() {
 				p := r.Project(hit.T())
 				n := hit.Object().(*render.Sphere).Normal(p)
 				eye := cameraDirection.Mul(-1)
-				image.SetAt(x, y, material.Lightning(light, p, eye, n))
+				image.SetAt(x, y, material.Lightning(light, p, eye, n, false))
 			}
 		}
 	}

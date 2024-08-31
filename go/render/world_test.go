@@ -134,6 +134,28 @@ func TestWorldShade_miss(t *testing.T) {
 	}
 }
 
+func TestWorldShade_shadow(t *testing.T) {
+	w := NewWorld()
+	l := NewPointLight(NewPoint(0, 0, -10), NewColor(1, 1, 1))
+	w.AddLight(l)
+
+	s1 := NewSphere()
+	w.AddObject(s1)
+	s2 := NewSphere()
+	s2.SetTransform(Translation(0, 0, 10))
+	w.AddObject(s2)
+
+	r := NewRay(NewPoint(0, 0, 5), NewVector(0, 0, 1))
+	i := NewIntersection(4, s2)
+
+	comps := i.Precompute(r)
+	c := w.ShadeHit(comps)
+
+	if !c.Equals(NewColor(0.1, 0.1, 0.1)) {
+		t.Fatal("Color was wrong")
+	}
+}
+
 func TestWorldShade_hit(t *testing.T) {
 	w := DefaultWorld()
 	r := NewRay(NewPoint(0, 0, -5), NewVector(0, 0, 1))
@@ -158,5 +180,50 @@ func TestWorldShade_hitInside(t *testing.T) {
 
 	if !c.Equals(inner.material.color) {
 		t.Fatal("Color was wrong")
+	}
+}
+
+func TestWorldShadow_no(t *testing.T) {
+	w := DefaultWorld()
+	p := NewPoint(0, 10, 0)
+
+	if w.IsShadowed(w.lights[0], p) {
+		t.Fatal("Shadow reported is wrong")
+	}
+}
+
+func TestWorldShadow_noSide(t *testing.T) {
+	w := DefaultWorld()
+	p := NewPoint(0, 10, 0)
+
+	if w.IsShadowed(w.lights[0], p) {
+		t.Fatal("Shadow reported is wrong")
+	}
+}
+
+func TestWorldShadow_yes(t *testing.T) {
+	w := DefaultWorld()
+	p := NewPoint(10, -10, 10)
+
+	if !w.IsShadowed(w.lights[0], p) {
+		t.Fatal("Shadow reported is wrong")
+	}
+}
+
+func TestWorldShadow_noBehind(t *testing.T) {
+	w := DefaultWorld()
+	p := NewPoint(-20, 20, 20)
+
+	if w.IsShadowed(w.lights[0], p) {
+		t.Fatal("Shadow reported is wrong")
+	}
+}
+
+func TestWorldShadow_noBetween(t *testing.T) {
+	w := DefaultWorld()
+	p := NewPoint(-2, 2, -2)
+
+	if w.IsShadowed(w.lights[0], p) {
+		t.Fatal("Shadow reported is wrong")
 	}
 }
