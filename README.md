@@ -10,3 +10,7 @@ To show off the capabilities of the renderer, see this image which is the result
 Then, in chapter 6 we added light sources and their consequences according to the Phong model:
 
 ![Illuminated rendering of a Sphere](/go/examples/chapter6/example.png?raw=true "IlluminatedSphereRender")
+
+In chapter 7 we created abstractions for cameras and worlds which makes setting up scenes way more easy:
+
+![Scene of multiple Spheres](/go/examples/chapter7/example.png?raw=true "MultipledSpheresRender")
