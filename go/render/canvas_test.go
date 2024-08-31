@@ -39,7 +39,7 @@ func TestCanvasToFile(t *testing.T) {
 	c.SetAt(2, 1, color2)
 	c.SetAt(4, 2, color3)
 
-	f, err := os.CreateTemp("./", "canvasTest*.png")
+	f, err := os.CreateTemp("./test_files/", "canvasTest*.png")
 	if err != nil {
 		t.Fatalf("Could not create temporary file: %v", err)
 	}

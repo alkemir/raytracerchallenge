@@ -1,4 +1,2 @@
 .vscode
-go/render/*.png
-go/examples/chapter5/example.png
-go/examples/chapter6/example.png
+go/render/test_files/*.png
