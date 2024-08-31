@@ -5,8 +5,8 @@ research has found it is essential for learning)
 
 To show off the capabilities of the renderer, see this image which is the result of chapter 5:
 
-![Basic rendering of a Sphere](/examples/chapter5/example.png?raw=true "BasicSphereRender")
+![Basic rendering of a Sphere](/go/examples/chapter5/example.png?raw=true "BasicSphereRender")
 
 Then, in chapter 6 we added light sources and their consequences according to the Phong model:
 
-![Illuminated rendering of a Sphere](/examples/chapter6/example.png?raw=true "IlluminatedSphereRender")
+![Illuminated rendering of a Sphere](/go/examples/chapter6/example.png?raw=true "IlluminatedSphereRender")
