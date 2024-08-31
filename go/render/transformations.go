@@ -26,6 +26,20 @@ func Shearing(xtoy, xtoz, ytox, ytoz, ztox, ztoy float64) *Matrix {
 	return NewMatrix(4, 4, []float64{1, xtoy, xtoz, 0, ytox, 1, ytoz, 0, ztox, ztoy, 1, 0, 0, 0, 0, 1})
 }
 
+func View(from Tuple, to Tuple, up Tuple) *Matrix {
+	forward := to.Sub(from).Norm()
+	upn := up.Norm()
+	left := forward.Cross(upn)
+	trueUp := left.Cross(forward)
+
+	return NewMatrix(4, 4, []float64{
+		left.x, left.y, left.z, 0,
+		trueUp.x, trueUp.y, trueUp.z, 0,
+		-forward.x, -forward.y, -forward.z, 0,
+		0, 0, 0, 1,
+	}).Multiply(Translation(-from.x, -from.y, -from.z))
+}
+
 func (m *Matrix) Translate(x, y, z float64) *Matrix {
 	return Translation(x, y, z).Multiply(m)
 }
