@@ -57,7 +57,7 @@ func (w *World) Intersect(ray *Ray) []*Intersection {
 func (w *World) ShadeHit(comps *Comps) Tuple {
 	res := NewColor(0, 0, 0)
 	for l := range w.lights {
-		res = res.Add(comps.object.(*Sphere).material.Lightning(w.lights[l], comps.point, comps.eye, comps.normal, w.IsShadowed(w.lights[l], comps.point)))
+		res = res.Add(comps.object.(*Sphere).material.Lightning(w.lights[l], comps.point, comps.eye, comps.normal, w.IsShadowed(w.lights[l], comps.overPoint)))
 	}
 	return res
 }

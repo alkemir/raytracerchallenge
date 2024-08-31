@@ -165,3 +165,19 @@ func TestPrecompute_inside(t *testing.T) {
 		t.Fatal("Normal is wrong")
 	}
 }
+
+func TestPrecompute_overPoint(t *testing.T) {
+	r := NewRay(NewPoint(0, 0, -5), NewVector(0, 0, 1))
+	shape := NewSphere()
+	shape.SetTransform(Translation(0, 0, 1))
+	i := NewIntersection(5, shape)
+
+	comps := i.Precompute(r)
+
+	if comps.overPoint.z >= EPSILON/2 {
+		t.Fatal("Over point is wrong")
+	}
+	if comps.point.z <= comps.overPoint.z {
+		t.Fatal("Over point is not over the point")
+	}
+}

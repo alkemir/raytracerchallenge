@@ -33,12 +33,13 @@ func Hit(ii []*Intersection) *Intersection {
 }
 
 type Comps struct {
-	t      float64
-	object any
-	point  Tuple
-	eye    Tuple
-	normal Tuple
-	inside bool
+	t         float64
+	object    any
+	point     Tuple
+	overPoint Tuple
+	eye       Tuple
+	normal    Tuple
+	inside    bool
 }
 
 func (i *Intersection) Precompute(ray *Ray) *Comps {
@@ -51,13 +52,15 @@ func (i *Intersection) Precompute(ray *Ray) *Comps {
 		inside = true
 		normal = normal.Mul(-1)
 	}
+	overPoint := point.Add(normal.Mul(EPSILON))
 
 	return &Comps{
-		t:      i.t,
-		object: i.obj,
-		point:  point,
-		eye:    eye,
-		normal: normal,
-		inside: inside,
+		t:         i.t,
+		object:    i.obj,
+		point:     point,
+		overPoint: overPoint,
+		eye:       eye,
+		normal:    normal,
+		inside:    inside,
 	}
 }
