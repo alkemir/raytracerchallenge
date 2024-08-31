@@ -14,3 +14,11 @@ Then, in chapter 6 we added light sources and their consequences according to th
 In chapter 7 we created abstractions for cameras and worlds which makes setting up scenes way more easy:
 
 ![Scene of multiple Spheres](/go/examples/chapter7/example.png?raw=true "MultipledSpheresRender")
+
+In chapter 8 we added shadows, which bring in a problem called acne:
+
+![Scene with Acne](/go/examples/chapter8/example_fleas.png?raw=true "AcneSpheresRender")
+
+But don't worry, we fixed it:
+
+![Scene with Shadows](/go/examples/chapter8/example.png?raw=true "ShadowsSpheresRender")
