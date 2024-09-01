@@ -8,7 +8,7 @@ import (
 func TestShapeDefaultTransform(t *testing.T) {
 	s := NewTestShape()
 
-	if !s.transform.Equals(IdentityMatrix()) {
+	if !s.transform().Equals(IdentityMatrix()) {
 		t.Fatal("Default transform is wrong")
 	}
 }
@@ -18,7 +18,7 @@ func TestShapeSetTransform(t *testing.T) {
 
 	s.SetTransform(Translation(2, 3, 4))
 
-	if !s.transform.Equals(Translation(2, 3, 4)) {
+	if !s.transform().Equals(Translation(2, 3, 4)) {
 		t.Fatal("Default transform is wrong")
 	}
 }
@@ -26,7 +26,7 @@ func TestShapeSetTransform(t *testing.T) {
 func TestShapeDefaultMaterial(t *testing.T) {
 	s := NewTestShape()
 
-	if !s.material.Equals(DefaultMaterial()) {
+	if !s.material().Equals(DefaultMaterial()) {
 		t.Fatal("Default transform is wrong")
 	}
 }
@@ -38,7 +38,7 @@ func TestShapeSetMaterial(t *testing.T) {
 
 	s.SetMaterial(m)
 
-	if !s.material.Equals(m) {
+	if !s.material().Equals(m) {
 		t.Fatal("Default transform is wrong")
 	}
 }

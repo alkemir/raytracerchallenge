@@ -30,41 +30,41 @@ func TestDefaultWorld(t *testing.T) {
 	if len(w.objs) != 2 {
 		t.Fatal("Default world does not have default objects")
 	}
-	if !w.objs[0].material.color.Equals(NewColor(0.8, 1.0, 0.6)) {
+	if !w.objs[0].material().color.Equals(NewColor(0.8, 1.0, 0.6)) {
 		t.Fatal("Default object 1 has wrong color")
 	}
-	if w.objs[0].material.ambient != 0.1 {
+	if w.objs[0].material().ambient != 0.1 {
 		t.Fatal("Default object 1 has wrong ambient")
 	}
-	if w.objs[0].material.diffuse != 0.7 {
+	if w.objs[0].material().diffuse != 0.7 {
 		t.Fatal("Default object 1 has wrong diffuse")
 	}
-	if w.objs[0].material.specular != 0.2 {
+	if w.objs[0].material().specular != 0.2 {
 		t.Fatal("Default object 1 has wrong specular")
 	}
-	if w.objs[0].material.shininess != 200 {
+	if w.objs[0].material().shininess != 200 {
 		t.Fatal("Default object 1 has wrong shininess")
 	}
-	if !w.objs[0].transform.Equals(IdentityMatrix()) {
+	if !w.objs[0].transform().Equals(IdentityMatrix()) {
 		t.Fatal("Default object 1 has wrong transform")
 	}
 
-	if !w.objs[1].material.color.Equals(DefaultMaterial().color) {
+	if !w.objs[1].material().color.Equals(DefaultMaterial().color) {
 		t.Fatal("Default object 2 has wrong color")
 	}
-	if w.objs[1].material.ambient != 0.1 {
+	if w.objs[1].material().ambient != 0.1 {
 		t.Fatal("Default object 2 has wrong ambient")
 	}
-	if w.objs[1].material.diffuse != 0.9 {
+	if w.objs[1].material().diffuse != 0.9 {
 		t.Fatal("Default object 2 has wrong diffuse")
 	}
-	if w.objs[1].material.specular != 0.9 {
+	if w.objs[1].material().specular != 0.9 {
 		t.Fatal("Default object 2 has wrong specular")
 	}
-	if w.objs[1].material.shininess != 200 {
+	if w.objs[1].material().shininess != 200 {
 		t.Fatal("Default object 2 has wrong shininess")
 	}
-	if !w.objs[1].transform.Equals(Scaling(0.5, 0.5, 0.5)) {
+	if !w.objs[1].transform().Equals(Scaling(0.5, 0.5, 0.5)) {
 		t.Fatal("Default object 2 has wrong transform")
 	}
 }
@@ -171,14 +171,14 @@ func TestWorldShade_hitInside(t *testing.T) {
 	w := DefaultWorld()
 
 	outer := w.objs[0]
-	outer.material.ambient = 1
+	outer.material().ambient = 1
 	inner := w.objs[1]
-	inner.material.ambient = 1
+	inner.material().ambient = 1
 	r := NewRay(NewPoint(0, 0, 0.75), NewVector(0, 0, -1))
 
 	c := w.Shade(r)
 
-	if !c.Equals(inner.material.color) {
+	if !c.Equals(inner.material().color) {
 		t.Fatal("Color was wrong")
 	}
 }

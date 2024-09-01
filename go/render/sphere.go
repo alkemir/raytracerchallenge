@@ -4,6 +4,7 @@ import (
 	"math"
 )
 
+var _ Shape = (*Sphere)(nil)
 var _ ConcreteShape = (*Sphere)(nil)
 
 type Sphere struct {

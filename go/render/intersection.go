@@ -2,10 +2,10 @@ package render
 
 type Intersection struct {
 	t   float64
-	obj any
+	obj Shape
 }
 
-func NewIntersection(t float64, obj any) *Intersection {
+func NewIntersection(t float64, obj Shape) *Intersection {
 	return &Intersection{
 		t:   t,
 		obj: obj,
@@ -34,7 +34,7 @@ func Hit(ii []*Intersection) *Intersection {
 
 type Comps struct {
 	t         float64
-	object    any
+	object    Shape
 	point     Tuple
 	overPoint Tuple
 	eye       Tuple
@@ -45,7 +45,7 @@ type Comps struct {
 func (i *Intersection) Precompute(ray *Ray) *Comps {
 	point := ray.Project(i.t)
 	eye := ray.direction.Mul(-1)
-	normal := i.obj.(*Sphere).Normal(point)
+	normal := i.obj.Normal(point)
 	inside := false
 
 	if normal.Dot(eye) < 0 {

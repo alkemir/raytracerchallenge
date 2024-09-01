@@ -1,8 +1,17 @@
 package render
 
+var _ Shape = (*BaseShape)(nil)
+
+type Shape interface {
+	Intersect(r *Ray) []*Intersection
+	Normal(p Tuple) Tuple
+	material() *Material
+	transform() *Matrix
+}
+
 type BaseShape struct {
-	transform *Matrix
-	material  *Material
+	_transform *Matrix
+	_material  *Material
 	ConcreteShape
 }
 
@@ -13,22 +22,30 @@ type ConcreteShape interface {
 
 func DefaultBaseShape() *BaseShape {
 	return &BaseShape{
-		transform:     IdentityMatrix(),
-		material:      DefaultMaterial(),
+		_transform:    IdentityMatrix(),
+		_material:     DefaultMaterial(),
 		ConcreteShape: nil,
 	}
 }
 
 func (s *BaseShape) SetTransform(m *Matrix) {
-	s.transform = m
+	s._transform = m
+}
+
+func (s *BaseShape) transform() *Matrix {
+	return s._transform
 }
 
 func (s *BaseShape) SetMaterial(m *Material) {
-	s.material = m
+	s._material = m
+}
+
+func (s *BaseShape) material() *Material {
+	return s._material
 }
 
 func (s *BaseShape) Intersect(r *Ray) []*Intersection {
-	mInv, err := s.transform.Inverse()
+	mInv, err := s._transform.Inverse()
 	if err != nil {
 		panic(err)
 	}
@@ -38,7 +55,7 @@ func (s *BaseShape) Intersect(r *Ray) []*Intersection {
 }
 
 func (s *BaseShape) Normal(p Tuple) Tuple {
-	mInv, err := s.transform.Inverse()
+	mInv, err := s._transform.Inverse()
 	if err != nil {
 		panic(err)
 	}
