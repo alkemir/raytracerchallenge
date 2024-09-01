@@ -4,7 +4,7 @@ import (
 	"math"
 )
 
-// TODO ensure Sphere implements concrete shape
+var _ ConcreteShape = (*Sphere)(nil)
 
 type Sphere struct {
 	BaseShape
