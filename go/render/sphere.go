@@ -4,45 +4,27 @@ import (
 	"math"
 )
 
+// TODO ensure Sphere implements concrete shape
+
 type Sphere struct {
-	transform *Matrix
-	material  *Material
+	BaseShape
 }
 
 func NewSphere() *Sphere {
-	return &Sphere{
-		transform: IdentityMatrix(),
-		material:  DefaultMaterial(),
+	baseShape := *DefaultBaseShape()
+	res := &Sphere{
+		BaseShape: baseShape,
 	}
+	res.BaseShape.ConcreteShape = res
+
+	return res
 }
 
-func (s *Sphere) SetTransform(m *Matrix) {
-	s.transform = m
+func (s *Sphere) concreteNormal(p Tuple) Tuple {
+	return p.Sub(NewPoint(0, 0, 0))
 }
 
-func (s *Sphere) SetMaterial(m *Material) {
-	s.material = m
-}
-
-func (s *Sphere) Normal(p Tuple) Tuple {
-	mInv, err := s.transform.Inverse()
-	if err != nil {
-		panic(err)
-	}
-
-	objP := mInv.MultiplyTuple(p)
-	objN := objP.Sub(NewPoint(0, 0, 0))
-	worldN := mInv.Transpose().MultiplyTuple(objN).ZeroW()
-	return worldN.Norm()
-}
-
-func (s *Sphere) Intersect(r *Ray) []*Intersection {
-	mInv, err := s.transform.Inverse()
-	if err != nil {
-		panic(err)
-	}
-
-	tr := r.Transform(mInv)
+func (s *Sphere) concreteIntersect(tr *Ray) []*Intersection {
 	sphereToRay := tr.origin.Sub(NewPoint(0, 0, 0))
 
 	a := tr.direction.Dot(tr.direction)
