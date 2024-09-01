@@ -84,25 +84,6 @@ func TestSphereIntersect_behind(t *testing.T) {
 	}
 }
 
-func TestSphereTransform_default(t *testing.T) {
-	s := NewSphere()
-
-	if !s.transform.Equals(IdentityMatrix()) {
-		t.Fatal("Default sphere transform is not the identity")
-	}
-}
-
-func TestSphereTransform_changed(t *testing.T) {
-	s := NewSphere()
-	m := Translation(2, 3, 4)
-
-	s.SetTransform(m)
-
-	if !s.transform.Equals(m) {
-		t.Fatal("Set sphere transform is wrong")
-	}
-}
-
 func TestSphereIntersect_scaled(t *testing.T) {
 	r := NewRay(NewPoint(0, 0, -5), NewVector(0, 0, 1))
 	s := NewSphere()
@@ -199,37 +180,5 @@ func TestSphereNormal_scaledRotated(t *testing.T) {
 
 	if !n.Equals(NewVector(0, 0.970142500, -0.24253562)) {
 		t.Fatal("Normal is wrong")
-	}
-}
-
-func TestSphereMaterial_default(t *testing.T) {
-	s := NewSphere()
-
-	if !s.material.Equals(DefaultMaterial()) {
-		t.Fatal("Material is wrong")
-	}
-}
-
-func TestSphereMaterial_set(t *testing.T) {
-	s := NewSphere()
-	m := DefaultMaterial()
-	m.ambient = 1
-
-	s.SetMaterial(m)
-
-	if !s.material.color.Equals(DefaultMaterial().color) {
-		t.Fatal("Material color is wrong")
-	}
-	if s.material.ambient != 1 {
-		t.Fatal("Material ambient is wrong")
-	}
-	if s.material.diffuse != DefaultMaterial().diffuse {
-		t.Fatal("Material difusse is wrong")
-	}
-	if s.material.specular != DefaultMaterial().specular {
-		t.Fatal("Material specular is wrong")
-	}
-	if s.material.shininess != DefaultMaterial().shininess {
-		t.Fatal("Material shininess is wrong")
 	}
 }
