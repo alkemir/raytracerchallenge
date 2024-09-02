@@ -114,3 +114,22 @@ func TestMaterialLightning_inShadow(t *testing.T) {
 		t.Fatal("Lightning is wrong")
 	}
 }
+
+func TestMaterialLightning_pattern(t *testing.T) {
+	pattern := NewStripePattern(NewColor(1, 1, 1), NewColor(0, 0, 0))
+	m := NewMaterial(NewColor(0, 0, 0), 1, 0, 0, 200, pattern)
+	eye := NewVector(0, 0, -1)
+	normal := NewVector(0, 0, -1)
+	light := NewPointLight(NewPoint(0, 0, -10), NewColor(1, 1, 1))
+	shadowed := false
+
+	c1 := m.Lightning(light, NewPoint(0.9, 0, 0), eye, normal, shadowed)
+	c2 := m.Lightning(light, NewPoint(1.1, 0, 0), eye, normal, shadowed)
+
+	if !c1.Equals(NewColor(1, 1, 1)) {
+		t.Fatal("Lightning is wrong")
+	}
+	if !c2.Equals(NewColor(0, 0, 0)) {
+		t.Fatal("Lightning is wrong")
+	}
+}

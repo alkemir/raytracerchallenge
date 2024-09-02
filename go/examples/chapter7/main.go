@@ -19,7 +19,7 @@ func main() {
 
 	floor := render.NewSphere()
 	floor.SetTransform(render.Scaling(10, 0.01, 10))
-	floorMaterial := render.NewMaterial(render.NewColor(1, 0.9, 0.9), 0.1, 0.9, 0, 200)
+	floorMaterial := render.NewMaterial(render.NewColor(1, 0.9, 0.9), 0.1, 0.9, 0, 200, nil)
 	floor.SetMaterial(floorMaterial)
 	world.AddObject(floor)
 
@@ -41,19 +41,19 @@ func main() {
 
 	middle := render.NewSphere()
 	middle.SetTransform(render.Translation(-0.5, 1, 0.5))
-	middleMaterial := render.NewMaterial(render.NewColor(0.1, 1, 0.5), 0.1, 0.7, 0.3, 200)
+	middleMaterial := render.NewMaterial(render.NewColor(0.1, 1, 0.5), 0.1, 0.7, 0.3, 200, nil)
 	middle.SetMaterial(middleMaterial)
 	world.AddObject(middle)
 
 	right := render.NewSphere()
 	right.SetTransform(render.Translation(1.5, 0.5, -0.5).Multiply(render.Scaling(0.5, 0.5, 0.5)))
-	rightMaterial := render.NewMaterial(render.NewColor(0.5, 1, 0.1), 0.1, 0.7, 0.3, 200)
+	rightMaterial := render.NewMaterial(render.NewColor(0.5, 1, 0.1), 0.1, 0.7, 0.3, 200, nil)
 	right.SetMaterial(rightMaterial)
 	world.AddObject(right)
 
 	left := render.NewSphere()
 	left.SetTransform(render.Translation(-1.5, 0.33, -0.75).Multiply(render.Scaling(0.33, 0.33, 0.33)))
-	leftMaterial := render.NewMaterial(render.NewColor(1, 0.8, 0.1), 0.1, 0.7, 0.3, 200)
+	leftMaterial := render.NewMaterial(render.NewColor(1, 0.8, 0.1), 0.1, 0.7, 0.3, 200, nil)
 	left.SetMaterial(leftMaterial)
 	world.AddObject(left)
 

@@ -10,15 +10,17 @@ type Material struct {
 	diffuse   float64
 	specular  float64
 	shininess float64
+	pattern   *StripePattern
 }
 
-func NewMaterial(color Tuple, ambient, diffuse, specular, shininess float64) *Material {
+func NewMaterial(color Tuple, ambient, diffuse, specular, shininess float64, pattern *StripePattern) *Material {
 	return &Material{
 		color:     color,
 		ambient:   ambient,
 		diffuse:   diffuse,
 		specular:  specular,
 		shininess: shininess,
+		pattern:   pattern,
 	}
 }
 
@@ -29,6 +31,7 @@ func DefaultMaterial() *Material {
 		diffuse:   0.9,
 		specular:  0.9,
 		shininess: 200,
+		pattern:   nil, // TODO: Implement solid pattern
 	}
 }
 
@@ -37,11 +40,17 @@ func (m *Material) Equals(o *Material) bool {
 		abs(m.ambient-o.ambient) < EPSILON &&
 		abs(m.diffuse-o.diffuse) < EPSILON &&
 		abs(m.specular-o.specular) < EPSILON &&
-		abs(m.shininess-o.shininess) < EPSILON
+		abs(m.shininess-o.shininess) < EPSILON &&
+		m.pattern == o.pattern
 }
 
 func (m *Material) Lightning(l *Light, p, eye, normal Tuple, shadowed bool) Tuple {
-	rCol := m.color.Hadamard(l.intensity)
+	pColor := m.color
+	if m.pattern != nil {
+		pColor = m.pattern.At(p)
+	}
+
+	rCol := pColor.Hadamard(l.intensity)
 	lVec := l.position.Sub(p).Norm()
 
 	ambientContrib := rCol.Mul(m.ambient)
