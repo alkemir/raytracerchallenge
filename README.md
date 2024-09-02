@@ -26,3 +26,20 @@ But don't worry, we fixed it:
 In chapter 9 we implemented planes, so we no longer have to torture spheres out of shape to achieve this effect:
 
 ![Scene with Plane](/go/examples/chapter9/example.png?raw=true "PlaneSpheresRender")
+
+Chapter 10 was all about adding patterns to leave behind the boring world of solid colors. But, of course, the first patterns are a bit boring:
+
+![Boring Scene](/go/examples/chapter10/example_untransformed.png?raw=true "BoringPatternRender")
+
+So we implemented support for patterns to be transformed, so there is some improvement, e.g. you are no longer confused by the middle sphere making a continuum with the floor.
+
+![Transformed Scene](/go/examples/chapter10/example_transformed.png?raw=true "TransformedPatternRender")
+
+Then we moved on to more interesting patterns
+
+![Acned floor Scene](/go/examples/chapter10/example_fail.png?raw=true "FailedPatternRender")
+
+Alas, I had a bug which reminded me of the acne from a couple of chapters ago. Had to use some colors to figure out whether it was a patterning issue or a shadowing one (the downsides of using black and white), so now thats taken care of. Lo, and behold:
+
+![Patterned Scene](/go/examples/chapter10/example.png?raw=true "PatternedRender")
+
