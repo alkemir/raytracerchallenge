@@ -10,10 +10,10 @@ type Material struct {
 	diffuse   float64
 	specular  float64
 	shininess float64
-	pattern   *StripePattern
+	pattern   Pattern
 }
 
-func NewMaterial(color Tuple, ambient, diffuse, specular, shininess float64, pattern *StripePattern) *Material {
+func NewMaterial(color Tuple, ambient, diffuse, specular, shininess float64, pattern Pattern) *Material {
 	return &Material{
 		color:     color,
 		ambient:   ambient,

@@ -7,98 +7,56 @@ import (
 var black = NewColor(0, 0, 0)
 var white = NewColor(1, 1, 1)
 
-func TestPatternStripe(t *testing.T) {
-	pattern := NewStripePattern(white, black)
+func TestPattern_defaultTransform(t *testing.T) {
+	pattern := NewTestPattern()
 
-	if !pattern.a.Equals(white) {
-		t.Fatal("First color is wrong")
-	}
-	if !pattern.b.Equals(black) {
-		t.Fatal("Second color is wrong")
+	if !pattern.transform.Equals(IdentityMatrix()) {
+		t.Fatal("Transform is wrong")
 	}
 }
 
-func TestPatternStrip_constantInY(t *testing.T) {
-	pattern := NewStripePattern(white, black)
+func TestPattern_setTransform(t *testing.T) {
+	pattern := NewTestPattern()
+	pattern.SetTransform(Translation(1, 2, 3))
 
-	if !pattern.At(NewPoint(0, 0, 0)).Equals(white) {
-		t.Fatal("Stripe is wrong")
-	}
-	if !pattern.At(NewPoint(0, 1, 0)).Equals(white) {
-		t.Fatal("Stripe is wrong")
-	}
-	if !pattern.At(NewPoint(0, 2, 0)).Equals(white) {
-		t.Fatal("Stripe is wrong")
+	if !pattern.transform.Equals(Translation(1, 2, 3)) {
+		t.Fatal("Transform is wrong")
 	}
 }
 
-func TestPatternStrip_constantInZ(t *testing.T) {
-	pattern := NewStripePattern(white, black)
-
-	if !pattern.At(NewPoint(0, 0, 0)).Equals(white) {
-		t.Fatal("Stripe is wrong")
-	}
-	if !pattern.At(NewPoint(0, 0, 1)).Equals(white) {
-		t.Fatal("Stripe is wrong")
-	}
-	if !pattern.At(NewPoint(0, 0, 2)).Equals(white) {
-		t.Fatal("Stripe is wrong")
-	}
-}
-
-func TestPatternStrip_alternatesInX(t *testing.T) {
-	pattern := NewStripePattern(white, black)
-
-	if !pattern.At(NewPoint(0, 0, 0)).Equals(white) {
-		t.Fatal("Stripe is wrong")
-	}
-	if !pattern.At(NewPoint(0.9, 0, 0)).Equals(white) {
-		t.Fatal("Stripe is wrong")
-	}
-	if !pattern.At(NewPoint(1, 0, 0)).Equals(black) {
-		t.Fatal("Stripe is wrong")
-	}
-	if !pattern.At(NewPoint(-0.1, 0, 0)).Equals(black) {
-		t.Fatal("Stripe is wrong")
-	}
-	if !pattern.At(NewPoint(-1.1, 0, 0)).Equals(white) {
-		t.Fatal("Stripe is wrong")
-	}
-}
-
-func TestPatternStrip_objectTransform(t *testing.T) {
+func TestPattern_objectTransform(t *testing.T) {
 	obj := NewSphere()
 	obj.SetTransform(Scaling(2, 2, 2))
-	pattern := NewStripePattern(white, black)
+	pattern := NewTestPattern()
 
-	c := pattern.AtObject(obj, NewPoint(1.50, 0, 0))
+	c := pattern.AtObject(obj, NewPoint(2, 3, 4))
 
-	if !c.Equals(white) {
-		t.Fatal("Stripe is wrong")
+	if !c.Equals(NewColor(1, 1.5, 2)) {
+		t.Fatal("Transform is wrong is wrong")
 	}
 }
 
-func TestPatternStrip_patternTransform(t *testing.T) {
+func TestPattern_patternTransform(t *testing.T) {
 	obj := NewSphere()
-	pattern := NewStripePattern(white, black)
+	pattern := NewTestPattern()
 	pattern.SetTransform(Scaling(2, 2, 2))
 
-	c := pattern.AtObject(obj, NewPoint(1.50, 0, 0))
+	c := pattern.AtObject(obj, NewPoint(2, 3, 4))
 
-	if !c.Equals(white) {
-		t.Fatal("Stripe is wrong")
+	if !c.Equals(NewColor(1, 1.5, 2)) {
+		t.Fatal("Transform is wrong is wrong")
 	}
 }
 
-func TestPatternStrip_patternAndObjTransform(t *testing.T) {
+func TestPattern_patternAndObjTransform(t *testing.T) {
 	obj := NewSphere()
 	obj.SetTransform(Scaling(2, 2, 2))
-	pattern := NewStripePattern(white, black)
-	pattern.SetTransform(Translation(0.5, 0, 0))
+	pattern := NewTestPattern()
+	pattern.SetTransform(Translation(0.5, 1, 1.5))
 
-	c := pattern.AtObject(obj, NewPoint(1.50, 0, 0))
+	c := pattern.AtObject(obj, NewPoint(2.5, 3, 3.5))
 
-	if !c.Equals(white) {
+	if !c.Equals(NewColor(0.75, 0.5, 0.25)) {
 		t.Fatal("Stripe is wrong")
 	}
 }
