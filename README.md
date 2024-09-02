@@ -22,3 +22,7 @@ In chapter 8 we added shadows, which bring in a problem called acne:
 But don't worry, we fixed it:
 
 ![Scene with Shadows](/go/examples/chapter8/example.png?raw=true "ShadowsSpheresRender")
+
+In chapter 9 we implemented planes, so we no longer have to torture spheres out of shape to achieve this effect:
+
+![Scene with Plane](/go/examples/chapter9/example.png?raw=true "PlaneSpheresRender")
