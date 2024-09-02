@@ -19,7 +19,7 @@ func DefaultWorld() *World {
 	w.AddLight(NewPointLight(NewPoint(-10, 10, -10), NewColor(1, 1, 1)))
 
 	s1 := NewSphere()
-	s1.SetMaterial(NewMaterial(NewColor(0.8, 1.0, 0.6), 0.1, 0.7, 0.2, 200, nil))
+	s1.SetMaterial(NewMaterial(NewColor(0.8, 1.0, 0.6), 0.1, 0.7, 0.2, 0, 200, nil))
 	w.AddObject(s1)
 
 	s2 := NewSphere()

@@ -5,33 +5,36 @@ import (
 )
 
 type Material struct {
-	color     Tuple
-	ambient   float64
-	diffuse   float64
-	specular  float64
-	shininess float64
-	pattern   Pattern
+	color      Tuple
+	ambient    float64
+	diffuse    float64
+	specular   float64
+	shininess  float64
+	reflective float64
+	pattern    Pattern
 }
 
-func NewMaterial(color Tuple, ambient, diffuse, specular, shininess float64, pattern Pattern) *Material {
+func NewMaterial(color Tuple, ambient, diffuse, specular, reflective, shininess float64, pattern Pattern) *Material {
 	return &Material{
-		color:     color,
-		ambient:   ambient,
-		diffuse:   diffuse,
-		specular:  specular,
-		shininess: shininess,
-		pattern:   pattern,
+		color:      color,
+		ambient:    ambient,
+		diffuse:    diffuse,
+		specular:   specular,
+		shininess:  shininess,
+		reflective: reflective,
+		pattern:    pattern,
 	}
 }
 
 func DefaultMaterial() *Material {
 	return &Material{
-		color:     NewColor(1, 1, 1),
-		ambient:   0.1,
-		diffuse:   0.9,
-		specular:  0.9,
-		shininess: 200,
-		pattern:   nil, // TODO: Implement solid pattern
+		color:      NewColor(1, 1, 1),
+		ambient:    0.1,
+		diffuse:    0.9,
+		specular:   0.9,
+		reflective: 0,
+		shininess:  200,
+		pattern:    nil, // TODO: Implement solid pattern
 	}
 }
 
@@ -41,6 +44,7 @@ func (m *Material) Equals(o *Material) bool {
 		abs(m.diffuse-o.diffuse) < EPSILON &&
 		abs(m.specular-o.specular) < EPSILON &&
 		abs(m.shininess-o.shininess) < EPSILON &&
+		abs(m.reflective-o.reflective) < EPSILON &&
 		m.pattern == o.pattern
 }
 
