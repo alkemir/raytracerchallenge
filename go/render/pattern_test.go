@@ -65,3 +65,40 @@ func TestPatternStrip_alternatesInX(t *testing.T) {
 		t.Fatal("Stripe is wrong")
 	}
 }
+
+func TestPatternStrip_objectTransform(t *testing.T) {
+	obj := NewSphere()
+	obj.SetTransform(Scaling(2, 2, 2))
+	pattern := NewStripePattern(white, black)
+
+	c := pattern.AtObject(obj, NewPoint(1.50, 0, 0))
+
+	if !c.Equals(white) {
+		t.Fatal("Stripe is wrong")
+	}
+}
+
+func TestPatternStrip_patternTransform(t *testing.T) {
+	obj := NewSphere()
+	pattern := NewStripePattern(white, black)
+	pattern.SetTransform(Scaling(2, 2, 2))
+
+	c := pattern.AtObject(obj, NewPoint(1.50, 0, 0))
+
+	if !c.Equals(white) {
+		t.Fatal("Stripe is wrong")
+	}
+}
+
+func TestPatternStrip_patternAndObjTransform(t *testing.T) {
+	obj := NewSphere()
+	obj.SetTransform(Scaling(2, 2, 2))
+	pattern := NewStripePattern(white, black)
+	pattern.SetTransform(Translation(0.5, 0, 0))
+
+	c := pattern.AtObject(obj, NewPoint(1.50, 0, 0))
+
+	if !c.Equals(white) {
+		t.Fatal("Stripe is wrong")
+	}
+}

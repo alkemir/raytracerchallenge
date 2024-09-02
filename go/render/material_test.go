@@ -33,7 +33,7 @@ func TestMaterialLightning_eyeBetweenLightSurface(t *testing.T) {
 	light := NewPointLight(NewPoint(0, 0, -10), NewColor(1, 1, 1))
 	shadowed := false
 
-	res := m.Lightning(light, p, eye, normal, shadowed)
+	res := m.Lightning(NewSphere(), light, p, eye, normal, shadowed)
 
 	if !res.Equals(NewColor(1.9, 1.9, 1.9)) {
 		t.Fatal("Lightning is wrong")
@@ -48,7 +48,7 @@ func TestMaterialLightning_eyeBetweenLightSurface_EyeOffset(t *testing.T) {
 	light := NewPointLight(NewPoint(0, 0, -10), NewColor(1, 1, 1))
 	shadowed := false
 
-	res := m.Lightning(light, p, eye, normal, shadowed)
+	res := m.Lightning(NewSphere(), light, p, eye, normal, shadowed)
 
 	if !res.Equals(NewColor(1.0, 1.0, 1.0)) {
 		t.Fatal("Lightning is wrong")
@@ -63,7 +63,7 @@ func TestMaterialLightning_eyeBetweenLightSurface_LightOffset(t *testing.T) {
 	light := NewPointLight(NewPoint(0, 10, -10), NewColor(1, 1, 1))
 	shadowed := false
 
-	res := m.Lightning(light, p, eye, normal, shadowed)
+	res := m.Lightning(NewSphere(), light, p, eye, normal, shadowed)
 
 	if !res.Equals(NewColor(0.73639610, 0.73639610, 0.73639610)) {
 		t.Fatal("Lightning is wrong")
@@ -78,7 +78,7 @@ func TestMaterialLightning_eyeInReflectionPath(t *testing.T) {
 	light := NewPointLight(NewPoint(0, 10, -10), NewColor(1, 1, 1))
 	shadowed := false
 
-	res := m.Lightning(light, p, eye, normal, shadowed)
+	res := m.Lightning(NewSphere(), light, p, eye, normal, shadowed)
 
 	if !res.Equals(NewColor(1.63639610, 1.63639610, 1.63639610)) {
 		t.Fatal("Lightning is wrong")
@@ -93,7 +93,7 @@ func TestMaterialLightning_eyeBehindSurface(t *testing.T) {
 	light := NewPointLight(NewPoint(0, 0, 10), NewColor(1, 1, 1))
 	shadowed := false
 
-	res := m.Lightning(light, p, eye, normal, shadowed)
+	res := m.Lightning(NewSphere(), light, p, eye, normal, shadowed)
 
 	if !res.Equals(NewColor(0.1, 0.1, 0.1)) {
 		t.Fatal("Lightning is wrong")
@@ -108,7 +108,7 @@ func TestMaterialLightning_inShadow(t *testing.T) {
 	light := NewPointLight(NewPoint(0, 0, -10), NewColor(1, 1, 1))
 	shadowed := true
 
-	res := m.Lightning(light, p, eye, normal, shadowed)
+	res := m.Lightning(NewSphere(), light, p, eye, normal, shadowed)
 
 	if !res.Equals(NewColor(0.1, 0.1, 0.1)) {
 		t.Fatal("Lightning is wrong")
@@ -123,8 +123,8 @@ func TestMaterialLightning_pattern(t *testing.T) {
 	light := NewPointLight(NewPoint(0, 0, -10), NewColor(1, 1, 1))
 	shadowed := false
 
-	c1 := m.Lightning(light, NewPoint(0.9, 0, 0), eye, normal, shadowed)
-	c2 := m.Lightning(light, NewPoint(1.1, 0, 0), eye, normal, shadowed)
+	c1 := m.Lightning(NewSphere(), light, NewPoint(0.9, 0, 0), eye, normal, shadowed)
+	c2 := m.Lightning(NewSphere(), light, NewPoint(1.1, 0, 0), eye, normal, shadowed)
 
 	if !c1.Equals(NewColor(1, 1, 1)) {
 		t.Fatal("Lightning is wrong")

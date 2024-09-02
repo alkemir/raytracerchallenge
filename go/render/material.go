@@ -44,10 +44,10 @@ func (m *Material) Equals(o *Material) bool {
 		m.pattern == o.pattern
 }
 
-func (m *Material) Lightning(l *Light, p, eye, normal Tuple, shadowed bool) Tuple {
+func (m *Material) Lightning(obj Shape, l *Light, p, eye, normal Tuple, shadowed bool) Tuple {
 	pColor := m.color
 	if m.pattern != nil {
-		pColor = m.pattern.At(p)
+		pColor = m.pattern.AtObject(obj, p)
 	}
 
 	rCol := pColor.Hadamard(l.intensity)
