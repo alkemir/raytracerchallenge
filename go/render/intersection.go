@@ -39,6 +39,7 @@ type Comps struct {
 	overPoint Tuple
 	eye       Tuple
 	normal    Tuple
+	reflectv  Tuple
 	inside    bool
 }
 
@@ -53,6 +54,7 @@ func (i *Intersection) Precompute(ray *Ray) *Comps {
 		normal = normal.Mul(-1)
 	}
 	overPoint := point.Add(normal.Mul(EPSILON))
+	reflectv := ray.direction.Reflect(normal)
 
 	return &Comps{
 		t:         i.t,
@@ -61,6 +63,7 @@ func (i *Intersection) Precompute(ray *Ray) *Comps {
 		overPoint: overPoint,
 		eye:       eye,
 		normal:    normal,
+		reflectv:  reflectv,
 		inside:    inside,
 	}
 }

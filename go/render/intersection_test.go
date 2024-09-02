@@ -1,6 +1,7 @@
 package render
 
 import (
+	"math"
 	"testing"
 )
 
@@ -179,5 +180,18 @@ func TestPrecompute_overPoint(t *testing.T) {
 	}
 	if comps.point.z <= comps.overPoint.z {
 		t.Fatal("Over point is not over the point")
+	}
+}
+
+func TestPrecompute_reflection(t *testing.T) {
+	r := NewRay(NewPoint(0, 1, -1), NewVector(0, -math.Sqrt2/2, math.Sqrt2/2))
+	shape := NewPlane()
+	shape.SetTransform(Translation(0, 0, 1))
+	i := NewIntersection(math.Sqrt2, shape)
+
+	comps := i.Precompute(r)
+
+	if !comps.reflectv.Equals(NewVector(0, math.Sqrt2/2, math.Sqrt2/2)) {
+		t.Fatal("Reflective vector is wrong")
 	}
 }
