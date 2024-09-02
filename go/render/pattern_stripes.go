@@ -2,18 +2,18 @@ package render
 
 import "math"
 
-var _ Pattern = (*StripePattern)(nil)
-var _ ConcretePattern = (*StripePattern)(nil)
+var _ Pattern = (*StripesPattern)(nil)
+var _ ConcretePattern = (*StripesPattern)(nil)
 
-type StripePattern struct {
+type StripesPattern struct {
 	a Tuple
 	b Tuple
 	BasePattern
 }
 
-func NewStripePattern(a, b Tuple) *StripePattern {
+func NewStripesPattern(a, b Tuple) *StripesPattern {
 	basePattern := *DefaultBasePattern()
-	res := &StripePattern{
+	res := &StripesPattern{
 		a:           a,
 		b:           b,
 		BasePattern: basePattern,
@@ -23,7 +23,7 @@ func NewStripePattern(a, b Tuple) *StripePattern {
 	return res
 }
 
-func (p *StripePattern) At(point Tuple) Tuple {
+func (p *StripesPattern) At(point Tuple) Tuple {
 	if int(math.Floor(point.x))%2 == 0 {
 		return p.a
 	}

@@ -116,7 +116,7 @@ func TestMaterialLightning_inShadow(t *testing.T) {
 }
 
 func TestMaterialLightning_pattern(t *testing.T) {
-	pattern := NewStripePattern(NewColor(1, 1, 1), NewColor(0, 0, 0))
+	pattern := NewStripesPattern(NewColor(1, 1, 1), NewColor(0, 0, 0))
 	m := NewMaterial(NewColor(0, 0, 0), 1, 0, 0, 200, pattern)
 	eye := NewVector(0, 0, -1)
 	normal := NewVector(0, 0, -1)
