@@ -1,6 +1,7 @@
 package render
 
 import (
+	"math"
 	"testing"
 )
 
@@ -99,7 +100,7 @@ func TestWorldShadeHit(t *testing.T) {
 	i := NewIntersection(4, shape)
 
 	comps := i.Precompute(r)
-	c := w.ShadeHit(comps)
+	c := w.ShadeHit(comps, 1)
 
 	if !c.Equals(NewColor(0.38066119, 0.47582649, 0.2854958)) {
 		t.Fatal("Color is wrong")
@@ -116,7 +117,7 @@ func TestWorldShadeHit_inside(t *testing.T) {
 	i := NewIntersection(0.5, shape)
 
 	comps := i.Precompute(r)
-	c := w.ShadeHit(comps)
+	c := w.ShadeHit(comps, 1)
 
 	if !c.Equals(NewColor(0.90498447, 0.90498447, 0.90498447)) {
 		t.Fatal("Color is wrong")
@@ -127,7 +128,7 @@ func TestWorldShade_miss(t *testing.T) {
 	w := DefaultWorld()
 	r := NewRay(NewPoint(0, 0, -5), NewVector(0, 1, 0))
 
-	c := w.Shade(r)
+	c := w.Shade(r, 1)
 
 	if !c.Equals(NewColor(0, 0, 0)) {
 		t.Fatal("Color was wrong")
@@ -149,7 +150,7 @@ func TestWorldShade_shadow(t *testing.T) {
 	i := NewIntersection(4, s2)
 
 	comps := i.Precompute(r)
-	c := w.ShadeHit(comps)
+	c := w.ShadeHit(comps, 1)
 
 	if !c.Equals(NewColor(0.1, 0.1, 0.1)) {
 		t.Fatal("Color was wrong")
@@ -160,7 +161,7 @@ func TestWorldShade_hit(t *testing.T) {
 	w := DefaultWorld()
 	r := NewRay(NewPoint(0, 0, -5), NewVector(0, 0, 1))
 
-	c := w.Shade(r)
+	c := w.Shade(r, 1)
 
 	if !c.Equals(NewColor(0.38066119, 0.47582649, 0.2854958)) {
 		t.Fatal("Color was wrong")
@@ -176,7 +177,7 @@ func TestWorldShade_hitInside(t *testing.T) {
 	inner.material().ambient = 1
 	r := NewRay(NewPoint(0, 0, 0.75), NewVector(0, 0, -1))
 
-	c := w.Shade(r)
+	c := w.Shade(r, 1)
 
 	if !c.Equals(inner.material().color) {
 		t.Fatal("Color was wrong")
@@ -225,5 +226,99 @@ func TestWorldShadow_noBetween(t *testing.T) {
 
 	if w.IsShadowed(w.lights[0], p) {
 		t.Fatal("Shadow reported is wrong")
+	}
+}
+
+func TestWorldReflect_nonReflective(t *testing.T) {
+	w := DefaultWorld()
+	r := NewRay(NewPoint(0, 0, 0), NewVector(0, 0, 1))
+	shape := w.objs[1]
+	shape.material().ambient = 1
+	i := NewIntersection(1, shape)
+
+	comps := i.Precompute(r)
+
+	c := w.ReflectedColor(comps, 1)
+
+	if !c.Equals(NewColor(0, 0, 0)) {
+		t.Fatal("Reflection is wrong")
+	}
+}
+
+func TestWorldReflect_reflective(t *testing.T) {
+	w := DefaultWorld()
+	shape := NewPlane()
+	shape.material().reflective = 0.5
+	shape.SetTransform(Translation(0, -1, 0))
+	w.AddObject(shape)
+
+	r := NewRay(NewPoint(0, 0, -3), NewVector(0, -math.Sqrt2/2, math.Sqrt2/2))
+	i := NewIntersection(math.Sqrt2, shape)
+
+	comps := i.Precompute(r)
+
+	c := w.ReflectedColor(comps, 1)
+
+	if !c.Equals(NewColor(0.1903322, 0.2379152, 0.1427491)) {
+		t.Fatal("Reflection is wrong")
+	}
+}
+
+func TestWorldShadeHit_reflective(t *testing.T) {
+	w := DefaultWorld()
+	shape := NewPlane()
+	shape.material().reflective = 0.5
+	shape.SetTransform(Translation(0, -1, 0))
+	w.AddObject(shape)
+
+	r := NewRay(NewPoint(0, 0, -3), NewVector(0, -math.Sqrt2/2, math.Sqrt2/2))
+	i := NewIntersection(math.Sqrt2, shape)
+
+	comps := i.Precompute(r)
+
+	c := w.ShadeHit(comps, 1)
+
+	if !c.Equals(NewColor(0.876757, 0.92434, 0.829174)) {
+		t.Fatal("Reflection is wrong")
+	}
+}
+
+func TestWorldShadeHit_infiniteReflection(t *testing.T) {
+	w := NewWorld()
+	l := NewPointLight(NewPoint(0, 0, 0), NewColor(1, 1, 1))
+	w.AddLight(l)
+
+	lower := NewPlane()
+	lower.material().reflective = 1
+	lower.SetTransform(Translation(0, -1, 0))
+
+	upper := NewPlane()
+	upper.material().reflective = 1
+	upper.SetTransform(Translation(0, 1, 0))
+
+	w.AddObject(lower)
+	w.AddObject(upper)
+
+	r := NewRay(NewPoint(0, 0, 0), NewVector(0, 1, 0))
+
+	w.Shade(r, 1)
+}
+
+func TestWorldReflect_reflectiveAtMaxDepth(t *testing.T) {
+	w := DefaultWorld()
+	shape := NewPlane()
+	shape.material().reflective = 0.5
+	shape.SetTransform(Translation(0, -1, 0))
+	w.AddObject(shape)
+
+	r := NewRay(NewPoint(0, 0, -3), NewVector(0, -math.Sqrt2/2, math.Sqrt2/2))
+	i := NewIntersection(math.Sqrt2, shape)
+
+	comps := i.Precompute(r)
+
+	c := w.ReflectedColor(comps, 0)
+
+	if !c.Equals(NewColor(0, 0, 0)) {
+		t.Fatal("Reflection is wrong")
 	}
 }

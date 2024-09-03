@@ -4,6 +4,8 @@ import (
 	"math"
 )
 
+const MAX_REFLECTION_DEPTH = 10
+
 type Camera struct {
 	hsize      int
 	vsize      int
@@ -75,7 +77,7 @@ func (c *Camera) Render(w *World) *Canvas {
 	for y := 0; y < c.vsize; y++ {
 		for x := 0; x < c.hsize; x++ {
 			r := c.RayForPixel(x, y)
-			c := w.Shade(r)
+			c := w.Shade(r, MAX_REFLECTION_DEPTH)
 			image.SetAt(x, y, c)
 		}
 	}

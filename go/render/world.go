@@ -54,22 +54,24 @@ func (w *World) Intersect(ray *Ray) []*Intersection {
 	return allIntersections
 }
 
-func (w *World) ShadeHit(comps *Comps) Tuple {
+func (w *World) ShadeHit(comps *Comps, remaining int) Tuple {
 	res := NewColor(0, 0, 0)
 	for l := range w.lights {
 		res = res.Add(comps.object.material().Lightning(comps.object, w.lights[l], comps.overPoint, comps.eye, comps.normal, w.IsShadowed(w.lights[l], comps.overPoint)))
 	}
+
+	res = res.Add(w.ReflectedColor(comps, remaining))
 	return res
 }
 
-func (w *World) Shade(ray *Ray) Tuple {
+func (w *World) Shade(ray *Ray, remaining int) Tuple {
 	i := Hit(w.Intersect(ray)) // Can optimize since w.Intersect is sorted
 	if i == nil {
 		return NewColor(0, 0, 0)
 	}
 
 	comps := i.Precompute(ray)
-	return w.ShadeHit(comps)
+	return w.ShadeHit(comps, remaining)
 }
 
 func (w *World) IsShadowed(l *Light, p Tuple) bool {
@@ -82,4 +84,19 @@ func (w *World) IsShadowed(l *Light, p Tuple) bool {
 
 	h := Hit(ii)
 	return h != nil && h.t < distance
+}
+
+func (w *World) ReflectedColor(comps *Comps, remaining int) Tuple {
+	if remaining == 0 {
+		return NewColor(0, 0, 0)
+	}
+	refCoef := comps.object.material().reflective
+	if refCoef == 0 {
+		return NewColor(0, 0, 0)
+	}
+
+	reflectRay := NewRay(comps.overPoint, comps.reflectv)
+	reflectColor := w.Shade(reflectRay, remaining-1)
+
+	return reflectColor.Mul(refCoef)
 }
