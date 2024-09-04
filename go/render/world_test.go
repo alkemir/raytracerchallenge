@@ -238,7 +238,7 @@ func TestWorldReflect_nonReflective(t *testing.T) {
 
 	comps := i.Precompute(r, []*Intersection{i})
 
-	c := w.ReflectedColor(comps, 1)
+	c := w.ReflectedColor(comps, 5)
 
 	if !c.Equals(NewColor(0, 0, 0)) {
 		t.Fatal("Reflection is wrong")
@@ -320,5 +320,57 @@ func TestWorldReflect_reflectiveAtMaxDepth(t *testing.T) {
 
 	if !c.Equals(NewColor(0, 0, 0)) {
 		t.Fatal("Reflection is wrong")
+	}
+}
+
+func TestWorldRefract_nonTransparent(t *testing.T) {
+	w := DefaultWorld()
+	r := NewRay(NewPoint(0, 0, -5), NewVector(0, 0, 1))
+	shape := w.objs[0]
+
+	ii := []*Intersection{NewIntersection(4, shape), NewIntersection(6, shape)}
+
+	comps := ii[0].Precompute(r, ii)
+
+	c := w.RefractedColor(comps, 5)
+
+	if !c.Equals(NewColor(0, 0, 0)) {
+		t.Fatal("Refraction is wrong")
+	}
+}
+
+func TestWorldRefract_transparentAtMaxDepth(t *testing.T) {
+	w := DefaultWorld()
+	r := NewRay(NewPoint(0, 0, -5), NewVector(0, 0, 1))
+	shape := w.objs[0]
+	shape.material().transparency = 1
+	shape.material().refractiveIndex = 1.5
+
+	ii := []*Intersection{NewIntersection(4, shape), NewIntersection(6, shape)}
+
+	comps := ii[0].Precompute(r, ii)
+
+	c := w.RefractedColor(comps, 0)
+
+	if !c.Equals(NewColor(0, 0, 0)) {
+		t.Fatal("Refraction is wrong")
+	}
+}
+
+func TestWorldRefract_totalInternalReflection(t *testing.T) {
+	w := DefaultWorld()
+	r := NewRay(NewPoint(0, 0, math.Sqrt2/2), NewVector(0, 1, 0))
+	shape := w.objs[0]
+	shape.material().transparency = 1
+	shape.material().refractiveIndex = 1.5
+
+	ii := []*Intersection{NewIntersection(-math.Sqrt2/2, shape), NewIntersection(math.Sqrt2/2, shape)}
+
+	comps := ii[1].Precompute(r, ii)
+
+	c := w.RefractedColor(comps, 5)
+
+	if !c.Equals(NewColor(0, 0, 0)) {
+		t.Fatal("Refraction is wrong")
 	}
 }

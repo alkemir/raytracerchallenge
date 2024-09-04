@@ -101,3 +101,22 @@ func (w *World) ReflectedColor(comps *Comps, remaining int) Tuple {
 
 	return reflectColor.Mul(refCoef)
 }
+
+func (w *World) RefractedColor(comps *Comps, remaining int) Tuple {
+	if remaining == 0 {
+		return NewColor(0, 0, 0)
+	}
+	transCoef := comps.object.material().transparency
+	if transCoef == 0 {
+		return NewColor(0, 0, 0)
+	}
+
+	refRatio := comps.n1 / comps.n2
+	cosI := comps.eye.Dot(comps.normal)
+	sin2T := refRatio * refRatio * (1 - cosI*cosI)
+	if sin2T > 1 {
+		return NewColor(0, 0, 0)
+	}
+
+	return NewColor(0, 0, 1)
+}
