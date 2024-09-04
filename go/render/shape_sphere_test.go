@@ -182,3 +182,17 @@ func TestSphereNormal_scaledRotated(t *testing.T) {
 		t.Fatal("Normal is wrong")
 	}
 }
+
+func TestGlassSphere(t *testing.T) {
+	s := NewGlassSphere()
+
+	if !s.transform().Equals(IdentityMatrix()) {
+		t.Fatal("Transform is wrong")
+	}
+	if s.material().transparency != 1 {
+		t.Fatal("Transparency is wrong")
+	}
+	if s.material().refractiveIndex != 1.5 {
+		t.Fatal("Refractive index is wrong")
+	}
+}

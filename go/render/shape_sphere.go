@@ -21,6 +21,13 @@ func NewSphere() *Sphere {
 	return res
 }
 
+func NewGlassSphere() *Sphere {
+	res := NewSphere()
+	res.material().transparency = 1
+	res.material().refractiveIndex = 1.5
+	return res
+}
+
 func (s *Sphere) concreteNormal(p Tuple) Tuple {
 	return p.Sub(NewPoint(0, 0, 0))
 }
