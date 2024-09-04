@@ -99,7 +99,7 @@ func TestWorldShadeHit(t *testing.T) {
 	shape := w.objs[0]
 	i := NewIntersection(4, shape)
 
-	comps := i.Precompute(r)
+	comps := i.Precompute(r, []*Intersection{i})
 	c := w.ShadeHit(comps, 1)
 
 	if !c.Equals(NewColor(0.38066119, 0.47582649, 0.2854958)) {
@@ -116,7 +116,7 @@ func TestWorldShadeHit_inside(t *testing.T) {
 	shape := w.objs[1]
 	i := NewIntersection(0.5, shape)
 
-	comps := i.Precompute(r)
+	comps := i.Precompute(r, []*Intersection{i})
 	c := w.ShadeHit(comps, 1)
 
 	if !c.Equals(NewColor(0.90498447, 0.90498447, 0.90498447)) {
@@ -149,7 +149,7 @@ func TestWorldShade_shadow(t *testing.T) {
 	r := NewRay(NewPoint(0, 0, 5), NewVector(0, 0, 1))
 	i := NewIntersection(4, s2)
 
-	comps := i.Precompute(r)
+	comps := i.Precompute(r, []*Intersection{i})
 	c := w.ShadeHit(comps, 1)
 
 	if !c.Equals(NewColor(0.1, 0.1, 0.1)) {
@@ -236,7 +236,7 @@ func TestWorldReflect_nonReflective(t *testing.T) {
 	shape.material().ambient = 1
 	i := NewIntersection(1, shape)
 
-	comps := i.Precompute(r)
+	comps := i.Precompute(r, []*Intersection{i})
 
 	c := w.ReflectedColor(comps, 1)
 
@@ -255,7 +255,7 @@ func TestWorldReflect_reflective(t *testing.T) {
 	r := NewRay(NewPoint(0, 0, -3), NewVector(0, -math.Sqrt2/2, math.Sqrt2/2))
 	i := NewIntersection(math.Sqrt2, shape)
 
-	comps := i.Precompute(r)
+	comps := i.Precompute(r, []*Intersection{i})
 
 	c := w.ReflectedColor(comps, 1)
 
@@ -274,7 +274,7 @@ func TestWorldShadeHit_reflective(t *testing.T) {
 	r := NewRay(NewPoint(0, 0, -3), NewVector(0, -math.Sqrt2/2, math.Sqrt2/2))
 	i := NewIntersection(math.Sqrt2, shape)
 
-	comps := i.Precompute(r)
+	comps := i.Precompute(r, []*Intersection{i})
 
 	c := w.ShadeHit(comps, 1)
 
@@ -314,7 +314,7 @@ func TestWorldReflect_reflectiveAtMaxDepth(t *testing.T) {
 	r := NewRay(NewPoint(0, 0, -3), NewVector(0, -math.Sqrt2/2, math.Sqrt2/2))
 	i := NewIntersection(math.Sqrt2, shape)
 
-	comps := i.Precompute(r)
+	comps := i.Precompute(r, []*Intersection{i})
 
 	c := w.ReflectedColor(comps, 0)
 

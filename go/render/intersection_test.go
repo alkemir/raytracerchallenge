@@ -115,7 +115,7 @@ func TestPrecompute(t *testing.T) {
 	shape := NewSphere()
 	i := NewIntersection(4, shape)
 
-	comps := i.Precompute(r)
+	comps := i.Precompute(r, []*Intersection{i})
 
 	if comps.t != i.t {
 		t.Fatal("T is wrong")
@@ -139,7 +139,7 @@ func TestPrecompute_outside(t *testing.T) {
 	shape := NewSphere()
 	i := NewIntersection(4, shape)
 
-	comps := i.Precompute(r)
+	comps := i.Precompute(r, []*Intersection{i})
 
 	if comps.inside {
 		t.Fatal("Inside was wrong")
@@ -151,7 +151,7 @@ func TestPrecompute_inside(t *testing.T) {
 	shape := NewSphere()
 	i := NewIntersection(1, shape)
 
-	comps := i.Precompute(r)
+	comps := i.Precompute(r, []*Intersection{i})
 
 	if !comps.inside {
 		t.Fatal("Inside was wrong")
@@ -173,7 +173,7 @@ func TestPrecompute_overPoint(t *testing.T) {
 	shape.SetTransform(Translation(0, 0, 1))
 	i := NewIntersection(5, shape)
 
-	comps := i.Precompute(r)
+	comps := i.Precompute(r, []*Intersection{i})
 
 	if comps.overPoint.z >= EPSILON/2 {
 		t.Fatal("Over point is wrong")
@@ -189,7 +189,7 @@ func TestPrecompute_reflection(t *testing.T) {
 	shape.SetTransform(Translation(0, 0, 1))
 	i := NewIntersection(math.Sqrt2, shape)
 
-	comps := i.Precompute(r)
+	comps := i.Precompute(r, []*Intersection{i})
 
 	if !comps.reflectv.Equals(NewVector(0, math.Sqrt2/2, math.Sqrt2/2)) {
 		t.Fatal("Reflective vector is wrong")

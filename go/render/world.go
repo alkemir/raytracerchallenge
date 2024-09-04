@@ -65,12 +65,13 @@ func (w *World) ShadeHit(comps *Comps, remaining int) Tuple {
 }
 
 func (w *World) Shade(ray *Ray, remaining int) Tuple {
-	i := Hit(w.Intersect(ray)) // Can optimize since w.Intersect is sorted
+	ii := w.Intersect(ray)
+	i := Hit(ii) // Can optimize since w.Intersect is sorted
 	if i == nil {
 		return NewColor(0, 0, 0)
 	}
 
-	comps := i.Precompute(ray)
+	comps := i.Precompute(ray, ii)
 	return w.ShadeHit(comps, remaining)
 }
 

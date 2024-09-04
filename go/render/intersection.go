@@ -43,7 +43,7 @@ type Comps struct {
 	inside    bool
 }
 
-func (i *Intersection) Precompute(ray *Ray) *Comps {
+func (i *Intersection) Precompute(ray *Ray, xs []*Intersection) *Comps {
 	point := ray.Project(i.t)
 	eye := ray.direction.Mul(-1)
 	normal := i.obj.Normal(point)
