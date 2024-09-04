@@ -1,6 +1,7 @@
 package render
 
 import (
+	"math"
 	"slices"
 )
 
@@ -61,6 +62,7 @@ func (w *World) ShadeHit(comps *Comps, remaining int) Tuple {
 	}
 
 	res = res.Add(w.ReflectedColor(comps, remaining))
+	res = res.Add(w.RefractedColor(comps, remaining))
 	return res
 }
 
@@ -118,5 +120,9 @@ func (w *World) RefractedColor(comps *Comps, remaining int) Tuple {
 		return NewColor(0, 0, 0)
 	}
 
-	return NewColor(0, 0, 1)
+	cosT := math.Sqrt(1 - sin2T)
+	refDirection := comps.normal.Mul(refRatio*cosI - cosT).Sub(comps.eye.Mul(refRatio))
+	refRay := NewRay(comps.underPoint, refDirection)
+
+	return w.Shade(refRay, remaining-1).Mul(transCoef)
 }

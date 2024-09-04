@@ -374,3 +374,56 @@ func TestWorldRefract_totalInternalReflection(t *testing.T) {
 		t.Fatal("Refraction is wrong")
 	}
 }
+
+func TestWorldRefract_refraction(t *testing.T) {
+	w := DefaultWorld()
+	r := NewRay(NewPoint(0, 0, 0.1), NewVector(0, 1, 0))
+	a := w.objs[0]
+	a.material().ambient = 1
+	a.material().pattern = NewTestPattern()
+	b := w.objs[1]
+	b.material().transparency = 1
+	b.material().refractiveIndex = 1.5
+
+	ii := []*Intersection{
+		NewIntersection(-0.9899, a),
+		NewIntersection(-0.4899, b),
+		NewIntersection(0.4899, b),
+		NewIntersection(0.9899, a),
+	}
+
+	comps := ii[2].Precompute(r, ii)
+
+	c := w.RefractedColor(comps, 5)
+
+	if !c.Equals(NewColor(0, 0.998874, 0.0472189)) {
+		t.Fatal("Refraction is wrong")
+	}
+}
+
+func TestWorldShadeHit_transparent(t *testing.T) {
+	w := DefaultWorld()
+	floor := NewPlane()
+	floor.material().transparency = 0.5
+	floor.material().refractiveIndex = 1.5
+	floor.SetTransform(Translation(0, -1, 0))
+	w.AddObject(floor)
+
+	ball := NewSphere()
+	ball.material().color = NewColor(1, 0, 0)
+	ball.material().ambient = 0.5
+	ball.SetTransform(Translation(0, -3.5, -0.5))
+	w.AddObject(ball)
+
+	r := NewRay(NewPoint(0, 0, -3), NewVector(0, -math.Sqrt2/2, math.Sqrt2/2))
+
+	ii := []*Intersection{NewIntersection(math.Sqrt2, floor)}
+
+	comps := ii[0].Precompute(r, ii)
+
+	c := w.ShadeHit(comps, 5)
+
+	if !c.Equals(NewColor(0.93642, 0.68642, 0.68642)) {
+		t.Fatal("Refraction is wrong")
+	}
+}
