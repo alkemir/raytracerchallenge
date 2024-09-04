@@ -196,3 +196,77 @@ func TestGlassSphere(t *testing.T) {
 		t.Fatal("Refractive index is wrong")
 	}
 }
+
+func TestGlassSphere_indexes(t *testing.T) {
+	a := NewGlassSphere()
+	a.SetTransform(Scaling(2, 2, 2))
+	a.material().refractiveIndex = 1.5
+
+	b := NewGlassSphere()
+	b.SetTransform(Translation(0, 0, -0.25))
+	b.material().refractiveIndex = 2
+
+	c := NewGlassSphere()
+	c.SetTransform(Translation(0, 0, 0.25))
+	c.material().refractiveIndex = 2.5
+
+	r := NewRay(NewPoint(0, 0, -4), NewVector(0, 0, 1))
+	ii := []*Intersection{
+		NewIntersection(2, a),
+		NewIntersection(2.75, b),
+		NewIntersection(3.25, c),
+		NewIntersection(4.75, b),
+		NewIntersection(5.25, c),
+		NewIntersection(6, a),
+	}
+
+	var comps *Comps
+
+	comps = ii[0].Precompute(r, ii)
+	if comps.n1 != 1.0 {
+		t.Fatal("n1 is wrong")
+	}
+	if comps.n2 != 1.5 {
+		t.Fatal("n2 is wrong")
+	}
+
+	comps = ii[1].Precompute(r, ii)
+	if comps.n1 != 1.5 {
+		t.Fatal("n1 is wrong")
+	}
+	if comps.n2 != 2.0 {
+		t.Fatal("n2 is wrong")
+	}
+
+	comps = ii[2].Precompute(r, ii)
+	if comps.n1 != 2.0 {
+		t.Fatal("n1 is wrong")
+	}
+	if comps.n2 != 2.5 {
+		t.Fatal("n2 is wrong")
+	}
+
+	comps = ii[3].Precompute(r, ii)
+	if comps.n1 != 2.5 {
+		t.Fatal("n1 is wrong")
+	}
+	if comps.n2 != 2.5 {
+		t.Fatal("n2 is wrong")
+	}
+
+	comps = ii[4].Precompute(r, ii)
+	if comps.n1 != 2.5 {
+		t.Fatal("n1 is wrong")
+	}
+	if comps.n2 != 1.5 {
+		t.Fatal("n2 is wrong")
+	}
+
+	comps = ii[5].Precompute(r, ii)
+	if comps.n1 != 1.5 {
+		t.Fatal("n1 is wrong")
+	}
+	if comps.n2 != 1.0 {
+		t.Fatal("n2 is wrong")
+	}
+}
