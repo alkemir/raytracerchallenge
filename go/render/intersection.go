@@ -37,16 +37,17 @@ func Hit(ii []*Intersection) *Intersection {
 }
 
 type Comps struct {
-	t         float64
-	object    Shape
-	point     Tuple
-	overPoint Tuple
-	eye       Tuple
-	normal    Tuple
-	reflectv  Tuple
-	inside    bool
-	n1        float64
-	n2        float64
+	t          float64
+	object     Shape
+	point      Tuple
+	overPoint  Tuple
+	underPoint Tuple
+	eye        Tuple
+	normal     Tuple
+	reflectv   Tuple
+	inside     bool
+	n1         float64
+	n2         float64
 }
 
 func (i *Intersection) Precompute(ray *Ray, xs []*Intersection) *Comps {
@@ -60,6 +61,7 @@ func (i *Intersection) Precompute(ray *Ray, xs []*Intersection) *Comps {
 		normal = normal.Mul(-1)
 	}
 	overPoint := point.Add(normal.Mul(EPSILON))
+	underPoint := point.Sub(normal.Mul(EPSILON))
 	reflectv := ray.direction.Reflect(normal)
 
 	containers := make([]Shape, 0)
@@ -92,15 +94,16 @@ func (i *Intersection) Precompute(ray *Ray, xs []*Intersection) *Comps {
 	}
 
 	return &Comps{
-		t:         i.t,
-		object:    i.obj,
-		point:     point,
-		overPoint: overPoint,
-		eye:       eye,
-		normal:    normal,
-		reflectv:  reflectv,
-		inside:    inside,
-		n1:        n1,
-		n2:        n2,
+		t:          i.t,
+		object:     i.obj,
+		point:      point,
+		overPoint:  overPoint,
+		underPoint: underPoint,
+		eye:        eye,
+		normal:     normal,
+		reflectv:   reflectv,
+		inside:     inside,
+		n1:         n1,
+		n2:         n2,
 	}
 }

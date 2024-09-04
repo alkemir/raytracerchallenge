@@ -195,3 +195,19 @@ func TestPrecompute_reflection(t *testing.T) {
 		t.Fatal("Reflective vector is wrong")
 	}
 }
+
+func TestPrecompute_underPoint(t *testing.T) {
+	r := NewRay(NewPoint(0, 0, -5), NewVector(0, 0, 1))
+	shape := NewSphere()
+	shape.SetTransform(Translation(0, 0, 1))
+	i := NewIntersection(5, shape)
+
+	comps := i.Precompute(r, []*Intersection{i})
+
+	if comps.underPoint.z <= EPSILON/2 {
+		t.Fatal("Under point is wrong")
+	}
+	if comps.point.z >= comps.underPoint.z {
+		t.Fatal("Under point is not under the point")
+	}
+}
