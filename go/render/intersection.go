@@ -1,6 +1,7 @@
 package render
 
 import (
+	"math"
 	"slices"
 )
 
@@ -106,4 +107,24 @@ func (i *Intersection) Precompute(ray *Ray, xs []*Intersection) *Comps {
 		n1:         n1,
 		n2:         n2,
 	}
+}
+
+func (c *Comps) Schlick() float64 {
+	cos := c.eye.Dot(c.normal)
+
+	if c.n1 > c.n2 {
+		n := c.n1 / c.n2
+		sin2T := n * n * (1 - cos*cos)
+		if sin2T > 1 {
+			return 1.0
+		}
+
+		cosT := math.Sqrt(1 - sin2T)
+		cos = cosT
+	}
+
+	r0 := ((c.n1 - c.n2) / (c.n1 + c.n2))
+	r0 = r0 * r0
+
+	return r0 + (1-r0)*math.Pow(1-cos, 5)
 }

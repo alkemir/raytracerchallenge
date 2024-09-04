@@ -211,3 +211,51 @@ func TestPrecompute_underPoint(t *testing.T) {
 		t.Fatal("Under point is not under the point")
 	}
 }
+
+func TestReflectance_totalInternalReflection(t *testing.T) {
+	shape := NewGlassSphere()
+	r := NewRay(NewPoint(0, 0, math.Sqrt2/2), NewVector(0, 1, 0))
+
+	ii := []*Intersection{
+		NewIntersection(-math.Sqrt2/2, shape),
+		NewIntersection(math.Sqrt2/2, shape),
+	}
+
+	comps := ii[1].Precompute(r, ii)
+	reflectance := comps.Schlick()
+
+	if reflectance != 1 {
+		t.Fatal("Reflectance is wrong")
+	}
+}
+
+func TestReflectance_perpendicular(t *testing.T) {
+	shape := NewGlassSphere()
+	r := NewRay(NewPoint(0, 0, 0), NewVector(0, 1, 0))
+
+	ii := []*Intersection{
+		NewIntersection(-1, shape),
+		NewIntersection(1, shape),
+	}
+
+	comps := ii[1].Precompute(r, ii)
+	reflectance := comps.Schlick()
+
+	if abs(reflectance-0.04) > EPSILON {
+		t.Fatal("Reflectance is wrong")
+	}
+}
+
+func TestReflectance_smallAngleN2Larger(t *testing.T) {
+	shape := NewGlassSphere()
+	r := NewRay(NewPoint(0, 0.99, -2), NewVector(0, 0, 1))
+
+	ii := []*Intersection{NewIntersection(1.8589, shape)}
+
+	comps := ii[0].Precompute(r, ii)
+	reflectance := comps.Schlick()
+
+	if abs(reflectance-0.48873) > EPSILON {
+		t.Fatal("Reflectance is wrong")
+	}
+}

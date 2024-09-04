@@ -61,8 +61,16 @@ func (w *World) ShadeHit(comps *Comps, remaining int) Tuple {
 		res = res.Add(comps.object.material().Lightning(comps.object, w.lights[l], comps.overPoint, comps.eye, comps.normal, w.IsShadowed(w.lights[l], comps.overPoint)))
 	}
 
-	res = res.Add(w.ReflectedColor(comps, remaining))
-	res = res.Add(w.RefractedColor(comps, remaining))
+	reflected := w.ReflectedColor(comps, remaining)
+	refracted := w.RefractedColor(comps, remaining)
+	material := comps.object.material()
+
+	if material.reflective > 0 && material.transparency > 0 {
+		reflectance := comps.Schlick()
+		return res.Add(reflected.Mul(reflectance)).Add(refracted.Mul(1 - reflectance))
+	}
+	res = res.Add(reflected)
+	res = res.Add(refracted)
 	return res
 }
 

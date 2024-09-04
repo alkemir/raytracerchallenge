@@ -427,3 +427,31 @@ func TestWorldShadeHit_transparent(t *testing.T) {
 		t.Fatal("Refraction is wrong")
 	}
 }
+
+func TestWorldShadeHit_transparentAndReflective(t *testing.T) {
+	w := DefaultWorld()
+	floor := NewPlane()
+	floor.material().reflective = 0.5
+	floor.material().transparency = 0.5
+	floor.material().refractiveIndex = 1.5
+	floor.SetTransform(Translation(0, -1, 0))
+	w.AddObject(floor)
+
+	ball := NewSphere()
+	ball.material().color = NewColor(1, 0, 0)
+	ball.material().ambient = 0.5
+	ball.SetTransform(Translation(0, -3.5, -0.5))
+	w.AddObject(ball)
+
+	r := NewRay(NewPoint(0, 0, -3), NewVector(0, -math.Sqrt2/2, math.Sqrt2/2))
+
+	ii := []*Intersection{NewIntersection(math.Sqrt2, floor)}
+
+	comps := ii[0].Precompute(r, ii)
+
+	c := w.ShadeHit(comps, 5)
+
+	if !c.Equals(NewColor(0.93391, 0.69643, 0.69243)) {
+		t.Fatal("Refraction is wrong")
+	}
+}
