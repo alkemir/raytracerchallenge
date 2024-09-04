@@ -18,7 +18,7 @@ func main() {
 
 	// Create a sphere
 	purple := render.NewColor(1, 0.2, 1)
-	material := render.NewMaterial(purple, 0.1, 0.9, 0.9, 0, 200, nil)
+	material := render.NewMaterial(purple, 0.1, 0.9, 0.9, 0, 0, 1.0, 200, nil)
 
 	sphere := render.NewSphere()
 	sphere.SetMaterial(material)

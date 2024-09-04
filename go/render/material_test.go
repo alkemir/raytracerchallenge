@@ -117,7 +117,7 @@ func TestMaterialLightning_inShadow(t *testing.T) {
 
 func TestMaterialLightning_pattern(t *testing.T) {
 	pattern := NewStripesPattern(NewColor(1, 1, 1), NewColor(0, 0, 0))
-	m := NewMaterial(NewColor(0, 0, 0), 1, 0, 0, 0, 200, pattern)
+	m := NewMaterial(NewColor(0, 0, 0), 1, 0, 0, 0, 0, 1, 200, pattern)
 	eye := NewVector(0, 0, -1)
 	normal := NewVector(0, 0, -1)
 	light := NewPointLight(NewPoint(0, 0, -10), NewColor(1, 1, 1))
@@ -139,5 +139,16 @@ func TestMaterialDefaultReflective(t *testing.T) {
 
 	if m.reflective != 0 {
 		t.Fatal("Reflective is wrong")
+	}
+}
+
+func TestMaterialDefaultTransparencyAndRefractiveIndex(t *testing.T) {
+	m := DefaultMaterial()
+
+	if m.transparency != 0 {
+		t.Fatal("Transparency is wrong")
+	}
+	if m.refractiveIndex != 1 {
+		t.Fatal("Refractive index is wrong")
 	}
 }

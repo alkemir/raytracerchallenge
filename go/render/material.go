@@ -5,36 +5,42 @@ import (
 )
 
 type Material struct {
-	color      Tuple
-	ambient    float64
-	diffuse    float64
-	specular   float64
-	shininess  float64
-	reflective float64
-	pattern    Pattern
+	color           Tuple
+	ambient         float64
+	diffuse         float64
+	specular        float64
+	shininess       float64
+	reflective      float64
+	transparency    float64
+	refractiveIndex float64
+	pattern         Pattern
 }
 
-func NewMaterial(color Tuple, ambient, diffuse, specular, reflective, shininess float64, pattern Pattern) *Material {
+func NewMaterial(color Tuple, ambient, diffuse, specular, reflective, transparency, refractiveIndex, shininess float64, pattern Pattern) *Material {
 	return &Material{
-		color:      color,
-		ambient:    ambient,
-		diffuse:    diffuse,
-		specular:   specular,
-		shininess:  shininess,
-		reflective: reflective,
-		pattern:    pattern,
+		color:           color,
+		ambient:         ambient,
+		diffuse:         diffuse,
+		specular:        specular,
+		shininess:       shininess,
+		reflective:      reflective,
+		transparency:    transparency,
+		refractiveIndex: refractiveIndex,
+		pattern:         pattern,
 	}
 }
 
 func DefaultMaterial() *Material {
 	return &Material{
-		color:      NewColor(1, 1, 1),
-		ambient:    0.1,
-		diffuse:    0.9,
-		specular:   0.9,
-		reflective: 0,
-		shininess:  200,
-		pattern:    nil, // TODO: Implement solid pattern
+		color:           NewColor(1, 1, 1),
+		ambient:         0.1,
+		diffuse:         0.9,
+		specular:        0.9,
+		reflective:      0,
+		transparency:    0,
+		refractiveIndex: 1,
+		shininess:       200,
+		pattern:         nil, // TODO: Implement solid pattern
 	}
 }
 
