@@ -89,7 +89,7 @@ func TestCameraRender(t *testing.T) {
 	up := NewVector(0, 1, 0)
 	c.SetTransform(View(from, to, up))
 
-	image := c.Render(w)
+	image := c.Render(w, make(chan bool, 11*11))
 
 	if !image.GetAt(5, 5).Equals(NewColor(0.38066, 0.47583, 0.2855)) {
 		t.Fatal("Color at center of image is wrong")

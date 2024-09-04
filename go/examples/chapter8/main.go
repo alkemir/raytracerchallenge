@@ -57,7 +57,7 @@ func main() {
 	left.SetMaterial(leftMaterial)
 	world.AddObject(left)
 
-	image := camera.Render(world)
+	image := camera.Render(world, make(chan bool, 100))
 
 	f, err := os.Create("example.png")
 	if err != nil {

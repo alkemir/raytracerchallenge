@@ -71,16 +71,26 @@ func (c *Camera) RayForPixel(x, y int) *Ray {
 	return NewRay(origin, direction)
 }
 
-func (c *Camera) Render(w *World) *Canvas {
+func (c *Camera) Render(w *World, progress chan bool) *Canvas {
 	image := NewCanvas(c.hsize, c.vsize)
+
+	total := c.hsize * c.vsize
+	prevReport := 0
+	count := 0
 
 	for y := 0; y < c.vsize; y++ {
 		for x := 0; x < c.hsize; x++ {
 			r := c.RayForPixel(x, y)
 			c := w.Shade(r, MAX_REFLECTION_DEPTH)
 			image.SetAt(x, y, c)
+			count++
+			if 10*count/total > prevReport {
+				progress <- true
+				prevReport = 10 * count / total
+			}
 		}
 	}
+	close(progress)
 
 	return image
 }
