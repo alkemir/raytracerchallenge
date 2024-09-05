@@ -7,13 +7,14 @@ import (
 const MAX_REFLECTION_DEPTH = 10
 
 type Camera struct {
-	hsize      int
-	vsize      int
-	fov        float64
-	transform  *Matrix
-	pixelSize  float64
-	halfWidth  float64
-	halfHeight float64
+	hsize       int
+	vsize       int
+	fov         float64
+	transform   *Matrix
+	pixelSize   float64
+	halfWidth   float64
+	halfHeight  float64
+	parallelism int
 }
 
 func NewCamera(hsize, vsize int, fov float64) *Camera {
@@ -31,6 +32,10 @@ func NewCamera(hsize, vsize int, fov float64) *Camera {
 
 func (c *Camera) SetTransform(transform *Matrix) {
 	c.transform = transform
+}
+
+func (c *Camera) SetParallelism(p int) {
+	c.parallelism = p
 }
 
 func PixelSize(hsize, vsize int, fov float64) (float64, float64, float64) {
@@ -74,23 +79,56 @@ func (c *Camera) RayForPixel(x, y int) *Ray {
 func (c *Camera) Render(w *World, progress chan bool) *Canvas {
 	image := NewCanvas(c.hsize, c.vsize)
 
+	workIn := make(chan workUnit)
+	workOut := make(chan bool)
+	go c.progressReporter(progress, workOut)
+	for i := 0; i < c.parallelism; i++ {
+		go c.worker(workIn, workOut)
+	}
+
+	for y := 0; y < c.vsize; y++ {
+		for x := 0; x < c.hsize; x++ {
+			workIn <- workUnit{w, x, y, image}
+		}
+	}
+
+	return image
+}
+
+func (c *Camera) progressReporter(progress chan bool, workOut chan bool) {
 	total := c.hsize * c.vsize
 	prevReport := 0
 	count := 0
 
-	for y := 0; y < c.vsize; y++ {
-		for x := 0; x < c.hsize; x++ {
-			r := c.RayForPixel(x, y)
-			c := w.Shade(r, MAX_REFLECTION_DEPTH)
-			image.SetAt(x, y, c)
-			count++
-			if 10*count/total > prevReport {
-				progress <- true
-				prevReport = 10 * count / total
-			}
+	for <-workOut {
+		count++
+		if 10*count/total > prevReport {
+			progress <- true
+			prevReport = 10 * count / total
+		}
+
+		if count == total {
+			close(workOut)
 		}
 	}
 	close(progress)
+}
 
-	return image
+type workUnit struct {
+	w     *World
+	x     int
+	y     int
+	image *Canvas
+}
+
+func (c *Camera) renderPixel(w *World, x, y int, image *Canvas, workOut chan bool) {
+	r := c.RayForPixel(x, y)
+	image.SetAt(x, y, w.Shade(r, MAX_REFLECTION_DEPTH))
+	workOut <- true
+}
+
+func (c *Camera) worker(workIn chan workUnit, workOut chan bool) {
+	for task := range workIn {
+		c.renderPixel(task.w, task.x, task.y, task.image, workOut)
+	}
 }
