@@ -46,11 +46,11 @@ func DefaultMaterial() *Material {
 
 func (m *Material) Equals(o *Material) bool {
 	return m.color.Equals(o.color) &&
-		abs(m.ambient-o.ambient) < EPSILON &&
-		abs(m.diffuse-o.diffuse) < EPSILON &&
-		abs(m.specular-o.specular) < EPSILON &&
-		abs(m.shininess-o.shininess) < EPSILON &&
-		abs(m.reflective-o.reflective) < EPSILON &&
+		math.Abs(m.ambient-o.ambient) < EPSILON &&
+		math.Abs(m.diffuse-o.diffuse) < EPSILON &&
+		math.Abs(m.specular-o.specular) < EPSILON &&
+		math.Abs(m.shininess-o.shininess) < EPSILON &&
+		math.Abs(m.reflective-o.reflective) < EPSILON &&
 		m.pattern == o.pattern
 }
 

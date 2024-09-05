@@ -241,7 +241,7 @@ func TestReflectance_perpendicular(t *testing.T) {
 	comps := ii[1].Precompute(r, ii)
 	reflectance := comps.Schlick()
 
-	if abs(reflectance-0.04) > EPSILON {
+	if math.Abs(reflectance-0.04) > EPSILON {
 		t.Fatal("Reflectance is wrong")
 	}
 }
@@ -255,7 +255,7 @@ func TestReflectance_smallAngleN2Larger(t *testing.T) {
 	comps := ii[0].Precompute(r, ii)
 	reflectance := comps.Schlick()
 
-	if abs(reflectance-0.48873) > EPSILON {
+	if math.Abs(reflectance-0.48873) > EPSILON {
 		t.Fatal("Reflectance is wrong")
 	}
 }

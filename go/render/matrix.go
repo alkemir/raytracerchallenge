@@ -2,6 +2,7 @@ package render
 
 import (
 	"fmt"
+	"math"
 )
 
 type Matrix struct {
@@ -32,7 +33,7 @@ func (m *Matrix) Equals(o *Matrix) bool {
 	}
 
 	for i := 0; i < m.cols*m.rows; i++ {
-		if !(abs(m.data[i]-o.data[i]) < EPSILON) {
+		if !(math.Abs(m.data[i]-o.data[i]) < EPSILON) {
 			return false
 		}
 	}
@@ -143,13 +144,13 @@ func (m *Matrix) Cofactor(row, col int) float64 {
 }
 
 func (m *Matrix) Invertible() bool {
-	return !(abs(m.Det()) < EPSILON)
+	return !(math.Abs(m.Det()) < EPSILON)
 }
 
 func (m *Matrix) Inverse() (*Matrix, error) {
 	det := m.Det()
 
-	if abs(det) < EPSILON {
+	if math.Abs(det) < EPSILON {
 		return nil, fmt.Errorf("Matrix is not invertible")
 	}
 

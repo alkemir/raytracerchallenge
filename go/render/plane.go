@@ -1,5 +1,7 @@
 package render
 
+import "math"
+
 var _ Shape = (*Plane)(nil)
 var _ ConcreteShape = (*Plane)(nil)
 
@@ -22,7 +24,7 @@ func (s *Plane) concreteNormal(p Tuple) Tuple {
 }
 
 func (s *Plane) concreteIntersect(ray *Ray) []*Intersection {
-	if abs(ray.direction.y) < EPSILON {
+	if math.Abs(ray.direction.y) < EPSILON {
 		return nil
 	}
 

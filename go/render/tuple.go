@@ -28,18 +28,18 @@ func NewColor(r, g, b float64) Tuple {
 }
 
 func (a Tuple) Equals(b Tuple) bool {
-	return abs(a.x-b.x) < EPSILON &&
-		abs(a.y-b.y) < EPSILON &&
-		abs(a.z-b.z) < EPSILON &&
-		abs(a.w-b.w) < EPSILON
+	return math.Abs(a.x-b.x) < EPSILON &&
+		math.Abs(a.y-b.y) < EPSILON &&
+		math.Abs(a.z-b.z) < EPSILON &&
+		math.Abs(a.w-b.w) < EPSILON
 }
 
 func (a Tuple) IsPoint() bool {
-	return abs(a.w-1) < EPSILON
+	return math.Abs(a.w-1) < EPSILON
 }
 
 func (a Tuple) IsVector() bool {
-	return abs(a.w) < EPSILON
+	return math.Abs(a.w) < EPSILON
 }
 
 func (a Tuple) X() float64 {
