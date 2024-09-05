@@ -57,4 +57,8 @@ But it turned out it was just a weird interaction resulting of making a material
 
 Pretty cool huh? But still, something was missing. The Fresnel effect. We implemented an approximation of it by Schlick.
 
-![Transparency Scene](/go/examples/chapter11/example.png?raw=true "TransparentRender")
+![Fresnel Scene](/go/examples/chapter11/example.png?raw=true "FresnelRender")
+
+To break with the monotony and familiarity of my favourite scene, we added cubes in chapter 12. Also implemented multi-threaded rendering as I got bored of waiting:
+
+![Cube Scene](/go/examples/chapter12/example.png?raw=true "CubeRender")
