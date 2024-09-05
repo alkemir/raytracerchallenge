@@ -22,7 +22,14 @@ func NewCube() *Cube {
 }
 
 func (s *Cube) concreteNormal(p Tuple) Tuple {
-	return p.Sub(NewPoint(0, 0, 0))
+	maxC := math.Max(math.Max(math.Abs(p.x), math.Abs(p.y)), math.Abs(p.z))
+	if math.Abs(p.x) == maxC {
+		return NewVector(p.x, 0, 0)
+	}
+	if math.Abs(p.y) == maxC {
+		return NewVector(0, p.y, 0)
+	}
+	return NewVector(0, 0, p.z)
 }
 
 func (s *Cube) concreteIntersect(tr *Ray) []*Intersection {
@@ -32,6 +39,10 @@ func (s *Cube) concreteIntersect(tr *Ray) []*Intersection {
 
 	tMin := math.Max(math.Max(xtMin, ytMin), ztMin)
 	tMax := math.Min(math.Min(xtMax, ytMax), ztMax)
+
+	if tMin > tMax {
+		return nil
+	}
 
 	res := make([]*Intersection, 2)
 
