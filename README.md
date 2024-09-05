@@ -43,3 +43,18 @@ Alas, I had a bug which reminded me of the acne from a couple of chapters ago. H
 
 ![Patterned Scene](/go/examples/chapter10/example.png?raw=true "PatternedRender")
 
+Chapter 11 was about reflection and refraction. Reflection is a bit simpler, so I turned one of the balls into a mirror:
+
+![Mirrored Scene](/go/examples/chapter11/example_reflection.png?raw=true "MirroredRender")
+
+Then, as I moved in with refraction I thought I had a bug that had me scratching my head:
+
+![Transparency Bugged Scene](/go/examples/chapter11/example_bug.png?raw=true "TransparentBugRender")
+
+But it turned out it was just a weird interaction resulting of making a material highly reflective and refractive. So here is the refractive version only:
+
+![Transparency Scene](/go/examples/chapter11/example_refraction.png?raw=true "TransparentRender")
+
+Pretty cool huh? But still, something was missing. The Fresnel effect. We implemented an approximation of it by Schlick.
+
+![Transparency Scene](/go/examples/chapter11/example.png?raw=true "TransparentRender")
