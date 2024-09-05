@@ -2,31 +2,35 @@ package render
 
 import (
 	"math"
+	"math/rand"
 )
 
 const MAX_REFLECTION_DEPTH = 10
 
 type Camera struct {
-	hsize       int
-	vsize       int
-	fov         float64
-	transform   *Matrix
-	pixelSize   float64
-	halfWidth   float64
-	halfHeight  float64
-	parallelism int
+	hsize        int
+	vsize        int
+	fov          float64
+	transform    *Matrix
+	pixelSize    float64
+	halfWidth    float64
+	halfHeight   float64
+	parallelism  int
+	antialiasing int
 }
 
 func NewCamera(hsize, vsize int, fov float64) *Camera {
 	pixelSize, halfWidth, halfHeight := PixelSize(hsize, vsize, fov)
 	return &Camera{
-		hsize:      hsize,
-		vsize:      vsize,
-		fov:        fov,
-		transform:  IdentityMatrix(),
-		pixelSize:  pixelSize,
-		halfWidth:  halfWidth,
-		halfHeight: halfHeight,
+		hsize:        hsize,
+		vsize:        vsize,
+		fov:          fov,
+		transform:    IdentityMatrix(),
+		pixelSize:    pixelSize,
+		halfWidth:    halfWidth,
+		halfHeight:   halfHeight,
+		parallelism:  1,
+		antialiasing: 1,
 	}
 }
 
@@ -36,6 +40,10 @@ func (c *Camera) SetTransform(transform *Matrix) {
 
 func (c *Camera) SetParallelism(p int) {
 	c.parallelism = p
+}
+
+func (c *Camera) SetAntialiasing(a int) {
+	c.antialiasing = a
 }
 
 func PixelSize(hsize, vsize int, fov float64) (float64, float64, float64) {
@@ -56,9 +64,9 @@ func PixelSize(hsize, vsize int, fov float64) (float64, float64, float64) {
 	return pixelSize, halfWidth, halfHeight
 }
 
-func (c *Camera) RayForPixel(x, y int) *Ray {
-	xOffset := (float64(x) + 0.5) * c.pixelSize
-	yOffset := (float64(y) + 0.5) * c.pixelSize
+func (c *Camera) RayForPixel(xPos, yPos float64) *Ray {
+	xOffset := xPos * c.pixelSize
+	yOffset := yPos * c.pixelSize
 
 	worldX := c.halfWidth - xOffset
 	worldY := c.halfHeight - yOffset
@@ -122,8 +130,13 @@ type workUnit struct {
 }
 
 func (c *Camera) renderPixel(w *World, x, y int, image *Canvas, workOut chan bool) {
-	r := c.RayForPixel(x, y)
-	image.SetAt(x, y, w.Shade(r, MAX_REFLECTION_DEPTH))
+	accC := NewColor(0, 0, 0)
+	for i := 0; i < c.antialiasing; i++ {
+		r := c.RayForPixel(float64(x)+rand.Float64(), float64(y)+rand.Float64())
+		accC = accC.Add(w.Shade(r, MAX_REFLECTION_DEPTH))
+	}
+
+	image.SetAt(x, y, accC.Div(float64(c.antialiasing)))
 	workOut <- true
 }
 
