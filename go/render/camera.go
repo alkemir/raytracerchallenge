@@ -64,7 +64,11 @@ func PixelSize(hsize, vsize int, fov float64) (float64, float64, float64) {
 	return pixelSize, halfWidth, halfHeight
 }
 
-func (c *Camera) RayForPixel(xPos, yPos float64) *Ray {
+func (c *Camera) RayForPixel(x, y int) *Ray {
+	return c.actualRayForPixel(float64(x)+0.5, float64(y)+0.5)
+}
+
+func (c *Camera) actualRayForPixel(xPos, yPos float64) *Ray {
 	xOffset := xPos * c.pixelSize
 	yOffset := yPos * c.pixelSize
 
@@ -131,9 +135,13 @@ type workUnit struct {
 
 func (c *Camera) renderPixel(w *World, x, y int, image *Canvas, workOut chan bool) {
 	accC := NewColor(0, 0, 0)
-	for i := 0; i < c.antialiasing; i++ {
-		r := c.RayForPixel(float64(x)+rand.Float64(), float64(y)+rand.Float64())
-		accC = accC.Add(w.Shade(r, MAX_REFLECTION_DEPTH))
+	if c.antialiasing == 1 {
+		accC = w.Shade(c.RayForPixel(x, y), MAX_REFLECTION_DEPTH)
+	} else {
+		for i := 0; i < c.antialiasing; i++ {
+			r := c.actualRayForPixel(float64(x)+rand.Float64(), float64(y)+rand.Float64())
+			accC = accC.Add(w.Shade(r, MAX_REFLECTION_DEPTH))
+		}
 	}
 
 	image.SetAt(x, y, accC.Div(float64(c.antialiasing)))

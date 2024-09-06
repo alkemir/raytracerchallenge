@@ -118,7 +118,7 @@ func TestRotationX_reverse(t *testing.T) {
 
 	r := rInv.MultiplyTuple(p)
 
-	if !r.Equals(NewPoint(0, math.Sqrt2/2, -1*math.Sqrt2/2)) {
+	if !r.Equals(NewPoint(0, math.Sqrt2/2, -math.Sqrt2/2)) {
 		t.Fatal("Rotating around X is wrong")
 	}
 }
@@ -147,7 +147,7 @@ func TestRotationZ(t *testing.T) {
 	r1 := halfQuarter.MultiplyTuple(p)
 	r2 := fullQuarter.MultiplyTuple(p)
 
-	if !r1.Equals(NewPoint(-1*math.Sqrt2/2, math.Sqrt2/2, 0)) {
+	if !r1.Equals(NewPoint(-math.Sqrt2/2, math.Sqrt2/2, 0)) {
 		t.Fatal("Half a quarter rotation around Z is wrong")
 	}
 	if !r2.Equals(NewPoint(-1, 0, 0)) {
