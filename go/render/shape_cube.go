@@ -44,11 +44,10 @@ func (s *Cube) concreteIntersect(tr *Ray) []*Intersection {
 		return nil
 	}
 
-	res := make([]*Intersection, 2)
-
-	res[0] = NewIntersection(tMin, s)
-	res[1] = NewIntersection(tMax, s)
-	return res
+	return []*Intersection{
+		NewIntersection(tMin, s),
+		NewIntersection(tMax, s),
+	}
 }
 
 func checkAxis(origin, direction float64) (float64, float64) {

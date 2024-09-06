@@ -45,9 +45,8 @@ func (s *Sphere) concreteIntersect(tr *Ray) []*Intersection {
 		return nil
 	}
 
-	res := make([]*Intersection, 2)
-
-	res[0] = NewIntersection((-1*b-math.Sqrt(discriminant))/(2*a), s)
-	res[1] = NewIntersection((-1*b+math.Sqrt(discriminant))/(2*a), s)
-	return res
+	return []*Intersection{
+		NewIntersection((-b-math.Sqrt(discriminant))/(2*a), s),
+		NewIntersection((-b+math.Sqrt(discriminant))/(2*a), s),
+	}
 }
