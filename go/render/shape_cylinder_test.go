@@ -74,3 +74,38 @@ func TestCylinderNormal(t *testing.T) {
 		}
 	}
 }
+
+func TestCylinderDefaultLength(t *testing.T) {
+	c := NewCylinder()
+
+	if c.minimum != math.Inf(-1) {
+		t.Fatal("Minimum is wrong")
+	}
+	if c.maximum != math.Inf(1) {
+		t.Fatal("Minimum is wrong")
+	}
+}
+
+func TestCylinderIntersect_constrained(t *testing.T) {
+	tt := []CylinderTestCase{
+		{NewPoint(0, 1.5, 0), NewVector(0.1, 1, 0), 0, 0},
+		{NewPoint(0, 3, -5), NewVector(0, 0, 1), 0, 0},
+		{NewPoint(0, 0, -5), NewVector(0, 0, 1), 0, 0},
+		{NewPoint(0, 2, -5), NewVector(0, 0, 1), 0, 0},
+		{NewPoint(0, 1, -5), NewVector(0, 0, 1), 0, 0},
+		{NewPoint(0, 1.5, -2), NewVector(0, 0, 1), 2, 0},
+	}
+
+	c := NewCylinder()
+	c.SetMinimum(1)
+	c.SetMaximum(2)
+
+	for _, testCase := range tt {
+		r := NewRay(testCase.origin, testCase.direction)
+
+		ii := c.concreteIntersect(r)
+		if len(ii) != int(testCase.t1) {
+			t.Fatal("Number of intersections is wrong")
+		}
+	}
+}
