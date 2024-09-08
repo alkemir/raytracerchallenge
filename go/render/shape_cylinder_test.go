@@ -109,3 +109,59 @@ func TestCylinderIntersect_constrained(t *testing.T) {
 		}
 	}
 }
+
+func TestCylinderDefaultClosed(t *testing.T) {
+	c := NewCylinder()
+
+	if c.closed {
+		t.Fatal("Default for closed is wrong")
+	}
+}
+
+func TestCylinderIntersect_closedCaps(t *testing.T) {
+	tt := []CylinderTestCase{
+		{NewPoint(0, 3, 0), NewVector(0, -1, 0), 2, 0},
+		{NewPoint(0, 3, -2), NewVector(0, -1, 2), 2, 0},
+		{NewPoint(0, 4, -2), NewVector(0, -1, 1), 2, 0},
+		{NewPoint(0, 0, -2), NewVector(0, 1, 2), 2, 0},
+		{NewPoint(0, -1, -2), NewVector(0, 1, 1), 2, 0},
+	}
+
+	c := NewCylinder()
+	c.SetMinimum(1)
+	c.SetMaximum(2)
+	c.SetClosed(true)
+
+	for _, testCase := range tt {
+		r := NewRay(testCase.origin, testCase.direction.Norm())
+
+		ii := c.concreteIntersect(r)
+		if len(ii) != int(testCase.t1) {
+			t.Fatal("Number of intersections is wrong")
+		}
+	}
+}
+
+func TestCylinderNormal_caps(t *testing.T) {
+	tt := []CylinderTestCase{
+		{NewPoint(0, 1, 0), NewVector(0, -1, 0), 0, 0},
+		{NewPoint(0.5, 1, 0), NewVector(0, -1, 0), 0, 0},
+		{NewPoint(0, 1, 0.5), NewVector(0, -1, 0), 0, 0},
+		{NewPoint(0, 2, 0), NewVector(0, 1, 0), 0, 0},
+		{NewPoint(0.5, 2, 0), NewVector(0, 1, 0), 0, 0},
+		{NewPoint(0, 2, 0.5), NewVector(0, 1, 0), 0, 0},
+	}
+
+	c := NewCylinder()
+	c.SetMinimum(1)
+	c.SetMaximum(2)
+	c.SetClosed(true)
+
+	for _, testCase := range tt {
+		n := c.concreteNormal(testCase.origin)
+
+		if !n.Equals(testCase.direction) {
+			t.Fatal("Normal is wrong")
+		}
+	}
+}
