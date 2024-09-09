@@ -1,5 +1,7 @@
 package render
 
+import "slices"
+
 var _ Shape = (*Group)(nil)
 var _ ConcreteShape = (*Group)(nil)
 
@@ -33,5 +35,17 @@ func (s *Group) concreteNormal(p Tuple) Tuple {
 }
 
 func (s *Group) concreteIntersect(tr *Ray) []*Intersection {
-	return nil
+	ii := make([]*Intersection, 0)
+	for _, c := range s.children {
+		ii = append(ii, c.Intersect(tr)...)
+	}
+
+	slices.SortFunc(ii, func(a *Intersection, b *Intersection) int {
+		if a.t > b.t {
+			return 1
+		}
+		return -1
+	})
+
+	return ii
 }
