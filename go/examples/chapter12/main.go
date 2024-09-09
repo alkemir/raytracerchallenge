@@ -14,7 +14,8 @@ func main() {
 	up := render.NewVector(0, 1, 0)
 	camera := render.NewCamera(1000, 500, math.Pi/3)
 	camera.SetTransform(render.View(from, to, up))
-	camera.SetParallelism(16)
+	camera.SetParallelism(32)
+	camera.SetAntialiasing(8)
 
 	patternStripes := render.NewStripesPattern(render.NewColor(0.1, 0.1, 1), render.NewColor(1, 0.1, 0.1))
 	patternStripes.SetTransform(render.Translation(0.5, 0, 0))
@@ -34,7 +35,7 @@ func main() {
 
 	middle := render.NewCube()
 	middle.SetTransform(
-		render.Translation(-0.5, 1, 0.5).Multiply(
+		render.Translation(-0.5, 1, -0.5).Multiply(
 			render.Scaling(0.2, 0.2, 0.2)).Multiply(
 			render.RotationY(math.Pi / 4)).Multiply(
 			render.RotationZ(math.Pi / 7)))

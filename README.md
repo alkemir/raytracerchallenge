@@ -61,4 +61,12 @@ Pretty cool huh? But still, something was missing. The Fresnel effect. We implem
 
 To break with the monotony and familiarity of my favourite scene, we added cubes in chapter 12. Also implemented multi-threaded rendering as I got bored of waiting:
 
-![Cube Scene](/go/examples/chapter12/example.png?raw=true "CubeRender")
+![Cube Scene](/go/examples/chapter12/example_old.png?raw=true "CubeRender")
+
+I got tired of the patterns in the background due to aliasing, so I implemented AA. My first attempt was doing 4x supersampling:
+
+![Supersampled Scene](/go/examples/chapter12/example_4aa.png?raw=true "SupersampledRender")
+
+It did help, but you can still see some patterning, so I went for stochastic raytracing, which worked, but I did not like that the borders seem noisier. Well, what can you do.
+
+![Stochastic Scene](/go/examples/chapter12/example.png?raw=true "StochasticRender")
