@@ -70,3 +70,7 @@ I got tired of the patterns in the background due to aliasing, so I implemented 
 It did help, but you can still see some patterning, so I went for stochastic raytracing, which worked, but I did not like that the borders seem noisier. Well, what can you do.
 
 ![Stochastic Scene](/go/examples/chapter12/example.png?raw=true "StochasticRender")
+
+In chapter 14 we implemented cylinders and cones, both capped and uncapped:
+
+![Cylinders and Cones Scene](/go/examples/chapter13/example.png?raw=true "CylinderConeRender")
