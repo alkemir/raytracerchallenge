@@ -7,11 +7,13 @@ type Shape interface {
 	Normal(p Tuple) Tuple
 	material() *Material
 	transform() *Matrix
+	setParent(p Shape)
 }
 
 type BaseShape struct {
 	_transform *Matrix
 	_material  *Material
+	parent     Shape
 	ConcreteShape
 }
 
@@ -42,6 +44,10 @@ func (s *BaseShape) SetMaterial(m *Material) {
 
 func (s *BaseShape) material() *Material {
 	return s._material
+}
+
+func (s *BaseShape) setParent(p Shape) {
+	s.parent = p
 }
 
 func (s *BaseShape) Intersect(r *Ray) []*Intersection {
