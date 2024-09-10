@@ -8,6 +8,8 @@ type Shape interface {
 	material() *Material
 	transform() *Matrix
 	setParent(p Shape)
+	worldToObject(p Tuple) Tuple
+	normalToWorld(n Tuple) Tuple
 }
 
 type BaseShape struct {
@@ -50,6 +52,36 @@ func (s *BaseShape) setParent(p Shape) {
 	s.parent = p
 }
 
+func (s *BaseShape) worldToObject(p Tuple) Tuple {
+	if s.parent != nil {
+		p = s.parent.worldToObject(p)
+	}
+
+	tInv, err := s.transform().Inverse()
+	if err != nil {
+		panic(err)
+	}
+
+	return tInv.MultiplyTuple(p)
+}
+
+func (s *BaseShape) normalToWorld(n Tuple) Tuple {
+	tInv, err := s.transform().Inverse()
+	if err != nil {
+		panic(err)
+	}
+
+	n = tInv.Transpose().MultiplyTuple(n)
+	n = n.ZeroW()
+	n = n.Norm()
+
+	if s.parent != nil {
+		n = s.parent.normalToWorld(n)
+	}
+
+	return n
+}
+
 func (s *BaseShape) Intersect(r *Ray) []*Intersection {
 	mInv, err := s._transform.Inverse()
 	if err != nil {
@@ -61,15 +93,10 @@ func (s *BaseShape) Intersect(r *Ray) []*Intersection {
 }
 
 func (s *BaseShape) Normal(p Tuple) Tuple {
-	mInv, err := s._transform.Inverse()
-	if err != nil {
-		panic(err)
-	}
-
-	objP := mInv.MultiplyTuple(p)
+	objP := s.worldToObject(p)
 	objN := s.concreteNormal(objP)
-	worldN := mInv.Transpose().MultiplyTuple(objN).ZeroW()
-	return worldN.Norm()
+	worldN := s.normalToWorld(objN)
+	return worldN
 }
 
 type TestShape struct {

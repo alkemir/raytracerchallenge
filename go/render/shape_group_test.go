@@ -1,6 +1,7 @@
 package render
 
 import (
+	"math"
 	"testing"
 )
 
@@ -92,5 +93,56 @@ func TestGroupIntersect_transformed(t *testing.T) {
 
 	if len(points) != 2 {
 		t.Fatal("Wrong number of intersections")
+	}
+}
+
+func TestGroupWorldToObject(t *testing.T) {
+	g1 := NewGroup()
+	g1.SetTransform(RotationY(math.Pi / 2))
+	g2 := NewGroup()
+	g2.SetTransform(Scaling(2, 2, 2))
+	g1.Add(g2)
+	s := NewSphere()
+	s.SetTransform(Translation(5, 0, 0))
+	g2.Add(s)
+
+	p := s.worldToObject(NewPoint(-2, 0, -10))
+
+	if !p.Equals(NewPoint(0, 0, -1)) {
+		t.Fatal("Point is wrong")
+	}
+}
+
+func TestGroupNormalToWorld(t *testing.T) {
+	g1 := NewGroup()
+	g1.SetTransform(RotationY(math.Pi / 2))
+	g2 := NewGroup()
+	g2.SetTransform(Scaling(1, 2, 3))
+	g1.Add(g2)
+	s := NewSphere()
+	s.SetTransform(Translation(5, 0, 0))
+	g2.Add(s)
+
+	n := s.normalToWorld(NewVector(math.Sqrt(3)/3, math.Sqrt(3)/3, math.Sqrt(3)/3))
+
+	if !n.Equals(NewVector(0.285714, 0.42857, -0.85714)) {
+		t.Fatal("Normal is wrong")
+	}
+}
+
+func TestGroupNormal(t *testing.T) {
+	g1 := NewGroup()
+	g1.SetTransform(RotationY(math.Pi / 2))
+	g2 := NewGroup()
+	g2.SetTransform(Scaling(1, 2, 3))
+	g1.Add(g2)
+	s := NewSphere()
+	s.SetTransform(Translation(5, 0, 0))
+	g2.Add(s)
+
+	n := s.Normal(NewPoint(1.7321, 1.1547, -5.5774))
+
+	if !n.Equals(NewVector(0.2857036, 0.4285431, -0.85716)) {
+		t.Fatal("Normal is wrong")
 	}
 }
