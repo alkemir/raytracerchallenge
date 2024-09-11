@@ -71,6 +71,10 @@ It did help, but you can still see some patterning, so I went for stochastic ray
 
 ![Stochastic Scene](/go/examples/chapter12/example.png?raw=true "StochasticRender")
 
-In chapter 14 we implemented cylinders and cones, both capped and uncapped:
+In chapter 13 we implemented cylinders and cones, both capped and uncapped:
 
 ![Cylinders and Cones Scene](/go/examples/chapter13/example.png?raw=true "CylinderConeRender")
+
+To prove that I have absolutely no creativity nor sense of aesthetics, I created this perfectly symmetrical scene (except for AA noise) which is hard to interpret at first, but it is my rendition of hexane (ok, ok its just a mirrory hexagon) to showcase the groups that I implemented in chapter 14.
+
+![Transluscent Hexane Scene](/go/examples/chapter14/example.png?raw=true "HexaneRender")

@@ -5,6 +5,7 @@ var _ Shape = (*BaseShape)(nil)
 type Shape interface {
 	Intersect(r *Ray) []*Intersection
 	Normal(p Tuple) Tuple
+	SetTransform(t *Matrix)
 	material() *Material
 	transform() *Matrix
 	setParent(p Shape)
