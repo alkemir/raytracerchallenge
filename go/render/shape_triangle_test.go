@@ -1,6 +1,7 @@
 package render
 
 import (
+	"math"
 	"testing"
 )
 
@@ -48,5 +49,78 @@ func TestTriangleNormal(t *testing.T) {
 	}
 	if !s.normal.Equals(n3) {
 		t.Fatal("Normal is wrong")
+	}
+}
+
+func TestTriangleIntersect_parallel(t *testing.T) {
+	p1 := NewPoint(0, 1, 0)
+	p2 := NewPoint(-1, 0, 0)
+	p3 := NewPoint(1, 0, 0)
+	s := NewTriangle(p1, p2, p3)
+	r := NewRay(NewPoint(0, -1, -2), NewVector(0, 1, 0))
+
+	ii := s.concreteIntersect(r)
+
+	if len(ii) != 0 {
+		t.Fatal("Intersect is wrong")
+	}
+}
+
+func TestTriangleIntersect_missA(t *testing.T) {
+	p1 := NewPoint(0, 1, 0)
+	p2 := NewPoint(-1, 0, 0)
+	p3 := NewPoint(1, 0, 0)
+	s := NewTriangle(p1, p2, p3)
+	r := NewRay(NewPoint(1, 1, -2), NewVector(0, 0, 1))
+
+	ii := s.concreteIntersect(r)
+
+	if len(ii) != 0 {
+		t.Fatal("Intersect is wrong")
+	}
+}
+
+func TestTriangleIntersect_missB(t *testing.T) {
+	p1 := NewPoint(0, 1, 0)
+	p2 := NewPoint(-1, 0, 0)
+	p3 := NewPoint(1, 0, 0)
+	s := NewTriangle(p1, p2, p3)
+	r := NewRay(NewPoint(-1, 1, -2), NewVector(0, 0, 1))
+
+	ii := s.concreteIntersect(r)
+
+	if len(ii) != 0 {
+		t.Fatal("Intersect is wrong")
+	}
+}
+
+func TestTriangleIntersect_missC(t *testing.T) {
+	p1 := NewPoint(0, 1, 0)
+	p2 := NewPoint(-1, 0, 0)
+	p3 := NewPoint(1, 0, 0)
+	s := NewTriangle(p1, p2, p3)
+	r := NewRay(NewPoint(0, -1, -2), NewVector(0, 0, 1))
+
+	ii := s.concreteIntersect(r)
+
+	if len(ii) != 0 {
+		t.Fatal("Intersect is wrong")
+	}
+}
+
+func TestTriangleIntersect_hit(t *testing.T) {
+	p1 := NewPoint(0, 1, 0)
+	p2 := NewPoint(-1, 0, 0)
+	p3 := NewPoint(1, 0, 0)
+	s := NewTriangle(p1, p2, p3)
+	r := NewRay(NewPoint(0, 0.5, -2), NewVector(0, 0, 1))
+
+	ii := s.concreteIntersect(r)
+
+	if len(ii) != 1 {
+		t.Fatal("Intersect is wrong")
+	}
+	if math.Abs(ii[0].t-2) > EPSILON {
+		t.Fatal("Intersect is wrong")
 	}
 }

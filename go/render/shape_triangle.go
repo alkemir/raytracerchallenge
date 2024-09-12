@@ -42,20 +42,25 @@ func (s *Triangle) concreteNormal(p Tuple) Tuple {
 }
 
 func (s *Triangle) concreteIntersect(tr *Ray) []*Intersection {
-	TriangleToRay := tr.origin.Sub(NewPoint(0, 0, 0))
-
-	a := tr.direction.Dot(tr.direction)
-	b := 2 * tr.direction.Dot(TriangleToRay)
-	c := TriangleToRay.Dot(TriangleToRay) - 1
-
-	discriminant := b*b - 4*a*c
-
-	if discriminant < 0 {
+	directionCrossEdge := tr.direction.Cross(s.e2)
+	det := s.e1.Dot(directionCrossEdge)
+	if math.Abs(det) < EPSILON {
 		return nil
 	}
 
-	return []*Intersection{
-		NewIntersection((-b-math.Sqrt(discriminant))/(2*a), s),
-		NewIntersection((-b+math.Sqrt(discriminant))/(2*a), s),
+	f := 1.0 / det
+	p1ToOrigin := tr.origin.Sub(s.p1)
+	u := f * p1ToOrigin.Dot(directionCrossEdge)
+	if u < 0 || u > 1 {
+		return nil
 	}
+
+	originCrossEdge := p1ToOrigin.Cross(s.e1)
+	v := f * tr.direction.Dot(originCrossEdge)
+	if v < 0 || u+v > 1 {
+		return nil
+	}
+
+	t := f * s.e2.Dot(originCrossEdge)
+	return []*Intersection{NewIntersection(t, s)}
 }
