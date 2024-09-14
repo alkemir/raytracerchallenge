@@ -79,3 +79,48 @@ func TestParserTriangle(t *testing.T) {
 		t.Fatal("Parse triangle is wrong")
 	}
 }
+
+func TestParserPolygon(t *testing.T) {
+	gibberish := strings.NewReader(
+		`v -1 1 0` + "\n" +
+			`v -1 0 0` + "\n" +
+			`v 1 0 0` + "\n" +
+			`v 1 1 0` + "\n" +
+			`v 0 2 0` + "\n" +
+			`` + "\n" +
+			`f 1 2 3 4 5`)
+	p := NewParser(gibberish)
+
+	p.Parse()
+	t1 := p.DefaultGroup().children[0]
+	t2 := p.DefaultGroup().children[1]
+	t3 := p.DefaultGroup().children[2]
+
+	if !t1.(*Triangle).p1.Equals(p.vertices[0]) {
+		t.Fatal("Parse polygon is wrong")
+	}
+	if !t1.(*Triangle).p2.Equals(p.vertices[1]) {
+		t.Fatal("Parse polygon is wrong")
+	}
+	if !t1.(*Triangle).p3.Equals(p.vertices[2]) {
+		t.Fatal("Parse polygon is wrong")
+	}
+	if !t2.(*Triangle).p1.Equals(p.vertices[0]) {
+		t.Fatal("Parse polygon is wrong")
+	}
+	if !t2.(*Triangle).p2.Equals(p.vertices[2]) {
+		t.Fatal("Parse polygon is wrong")
+	}
+	if !t2.(*Triangle).p3.Equals(p.vertices[3]) {
+		t.Fatal("Parse polygon is wrong")
+	}
+	if !t3.(*Triangle).p1.Equals(p.vertices[0]) {
+		t.Fatal("Parse polygon is wrong")
+	}
+	if !t3.(*Triangle).p2.Equals(p.vertices[3]) {
+		t.Fatal("Parse polygon is wrong")
+	}
+	if !t3.(*Triangle).p3.Equals(p.vertices[4]) {
+		t.Fatal("Parse polygon is wrong")
+	}
+}

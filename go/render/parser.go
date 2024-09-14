@@ -71,11 +71,8 @@ func (p *Parser) parseVertex(vxs []string) error {
 }
 
 func (p *Parser) parseFace(idxs []string) error {
-	if len(idxs) != 3 {
-		return fmt.Errorf("wrong number of vertices %v", idxs)
-	}
-
-	numIdxs := make([]int, 3)
+	vertices := len(idxs)
+	numIdxs := make([]int, vertices)
 	for i, idx := range idxs {
 		num, err := strconv.ParseInt(idx, 0, 0)
 		if err != nil {
@@ -84,8 +81,10 @@ func (p *Parser) parseFace(idxs []string) error {
 		numIdxs[i] = int(num) - 1
 	}
 
-	s := NewTriangle(p.vertices[numIdxs[0]], p.vertices[numIdxs[1]], p.vertices[numIdxs[2]])
-	p.g.Add(s)
+	for i := 0; i < vertices-2; i++ {
+		s := NewTriangle(p.vertices[numIdxs[0]], p.vertices[numIdxs[i+1]], p.vertices[numIdxs[i+2]])
+		p.g.Add(s)
+	}
 
 	return nil
 }
