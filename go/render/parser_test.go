@@ -124,3 +124,42 @@ func TestParserPolygon(t *testing.T) {
 		t.Fatal("Parse polygon is wrong")
 	}
 }
+
+func TestParserNamedGroups(t *testing.T) {
+	gibberish := strings.NewReader(
+		`v -1 1 0` + "\n" +
+			`v -1 0 0` + "\n" +
+			`v 1 0 0` + "\n" +
+			`v 1 1 0` + "\n" +
+			`` + "\n" +
+			`g FirstGroup` + "\n" +
+			`f 1 2 3` + "\n" +
+			`g SecondGroup` + "\n" +
+			`f 1 3 4`)
+	p := NewParser(gibberish)
+
+	p.Parse()
+	g1 := p.Group("FirstGroup")
+	g2 := p.Group("SecondGroup")
+	t1 := g1.children[0]
+	t2 := g2.children[0]
+
+	if !t1.(*Triangle).p1.Equals(p.vertices[0]) {
+		t.Fatal("Parse polygon is wrong")
+	}
+	if !t1.(*Triangle).p2.Equals(p.vertices[1]) {
+		t.Fatal("Parse polygon is wrong")
+	}
+	if !t1.(*Triangle).p3.Equals(p.vertices[2]) {
+		t.Fatal("Parse polygon is wrong")
+	}
+	if !t2.(*Triangle).p1.Equals(p.vertices[0]) {
+		t.Fatal("Parse polygon is wrong")
+	}
+	if !t2.(*Triangle).p2.Equals(p.vertices[2]) {
+		t.Fatal("Parse polygon is wrong")
+	}
+	if !t2.(*Triangle).p3.Equals(p.vertices[3]) {
+		t.Fatal("Parse polygon is wrong")
+	}
+}

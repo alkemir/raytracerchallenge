@@ -9,20 +9,26 @@ import (
 )
 
 type Parser struct {
-	r        io.Reader
-	g        *Group
-	vertices []Tuple
+	r            io.Reader
+	currentGroup string
+	g            map[string]*Group
+	vertices     []Tuple
 }
 
 func NewParser(r io.Reader) *Parser {
 	return &Parser{
-		r: r,
-		g: NewGroup(),
+		r:            r,
+		currentGroup: "",
+		g:            map[string]*Group{"": NewGroup()},
 	}
 }
 
 func (p *Parser) DefaultGroup() *Group {
-	return p.g
+	return p.g[""]
+}
+
+func (p *Parser) Group(group string) *Group {
+	return p.g[group]
 }
 
 func (p *Parser) Parse() int {
@@ -44,6 +50,8 @@ func (p *Parser) parseLine(line string) error {
 		return p.parseVertex(tokens[1:])
 	case "f":
 		return p.parseFace(tokens[1:])
+	case "g":
+		return p.parseGroup(tokens[1:])
 	}
 	return fmt.Errorf("command unknown: %v", tokens)
 }
@@ -81,10 +89,24 @@ func (p *Parser) parseFace(idxs []string) error {
 		numIdxs[i] = int(num) - 1
 	}
 
+	g := p.g[p.currentGroup]
 	for i := 0; i < vertices-2; i++ {
 		s := NewTriangle(p.vertices[numIdxs[0]], p.vertices[numIdxs[i+1]], p.vertices[numIdxs[i+2]])
-		p.g.Add(s)
+		g.Add(s)
 	}
 
+	return nil
+}
+
+func (p *Parser) parseGroup(groupNames []string) error {
+	if len(groupNames) != 1 {
+		return fmt.Errorf("Invalid group name %v", groupNames)
+	}
+
+	p.currentGroup = groupNames[0]
+	g := p.g[p.currentGroup]
+	if g == nil {
+		p.g[p.currentGroup] = NewGroup()
+	}
 	return nil
 }
