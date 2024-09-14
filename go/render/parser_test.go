@@ -22,12 +22,12 @@ func TestParserGibberish(t *testing.T) {
 }
 
 func TestParserVertices(t *testing.T) {
-	gibberish := strings.NewReader(
+	fileContents := strings.NewReader(
 		`v -1 1 0` + "\n" +
 			`v -1.000 0.5000 0.0000` + "\n" +
 			`v 1 0 0` + "\n" +
 			`v 1 1 0`)
-	p := NewParser(gibberish)
+	p := NewParser(fileContents)
 
 	p.Parse()
 
@@ -46,7 +46,7 @@ func TestParserVertices(t *testing.T) {
 }
 
 func TestParserTriangle(t *testing.T) {
-	gibberish := strings.NewReader(
+	fileContents := strings.NewReader(
 		`v -1 1 0` + "\n" +
 			`v -1 0 0` + "\n" +
 			`v 1 0 0` + "\n" +
@@ -54,7 +54,7 @@ func TestParserTriangle(t *testing.T) {
 			`` + "\n" +
 			`f 1 2 3` + "\n" +
 			`f 1 3 4`)
-	p := NewParser(gibberish)
+	p := NewParser(fileContents)
 
 	p.Parse()
 	t1 := p.DefaultGroup().children[0]
@@ -81,7 +81,7 @@ func TestParserTriangle(t *testing.T) {
 }
 
 func TestParserPolygon(t *testing.T) {
-	gibberish := strings.NewReader(
+	fileContents := strings.NewReader(
 		`v -1 1 0` + "\n" +
 			`v -1 0 0` + "\n" +
 			`v 1 0 0` + "\n" +
@@ -89,7 +89,7 @@ func TestParserPolygon(t *testing.T) {
 			`v 0 2 0` + "\n" +
 			`` + "\n" +
 			`f 1 2 3 4 5`)
-	p := NewParser(gibberish)
+	p := NewParser(fileContents)
 
 	p.Parse()
 	t1 := p.DefaultGroup().children[0]
@@ -126,7 +126,7 @@ func TestParserPolygon(t *testing.T) {
 }
 
 func TestParserNamedGroups(t *testing.T) {
-	gibberish := strings.NewReader(
+	fileContents := strings.NewReader(
 		`v -1 1 0` + "\n" +
 			`v -1 0 0` + "\n" +
 			`v 1 0 0` + "\n" +
@@ -136,7 +136,7 @@ func TestParserNamedGroups(t *testing.T) {
 			`f 1 2 3` + "\n" +
 			`g SecondGroup` + "\n" +
 			`f 1 3 4`)
-	p := NewParser(gibberish)
+	p := NewParser(fileContents)
 
 	p.Parse()
 	g1 := p.Group("FirstGroup")
@@ -161,5 +161,32 @@ func TestParserNamedGroups(t *testing.T) {
 	}
 	if !t2.(*Triangle).p3.Equals(p.vertices[3]) {
 		t.Fatal("Parse polygon is wrong")
+	}
+}
+
+func TestParserAsGroup(t *testing.T) {
+	fileContents := strings.NewReader(
+		`v -1 1 0` + "\n" +
+			`v -1 0 0` + "\n" +
+			`v 1 0 0` + "\n" +
+			`v 1 1 0` + "\n" +
+			`` + "\n" +
+			`g FirstGroup` + "\n" +
+			`f 1 2 3` + "\n" +
+			`g SecondGroup` + "\n" +
+			`f 1 3 4`)
+	p := NewParser(fileContents)
+
+	p.Parse()
+	g := p.AsGroup()
+	subGs := g.Children()
+
+	if len(subGs) != 3 {
+		t.Fatal("Subgroups is wrong")
+	}
+	for _, subG := range subGs {
+		if _, isGroup := subG.(*Group); !isGroup {
+			t.Fatal("Subgroups is wrong")
+		}
 	}
 }

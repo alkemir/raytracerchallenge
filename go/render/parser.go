@@ -31,6 +31,14 @@ func (p *Parser) Group(group string) *Group {
 	return p.g[group]
 }
 
+func (p *Parser) AsGroup() *Group {
+	g := NewGroup()
+	for _, subG := range p.g {
+		g.Add(subG)
+	}
+	return g
+}
+
 func (p *Parser) Parse() int {
 	ignored := 0
 	scanner := bufio.NewScanner(p.r)
@@ -100,7 +108,7 @@ func (p *Parser) parseFace(idxs []string) error {
 
 func (p *Parser) parseGroup(groupNames []string) error {
 	if len(groupNames) != 1 {
-		return fmt.Errorf("Invalid group name %v", groupNames)
+		return fmt.Errorf("invalid group name %v", groupNames)
 	}
 
 	p.currentGroup = groupNames[0]
