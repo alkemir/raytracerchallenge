@@ -38,6 +38,15 @@ func NewSmoothTriangle(p1, p2, p3, n1, n2, n3 Tuple) *SmoothTriangle {
 	return res
 }
 
+func (s *SmoothTriangle) Equals(o *SmoothTriangle) bool {
+	return s.p1.Equals(o.p1) &&
+		s.p2.Equals(o.p2) &&
+		s.p3.Equals(o.p3) &&
+		s.n1.Equals(o.n1) &&
+		s.n2.Equals(o.n2) &&
+		s.n3.Equals(o.n3)
+}
+
 func (s *SmoothTriangle) concreteNormal(p Tuple, i *Intersection) Tuple {
 	return s.n2.Mul(i.u).Add(s.n3.Mul(i.v)).Add(s.n1.Mul(1 - i.u - i.v))
 }

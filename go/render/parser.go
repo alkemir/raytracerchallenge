@@ -13,6 +13,7 @@ type Parser struct {
 	currentGroup string
 	g            map[string]*Group
 	vertices     []Tuple
+	normals      []Tuple
 }
 
 func NewParser(r io.Reader) *Parser {
@@ -60,6 +61,8 @@ func (p *Parser) parseLine(line string) error {
 		return p.parseFace(tokens[1:])
 	case "g":
 		return p.parseGroup(tokens[1:])
+	case "vn":
+		return p.parseVertexNormal(tokens[1:])
 	}
 	return fmt.Errorf("command unknown: %v", tokens)
 }
@@ -89,17 +92,36 @@ func (p *Parser) parseVertex(vxs []string) error {
 func (p *Parser) parseFace(idxs []string) error {
 	vertices := len(idxs)
 	numIdxs := make([]int, vertices)
+	numNormals := make([]int, 0)
 	for i, idx := range idxs {
-		num, err := strconv.ParseInt(idx, 0, 0)
+		idxParts := strings.Split(idx, "/")
+
+		num, err := strconv.ParseInt(idxParts[0], 0, 0)
 		if err != nil {
 			return err
 		}
 		numIdxs[i] = int(num) - 1
+
+		if len(idxParts) != 1 {
+			normal, err2 := strconv.ParseInt(idxParts[2], 0, 0)
+			if err2 != nil {
+				return err
+			}
+			numNormals = append(numNormals, int(normal)-1)
+		}
 	}
 
 	g := p.g[p.currentGroup]
 	for i := 0; i < vertices-2; i++ {
-		s := NewTriangle(p.vertices[numIdxs[0]], p.vertices[numIdxs[i+1]], p.vertices[numIdxs[i+2]])
+		var s Shape
+		if len(numNormals) == 0 {
+			s = NewTriangle(p.vertices[numIdxs[0]], p.vertices[numIdxs[i+1]], p.vertices[numIdxs[i+2]])
+		} else if len(numNormals) == vertices {
+			s = NewSmoothTriangle(p.vertices[numIdxs[0]], p.vertices[numIdxs[i+1]], p.vertices[numIdxs[i+2]],
+				p.normals[numNormals[i]], p.normals[numNormals[i+1]], p.normals[numNormals[i+2]])
+		} else {
+			return fmt.Errorf("number of vertices did not match number of normals: %v %v", numIdxs, numNormals)
+		}
 		g.Add(s)
 	}
 
@@ -116,5 +138,27 @@ func (p *Parser) parseGroup(groupNames []string) error {
 	if g == nil {
 		p.g[p.currentGroup] = NewGroup()
 	}
+	return nil
+}
+
+func (p *Parser) parseVertexNormal(ns []string) error {
+	if len(ns) != 3 {
+		return fmt.Errorf("wrong number of normals: %v", ns)
+	}
+
+	x, errX := strconv.ParseFloat(ns[0], 64)
+	if errX != nil {
+		return errX
+	}
+	y, errY := strconv.ParseFloat(ns[1], 64)
+	if errY != nil {
+		return errY
+	}
+	z, errZ := strconv.ParseFloat(ns[2], 64)
+	if errZ != nil {
+		return errZ
+	}
+
+	p.normals = append(p.normals, NewVector(x, y, z))
 	return nil
 }
