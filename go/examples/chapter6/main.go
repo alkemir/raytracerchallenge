@@ -44,7 +44,7 @@ func main() {
 
 			if hit := render.Hit(sphere.Intersect(r)); hit != nil {
 				p := r.Project(hit.T())
-				n := hit.Object().(*render.Sphere).Normal(p)
+				n := hit.Object().(*render.Sphere).Normal(p, hit)
 				eye := cameraDirection.Mul(-1)
 				image.SetAt(x, y, material.Lightning(sphere, light, p, eye, n, false))
 			}
