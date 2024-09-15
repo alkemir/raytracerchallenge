@@ -78,3 +78,12 @@ In chapter 13 we implemented cylinders and cones, both capped and uncapped:
 To prove that I have absolutely no creativity nor sense of aesthetics, I created this perfectly symmetrical scene (except for AA noise) which is hard to interpret at first, but it is my rendition of hexane (ok, ok its just a mirrory hexagon) to showcase the groups that I implemented in chapter 14.
 
 ![Transluscent Hexane Scene](/go/examples/chapter14/example.png?raw=true "HexaneRender")
+
+In chapter 15 we implement triangles, and I let my creativity go loose with this crystal:
+
+![Transluscent Crystal Scene](/go/examples/chapter15/example.png?raw=true "CrystalRender")
+
+Not much to see, but it's not over. Then we move into OBJ files; watch this beautiful teapot which took 4 hours to render:
+
+![Teapot Scene](/go/examples/chapter15teapot/example.png?raw=true "TeapotRender")
+
