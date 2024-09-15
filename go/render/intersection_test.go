@@ -259,3 +259,16 @@ func TestReflectance_smallAngleN2Larger(t *testing.T) {
 		t.Fatal("Reflectance is wrong")
 	}
 }
+
+func TestIntersectionWithUVConstructor(t *testing.T) {
+	s := NewTriangle(NewPoint(0, 1, 0), NewPoint(-1, 0, 0), NewPoint(1, 0, 0))
+
+	i := NewIntersectionUV(3.5, s, 0.2, 0.4)
+
+	if i.u != 0.2 {
+		t.Fatal("U is wrong")
+	}
+	if i.v != 0.4 {
+		t.Fatal("V is wrong")
+	}
+}

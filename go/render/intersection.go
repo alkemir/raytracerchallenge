@@ -6,6 +6,8 @@ import (
 )
 
 type Intersection struct {
+	u   float64
+	v   float64
 	t   float64
 	obj Shape
 }
@@ -35,6 +37,15 @@ func Hit(ii []*Intersection) *Intersection {
 	}
 
 	return currentHit
+}
+
+func NewIntersectionUV(t float64, obj Shape, u, v float64) *Intersection {
+	return &Intersection{
+		u:   u,
+		v:   v,
+		t:   t,
+		obj: obj,
+	}
 }
 
 type Comps struct {
