@@ -140,7 +140,7 @@ func TestGroupNormal(t *testing.T) {
 	s.SetTransform(Translation(5, 0, 0))
 	g2.Add(s)
 
-	n := s.Normal(NewPoint(1.7321, 1.1547, -5.5774))
+	n := s.Normal(NewPoint(1.7321, 1.1547, -5.5774), nil)
 
 	if !n.Equals(NewVector(0.2857036, 0.4285431, -0.85716)) {
 		t.Fatal("Normal is wrong")

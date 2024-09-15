@@ -38,8 +38,8 @@ func NewSmoothTriangle(p1, p2, p3, n1, n2, n3 Tuple) *SmoothTriangle {
 	return res
 }
 
-func (s *SmoothTriangle) concreteNormal(p Tuple) Tuple {
-	return s.p1
+func (s *SmoothTriangle) concreteNormal(p Tuple, i *Intersection) Tuple {
+	return s.n2.Mul(i.u).Add(s.n3.Mul(i.v)).Add(s.n1.Mul(1 - i.u - i.v))
 }
 
 func (s *SmoothTriangle) concreteIntersect(tr *Ray) []*Intersection {

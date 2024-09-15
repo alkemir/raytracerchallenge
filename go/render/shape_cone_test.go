@@ -61,7 +61,7 @@ func TestConeNormal(t *testing.T) {
 	c := NewCone()
 
 	for _, testCase := range tt {
-		n := c.concreteNormal(testCase.origin)
+		n := c.concreteNormal(testCase.origin, nil)
 		if !n.Equals(testCase.direction) {
 			t.Fatal("Normal is wrong")
 		}
@@ -80,7 +80,7 @@ func TestConeNormal_caps(t *testing.T) {
 	c.SetClosed(true)
 
 	for _, testCase := range tt {
-		n := c.concreteNormal(testCase.origin)
+		n := c.concreteNormal(testCase.origin, nil)
 
 		if !n.Equals(testCase.direction) {
 			t.Fatal("Normal is wrong")

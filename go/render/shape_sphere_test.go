@@ -117,7 +117,7 @@ func TestSphereIntersect_translated(t *testing.T) {
 func TestSphereNormal_xaxis(t *testing.T) {
 	s := NewSphere()
 
-	n := s.Normal(NewPoint(1, 0, 0))
+	n := s.Normal(NewPoint(1, 0, 0), nil)
 
 	if !n.Equals(NewVector(1, 0, 0)) {
 		t.Fatal("Normal is wrong")
@@ -127,7 +127,7 @@ func TestSphereNormal_xaxis(t *testing.T) {
 func TestSphereNormal_yaxis(t *testing.T) {
 	s := NewSphere()
 
-	n := s.Normal(NewPoint(0, 1, 0))
+	n := s.Normal(NewPoint(0, 1, 0), nil)
 
 	if !n.Equals(NewVector(0, 1, 0)) {
 		t.Fatal("Normal is wrong")
@@ -136,7 +136,7 @@ func TestSphereNormal_yaxis(t *testing.T) {
 func TestSphereNormal_zaxis(t *testing.T) {
 	s := NewSphere()
 
-	n := s.Normal(NewPoint(0, 0, 1))
+	n := s.Normal(NewPoint(0, 0, 1), nil)
 
 	if !n.Equals(NewVector(0, 0, 1)) {
 		t.Fatal("Normal is wrong")
@@ -145,7 +145,7 @@ func TestSphereNormal_zaxis(t *testing.T) {
 func TestSphereNormal_offAxis(t *testing.T) {
 	s := NewSphere()
 
-	n := s.Normal(NewPoint(math.Sqrt(3)/3, math.Sqrt(3)/3, math.Sqrt(3)/3))
+	n := s.Normal(NewPoint(math.Sqrt(3)/3, math.Sqrt(3)/3, math.Sqrt(3)/3), nil)
 
 	if !n.Equals(NewVector(math.Sqrt(3)/3, math.Sqrt(3)/3, math.Sqrt(3)/3)) {
 		t.Fatal("Normal is wrong")
@@ -155,7 +155,7 @@ func TestSphereNormal_offAxis(t *testing.T) {
 func TestSphereNormal_normalized(t *testing.T) {
 	s := NewSphere()
 
-	n := s.Normal(NewPoint(math.Sqrt(3)/3, math.Sqrt(3)/3, math.Sqrt(3)/3))
+	n := s.Normal(NewPoint(math.Sqrt(3)/3, math.Sqrt(3)/3, math.Sqrt(3)/3), nil)
 
 	if !n.Equals(n.Norm()) {
 		t.Fatal("Normal is not normal")
@@ -166,7 +166,7 @@ func TestSphereNormal_translated(t *testing.T) {
 	s := NewSphere()
 	s.SetTransform(Translation(0, 1, 0))
 
-	n := s.Normal(NewPoint(0, 1.70710678, -0.70710678))
+	n := s.Normal(NewPoint(0, 1.70710678, -0.70710678), nil)
 
 	if !n.Equals(NewVector(0, 0.70710678, -0.70710678)) {
 		t.Fatal("Normal is wrong")
@@ -176,7 +176,7 @@ func TestSphereNormal_scaledRotated(t *testing.T) {
 	s := NewSphere()
 	s.SetTransform(Scaling(1, 0.5, 1).Multiply(RotationZ(math.Pi / 5)))
 
-	n := s.Normal(NewPoint(0, math.Sqrt2/2, -math.Sqrt2/2))
+	n := s.Normal(NewPoint(0, math.Sqrt2/2, -math.Sqrt2/2), nil)
 
 	if !n.Equals(NewVector(0, 0.970142500, -0.24253562)) {
 		t.Fatal("Normal is wrong")

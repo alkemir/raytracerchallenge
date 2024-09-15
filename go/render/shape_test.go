@@ -77,7 +77,7 @@ func TestShapeNormalTranslated(t *testing.T) {
 	s := NewTestShape()
 	s.SetTransform(Translation(0, 1, 0))
 
-	n := s.Normal(NewPoint(0, 1.70711, -0.70711))
+	n := s.Normal(NewPoint(0, 1.70711, -0.70711), nil)
 
 	if !n.Equals(NewVector(0, 0.70711, -0.70711)) {
 		t.Fatal("Normal is wrong")
@@ -88,7 +88,7 @@ func TestShapeNormalScaled(t *testing.T) {
 	s := NewTestShape()
 	s.SetTransform(Scaling(1, 0.5, 1).Multiply(RotationZ(math.Pi / 5)))
 
-	n := s.Normal(NewPoint(0, math.Sqrt2/2, -math.Sqrt2/2))
+	n := s.Normal(NewPoint(0, math.Sqrt2/2, -math.Sqrt2/2), nil)
 
 	if !n.Equals(NewVector(0, 0.97014, -0.24254)) {
 		t.Fatal("Normal is wrong")

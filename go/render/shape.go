@@ -4,7 +4,7 @@ var _ Shape = (*BaseShape)(nil)
 
 type Shape interface {
 	Intersect(r *Ray) []*Intersection
-	Normal(p Tuple) Tuple
+	Normal(p Tuple, i *Intersection) Tuple
 	SetTransform(t *Matrix)
 	material() *Material
 	transform() *Matrix
@@ -22,7 +22,7 @@ type BaseShape struct {
 
 type ConcreteShape interface {
 	concreteIntersect(r *Ray) []*Intersection
-	concreteNormal(p Tuple) Tuple
+	concreteNormal(p Tuple, i *Intersection) Tuple
 }
 
 func DefaultBaseShape() *BaseShape {
@@ -93,9 +93,9 @@ func (s *BaseShape) Intersect(r *Ray) []*Intersection {
 	return s.concreteIntersect(tr)
 }
 
-func (s *BaseShape) Normal(p Tuple) Tuple {
+func (s *BaseShape) Normal(p Tuple, i *Intersection) Tuple {
 	objP := s.worldToObject(p)
-	objN := s.concreteNormal(objP)
+	objN := s.concreteNormal(objP, i)
 	worldN := s.normalToWorld(objN)
 	return worldN
 }
@@ -120,6 +120,6 @@ func (s *TestShape) concreteIntersect(r *Ray) []*Intersection {
 	return nil
 }
 
-func (s *TestShape) concreteNormal(p Tuple) Tuple {
+func (s *TestShape) concreteNormal(p Tuple, i *Intersection) Tuple {
 	return NewVector(p.x, p.y, p.z)
 }

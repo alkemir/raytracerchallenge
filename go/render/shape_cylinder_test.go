@@ -67,7 +67,7 @@ func TestCylinderNormal(t *testing.T) {
 	c := NewCylinder()
 
 	for _, testCase := range tt {
-		n := c.concreteNormal(testCase.origin)
+		n := c.concreteNormal(testCase.origin, nil)
 
 		if !n.Equals(testCase.direction) {
 			t.Fatal("Normal is wrong")
@@ -158,7 +158,7 @@ func TestCylinderNormal_caps(t *testing.T) {
 	c.SetClosed(true)
 
 	for _, testCase := range tt {
-		n := c.concreteNormal(testCase.origin)
+		n := c.concreteNormal(testCase.origin, nil)
 
 		if !n.Equals(testCase.direction) {
 			t.Fatal("Normal is wrong")

@@ -30,7 +30,7 @@ func (g *Group) Children() []Shape {
 	return g.children
 }
 
-func (s *Group) concreteNormal(p Tuple) Tuple {
+func (s *Group) concreteNormal(p Tuple, i *Intersection) Tuple {
 	return NewPoint(0, 0, 0)
 }
 

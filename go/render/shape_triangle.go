@@ -37,7 +37,7 @@ func NewTriangle(p1, p2, p3 Tuple) *Triangle {
 	return res
 }
 
-func (s *Triangle) concreteNormal(p Tuple) Tuple {
+func (s *Triangle) concreteNormal(p Tuple, i *Intersection) Tuple {
 	return s.normal
 }
 

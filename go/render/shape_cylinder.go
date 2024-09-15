@@ -39,7 +39,7 @@ func (s *Cylinder) SetClosed(c bool) {
 	s.closed = c
 }
 
-func (s *Cylinder) concreteNormal(p Tuple) Tuple {
+func (s *Cylinder) concreteNormal(p Tuple, i *Intersection) Tuple {
 	if !s.closed {
 		return NewVector(p.x, 0, p.z)
 	}

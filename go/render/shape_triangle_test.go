@@ -37,9 +37,9 @@ func TestTriangleNormal(t *testing.T) {
 	p3 := NewPoint(1, 0, 0)
 	s := NewTriangle(p1, p2, p3)
 
-	n1 := s.concreteNormal(NewPoint(0, 0.5, 0))
-	n2 := s.concreteNormal(NewPoint(-0.5, 0.75, 0))
-	n3 := s.concreteNormal(NewPoint(0.5, 0.25, 0))
+	n1 := s.concreteNormal(NewPoint(0, 0.5, 0), nil)
+	n2 := s.concreteNormal(NewPoint(-0.5, 0.75, 0), nil)
+	n3 := s.concreteNormal(NewPoint(0.5, 0.25, 0), nil)
 
 	if !s.normal.Equals(n1) {
 		t.Fatal("Normal is wrong")

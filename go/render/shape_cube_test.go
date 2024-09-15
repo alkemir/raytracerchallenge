@@ -78,7 +78,7 @@ func TestCubeNormal(t *testing.T) {
 	c := NewCube()
 
 	for _, testCase := range tt {
-		n := c.concreteNormal(testCase.origin)
+		n := c.concreteNormal(testCase.origin, nil)
 
 		if !n.Equals(testCase.direction) {
 			t.Fatal("Normal is wrong")

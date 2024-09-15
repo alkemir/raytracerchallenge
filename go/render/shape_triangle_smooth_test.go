@@ -55,3 +55,20 @@ func TestSmoothTriangleIntersection_storesUV(t *testing.T) {
 		t.Fatal("V is wrong")
 	}
 }
+
+func TestSmoothTriangleNormal_interpolated(t *testing.T) {
+	p1 := NewPoint(0, 1, 0)
+	p2 := NewPoint(-1, 0, 0)
+	p3 := NewPoint(1, 0, 0)
+	n1 := NewVector(0, 1, 0)
+	n2 := NewVector(-1, 0, 0)
+	n3 := NewVector(1, 0, 0)
+
+	tri := NewSmoothTriangle(p1, p2, p3, n1, n2, n3)
+	i := NewIntersectionUV(1, tri, 0.45, 0.25)
+	n := tri.Normal(NewPoint(0, 0, 0), i)
+
+	if !n.Equals(NewVector(-0.5547, 0.83205, 0)) {
+		t.Fatal("Normal is wrong")
+	}
+}

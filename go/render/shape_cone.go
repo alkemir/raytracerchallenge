@@ -39,7 +39,7 @@ func (s *Cone) SetClosed(c bool) {
 	s.closed = c
 }
 
-func (s *Cone) concreteNormal(p Tuple) Tuple {
+func (s *Cone) concreteNormal(p Tuple, i *Intersection) Tuple {
 	y := math.Sqrt(p.x*p.x + p.z*p.z)
 	if p.y > 0 {
 		y = -y

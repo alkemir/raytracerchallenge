@@ -21,7 +21,7 @@ func NewCube() *Cube {
 	return res
 }
 
-func (s *Cube) concreteNormal(p Tuple) Tuple {
+func (s *Cube) concreteNormal(p Tuple, i *Intersection) Tuple {
 	maxC := math.Max(math.Max(math.Abs(p.x), math.Abs(p.y)), math.Abs(p.z))
 	if math.Abs(p.x) == maxC {
 		return NewVector(p.x, 0, 0)

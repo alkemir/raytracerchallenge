@@ -28,7 +28,7 @@ func NewGlassSphere() *Sphere {
 	return res
 }
 
-func (s *Sphere) concreteNormal(p Tuple) Tuple {
+func (s *Sphere) concreteNormal(p Tuple, i *Intersection) Tuple {
 	return p.Sub(NewPoint(0, 0, 0))
 }
 

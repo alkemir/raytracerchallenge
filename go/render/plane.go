@@ -19,7 +19,7 @@ func NewPlane() *Plane {
 	return res
 }
 
-func (s *Plane) concreteNormal(p Tuple) Tuple {
+func (s *Plane) concreteNormal(p Tuple, i *Intersection) Tuple {
 	return NewVector(0, 1, 0)
 }
 

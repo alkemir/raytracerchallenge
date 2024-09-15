@@ -7,9 +7,9 @@ import (
 func TestPlaneNormal(t *testing.T) {
 	p := NewPlane()
 
-	n1 := p.concreteNormal(NewPoint(0, 0, 0))
-	n2 := p.concreteNormal(NewPoint(10, 0, -10))
-	n3 := p.concreteNormal(NewPoint(-5, 0, 150))
+	n1 := p.concreteNormal(NewPoint(0, 0, 0), nil)
+	n2 := p.concreteNormal(NewPoint(10, 0, -10), nil)
+	n3 := p.concreteNormal(NewPoint(-5, 0, 150), nil)
 
 	if !n1.Equals(NewVector(0, 1, 0)) {
 		t.Fatal("Normal is wrong")
