@@ -87,3 +87,9 @@ Not much to see, but it's not over. Then we move into OBJ files; watch this beau
 
 ![Teapot Scene](/go/examples/chapter15teapot/example.png?raw=true "TeapotRender")
 
+In chapter 16, the final chapter when it comes to implementations based on tests, we created shapes based on CSG (Constructive Solig Geometry). I made the following example to illustrate why two superimposed glass cubes are different to a union of two cubes:
+
+![CSG Scene](/go/examples/chapter16/example.png?raw=true "CSGRender")
+
+Thats it folks. There are some interesting next steps, but I will take a break for now. When I come back, I think this would be a fun project to optimize, as there
+is a lot of low hanging fruit.
