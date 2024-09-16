@@ -37,6 +37,10 @@ func NewTriangle(p1, p2, p3 Tuple) *Triangle {
 	return res
 }
 
+func (s *Triangle) Includes(o Shape) bool {
+	return s == o
+}
+
 func (s *Triangle) concreteNormal(p Tuple, i *Intersection) Tuple {
 	return s.normal
 }

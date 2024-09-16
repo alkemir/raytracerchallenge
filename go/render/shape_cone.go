@@ -27,6 +27,10 @@ func NewCone() *Cone {
 	return res
 }
 
+func (s *Cone) Includes(o Shape) bool {
+	return s == o
+}
+
 func (s *Cone) SetMinimum(m float64) {
 	s.minimum = m
 }

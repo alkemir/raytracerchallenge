@@ -30,6 +30,16 @@ func (g *Group) Children() []Shape {
 	return g.children
 }
 
+func (g *Group) Includes(o Shape) bool {
+	for _, s := range g.children {
+		if s.Includes(o) {
+			return true
+		}
+	}
+
+	return false
+}
+
 func (s *Group) concreteNormal(p Tuple, i *Intersection) Tuple {
 	return NewPoint(0, 0, 0)
 }

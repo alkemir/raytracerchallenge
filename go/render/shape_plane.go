@@ -19,6 +19,10 @@ func NewPlane() *Plane {
 	return res
 }
 
+func (s *Plane) Includes(o Shape) bool {
+	return s == o
+}
+
 func (s *Plane) concreteNormal(p Tuple, i *Intersection) Tuple {
 	return NewVector(0, 1, 0)
 }

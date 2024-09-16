@@ -38,6 +38,10 @@ func NewSmoothTriangle(p1, p2, p3, n1, n2, n3 Tuple) *SmoothTriangle {
 	return res
 }
 
+func (s *SmoothTriangle) Includes(o Shape) bool {
+	return s == o
+}
+
 func (s *SmoothTriangle) Equals(o *SmoothTriangle) bool {
 	return s.p1.Equals(o.p1) &&
 		s.p2.Equals(o.p2) &&

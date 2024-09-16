@@ -27,6 +27,10 @@ func NewCylinder() *Cylinder {
 	return res
 }
 
+func (s *Cylinder) Includes(o Shape) bool {
+	return s == o
+}
+
 func (s *Cylinder) SetMinimum(m float64) {
 	s.minimum = m
 }

@@ -1,11 +1,12 @@
 package render
 
-var _ Shape = (*BaseShape)(nil)
+var _ Shape = (*TestShape)(nil)
 
 type Shape interface {
 	Intersect(r *Ray) []*Intersection
 	Normal(p Tuple, i *Intersection) Tuple
 	SetTransform(t *Matrix)
+	Includes(s Shape) bool
 	material() *Material
 	transform() *Matrix
 	setParent(p Shape)
@@ -113,6 +114,10 @@ func NewTestShape() *TestShape {
 	res.BaseShape.ConcreteShape = res
 
 	return res
+}
+
+func (s *TestShape) Includes(o Shape) bool {
+	return s == o
 }
 
 func (s *TestShape) concreteIntersect(r *Ray) []*Intersection {
