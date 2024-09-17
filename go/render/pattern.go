@@ -27,7 +27,7 @@ func (p *BasePattern) SetTransform(t *Matrix) {
 }
 
 func (p *BasePattern) AtObject(obj Shape, point Tuple) Tuple {
-	objTInv, err := obj.transform().Inverse()
+	objTInv, err := obj.transform().Inverse() // TODO: Use cached versions
 	if err != nil {
 		panic(err)
 	}

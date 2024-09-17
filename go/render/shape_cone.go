@@ -65,7 +65,7 @@ func (s *Cone) concreteNormal(p Tuple, i *Intersection) Tuple {
 }
 
 func (s *Cone) concreteIntersect(tr *Ray) []*Intersection {
-	ii := make([]*Intersection, 0)
+	ii := make([]*Intersection, 0, 4)
 
 	a := tr.direction.x*tr.direction.x - tr.direction.y*tr.direction.y + tr.direction.z*tr.direction.z
 	b := 2 * (tr.origin.x*tr.direction.x - tr.origin.y*tr.direction.y + tr.origin.z*tr.direction.z)

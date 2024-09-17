@@ -60,7 +60,7 @@ func (s *Cylinder) concreteNormal(p Tuple, i *Intersection) Tuple {
 }
 
 func (s *Cylinder) concreteIntersect(tr *Ray) []*Intersection {
-	ii := make([]*Intersection, 0)
+	ii := make([]*Intersection, 0, 2)
 
 	a := tr.direction.x*tr.direction.x + tr.direction.z*tr.direction.z
 	if math.Abs(a) >= EPSILON { // Check walls

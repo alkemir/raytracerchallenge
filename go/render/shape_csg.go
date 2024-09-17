@@ -35,7 +35,7 @@ func (s *CSGShape) Includes(o Shape) bool {
 func (s *CSGShape) filterIntersection(xs []*Intersection) []*Intersection {
 	inL := false
 	inR := false
-	result := make([]*Intersection, 0)
+	result := make([]*Intersection, 0, len(xs))
 
 	for _, x := range xs {
 		lHit := s.left.Includes(x.obj)
@@ -54,9 +54,12 @@ func (s *CSGShape) filterIntersection(xs []*Intersection) []*Intersection {
 }
 
 func (s *CSGShape) concreteIntersect(tr *Ray) []*Intersection {
-	ii := make([]*Intersection, 0)
-	ii = append(ii, s.left.Intersect(tr)...)
-	ii = append(ii, s.right.Intersect(tr)...)
+	iiL := s.left.Intersect(tr)
+	iiR := s.right.Intersect(tr)
+
+	ii := make([]*Intersection, 0, len(iiL)+len(iiR))
+	ii = append(ii, iiL...)
+	ii = append(ii, iiR...)
 
 	slices.SortFunc(ii, func(a *Intersection, b *Intersection) int {
 		if a.t > b.t {

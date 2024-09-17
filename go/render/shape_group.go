@@ -45,7 +45,7 @@ func (s *Group) concreteNormal(p Tuple, i *Intersection) Tuple {
 }
 
 func (s *Group) concreteIntersect(tr *Ray) []*Intersection {
-	ii := make([]*Intersection, 0)
+	ii := make([]*Intersection, 0, 4*len(s.children))
 	for _, c := range s.children {
 		ii = append(ii, c.Intersect(tr)...)
 	}

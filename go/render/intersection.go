@@ -76,7 +76,7 @@ func (i *Intersection) Precompute(ray *Ray, xs []*Intersection) *Comps {
 	underPoint := point.Sub(normal.Mul(EPSILON))
 	reflectv := ray.direction.Reflect(normal)
 
-	containers := make([]Shape, 0)
+	containers := make([]Shape, 0, len(xs))
 
 	var n1, n2 float64
 
