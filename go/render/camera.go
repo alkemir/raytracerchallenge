@@ -12,6 +12,7 @@ type Camera struct {
 	vsize        int
 	fov          float64
 	transform    *Matrix
+	transformInv *Matrix
 	pixelSize    float64
 	halfWidth    float64
 	halfHeight   float64
@@ -26,6 +27,7 @@ func NewCamera(hsize, vsize int, fov float64) *Camera {
 		vsize:        vsize,
 		fov:          fov,
 		transform:    IdentityMatrix(),
+		transformInv: IdentityMatrix(),
 		pixelSize:    pixelSize,
 		halfWidth:    halfWidth,
 		halfHeight:   halfHeight,
@@ -36,6 +38,11 @@ func NewCamera(hsize, vsize int, fov float64) *Camera {
 
 func (c *Camera) SetTransform(transform *Matrix) {
 	c.transform = transform
+	tInv, err := transform.Inverse()
+	if err != nil {
+		panic(err)
+	}
+	c.transformInv = tInv
 }
 
 func (c *Camera) SetParallelism(p int) {
@@ -75,14 +82,8 @@ func (c *Camera) actualRayForPixel(xPos, yPos float64) *Ray {
 	worldX := c.halfWidth - xOffset
 	worldY := c.halfHeight - yOffset
 
-	// TODO: Probably we should store this
-	tInv, err := c.transform.Inverse()
-	if err != nil {
-		panic(err)
-	}
-
-	pixel := tInv.MultiplyTuple(NewPoint(worldX, worldY, -1))
-	origin := tInv.MultiplyTuple(NewPoint(0, 0, 0))
+	pixel := c.transformInv.MultiplyTuple(NewPoint(worldX, worldY, -1))
+	origin := c.transformInv.MultiplyTuple(NewPoint(0, 0, 0))
 	direction := pixel.Sub(origin).Norm()
 
 	return NewRay(origin, direction)
