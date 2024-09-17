@@ -39,7 +39,7 @@ func (w *World) AddLight(light *Light) {
 }
 
 func (w *World) Intersect(ray *Ray) []*Intersection {
-	allIntersections := make([]*Intersection, 0)
+	allIntersections := make([]*Intersection, 0, 4*len(w.objs))
 
 	for _, obj := range w.objs {
 		allIntersections = append(allIntersections, obj.Intersect(ray)...)

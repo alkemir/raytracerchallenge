@@ -16,10 +16,11 @@ type Shape interface {
 }
 
 type BaseShape struct {
-	_transform    *Matrix
-	_transformInv *Matrix
-	_material     *Material
-	parent        Shape
+	_transform     *Matrix
+	_transformInv  *Matrix
+	_transformInvT *Matrix
+	_material      *Material
+	parent         Shape
 	ConcreteShape
 }
 
@@ -30,10 +31,11 @@ type ConcreteShape interface {
 
 func DefaultBaseShape() *BaseShape {
 	return &BaseShape{
-		_transform:    IdentityMatrix(),
-		_transformInv: IdentityMatrix(),
-		_material:     DefaultMaterial(),
-		ConcreteShape: nil,
+		_transform:     IdentityMatrix(),
+		_transformInv:  IdentityMatrix(),
+		_transformInvT: IdentityMatrix(),
+		_material:      DefaultMaterial(),
+		ConcreteShape:  nil,
 	}
 }
 
@@ -44,6 +46,7 @@ func (s *BaseShape) SetTransform(m *Matrix) {
 		panic(err)
 	}
 	s._transformInv = mInv
+	s._transformInvT = mInv.Transpose()
 }
 
 func (s *BaseShape) transform() *Matrix {
@@ -75,7 +78,7 @@ func (s *BaseShape) worldToObject(p Tuple) Tuple {
 }
 
 func (s *BaseShape) normalToWorld(n Tuple) Tuple {
-	n = s._transformInv.Transpose().MultiplyTuple(n)
+	n = s._transformInvT.MultiplyTuple(n)
 	n = n.ZeroW()
 	n = n.Norm()
 
