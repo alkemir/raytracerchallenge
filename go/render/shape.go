@@ -9,6 +9,7 @@ type Shape interface {
 	Includes(s Shape) bool
 	material() *Material
 	transform() *Matrix
+	transformInv() *Matrix
 	setParent(p Shape)
 	worldToObject(p Tuple) Tuple
 	normalToWorld(n Tuple) Tuple
@@ -47,6 +48,10 @@ func (s *BaseShape) SetTransform(m *Matrix) {
 
 func (s *BaseShape) transform() *Matrix {
 	return s._transform
+}
+
+func (s *BaseShape) transformInv() *Matrix {
+	return s._transformInv
 }
 
 func (s *BaseShape) SetMaterial(m *Material) {

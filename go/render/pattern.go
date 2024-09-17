@@ -7,7 +7,8 @@ type Pattern interface {
 }
 
 type BasePattern struct {
-	transform *Matrix
+	transform    *Matrix
+	transformInv *Matrix
 	ConcretePattern
 }
 
@@ -18,26 +19,23 @@ type ConcretePattern interface {
 func DefaultBasePattern() *BasePattern {
 	return &BasePattern{
 		transform:       IdentityMatrix(),
+		transformInv:    IdentityMatrix(),
 		ConcretePattern: nil,
 	}
 }
 
 func (p *BasePattern) SetTransform(t *Matrix) {
 	p.transform = t
-}
-
-func (p *BasePattern) AtObject(obj Shape, point Tuple) Tuple {
-	objTInv, err := obj.transform().Inverse() // TODO: Use cached versions
+	patTInv, err := t.Inverse()
 	if err != nil {
 		panic(err)
 	}
-	patTInv, err2 := p.transform.Inverse()
-	if err2 != nil {
-		panic(err2)
-	}
+	p.transformInv = patTInv
+}
 
-	wPoint := objTInv.MultiplyTuple(point)
-	pPoint := patTInv.MultiplyTuple(wPoint)
+func (p *BasePattern) AtObject(obj Shape, point Tuple) Tuple {
+	wPoint := obj.transformInv().MultiplyTuple(point)
+	pPoint := p.transformInv.MultiplyTuple(wPoint)
 
 	return p.At(pPoint)
 }
