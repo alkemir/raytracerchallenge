@@ -66,21 +66,11 @@ func (s *BaseShape) worldToObject(p Tuple) Tuple {
 		p = s.parent.worldToObject(p)
 	}
 
-	tInv, err := s.transform().Inverse()
-	if err != nil {
-		panic(err)
-	}
-
-	return tInv.MultiplyTuple(p)
+	return s._transformInv.MultiplyTuple(p)
 }
 
 func (s *BaseShape) normalToWorld(n Tuple) Tuple {
-	tInv, err := s.transform().Inverse()
-	if err != nil {
-		panic(err)
-	}
-
-	n = tInv.Transpose().MultiplyTuple(n)
+	n = s._transformInv.Transpose().MultiplyTuple(n)
 	n = n.ZeroW()
 	n = n.Norm()
 
