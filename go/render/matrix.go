@@ -92,11 +92,8 @@ func (m *Matrix) Transpose() *Matrix {
 	return NewMatrix(rows, cols, resData)
 }
 
-func (m *Matrix) SubMatrix(row, col int) *Matrix {
-	rows := m.rows - 1
+func (m *Matrix) SubMatrix(row, col int, scratchMatrix *Matrix) *Matrix {
 	cols := m.cols - 1
-
-	resData := make([]float64, rows*cols)
 
 	yOff := 0
 	for y := 0; y < m.rows; y++ {
@@ -112,12 +109,11 @@ func (m *Matrix) SubMatrix(row, col int) *Matrix {
 				continue
 			}
 
-			resData[x-xOff+(y-yOff)*cols] = m.data[x+y*m.cols]
+			scratchMatrix.data[x-xOff+(y-yOff)*cols] = m.data[x+y*m.cols]
 		}
 	}
 
-	return NewMatrix(rows, cols, resData)
-
+	return scratchMatrix
 }
 
 func (m *Matrix) Det() float64 {
@@ -126,21 +122,22 @@ func (m *Matrix) Det() float64 {
 	}
 
 	det := float64(0)
+	scratch := NewMatrix(m.rows-1, m.cols-1, make([]float64, (m.rows-1)*(m.cols-1)))
 	for y := 0; y < m.cols; y++ {
-		det += m.data[y] * m.Cofactor(0, y)
+		det += m.data[y] * m.Cofactor(0, y, scratch)
 	}
 	return det
 }
 
-func (m *Matrix) Minor(row, col int) float64 {
-	return m.SubMatrix(row, col).Det()
+func (m *Matrix) Minor(row, col int, scratchMatrix *Matrix) float64 {
+	return m.SubMatrix(row, col, scratchMatrix).Det()
 }
 
-func (m *Matrix) Cofactor(row, col int) float64 {
+func (m *Matrix) Cofactor(row, col int, scratchMatrix *Matrix) float64 {
 	if (row+col)%2 == 1 {
-		return -1 * m.Minor(row, col)
+		return -1 * m.Minor(row, col, scratchMatrix)
 	}
-	return m.Minor(row, col)
+	return m.Minor(row, col, scratchMatrix)
 }
 
 func (m *Matrix) Invertible() bool {
@@ -155,9 +152,10 @@ func (m *Matrix) Inverse() (*Matrix, error) {
 	}
 
 	resData := make([]float64, m.rows*m.cols)
+	scratchMatrix := NewMatrix(3, 3, make([]float64, 9))
 	for row := 0; row < m.rows; row++ {
 		for col := 0; col < m.cols; col++ {
-			resData[row+col*m.cols] = m.Cofactor(row, col) / det
+			resData[row+col*m.cols] = m.Cofactor(row, col, scratchMatrix) / det
 		}
 	}
 	return NewMatrix(m.rows, m.cols, resData), nil

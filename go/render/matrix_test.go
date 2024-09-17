@@ -149,8 +149,9 @@ func TestDeterminant2x2(t *testing.T) {
 func TestSubmatrixOf3x3Is2x2(t *testing.T) {
 	m := NewMatrix(3, 3, []float64{1, 5, 0, -3, 2, 7, 0, 6, -3})
 	sm := NewMatrix(2, 2, []float64{-3, 2, 0, 6})
+	scratch := NewMatrix(2, 2, make([]float64, 4))
 
-	sub := m.SubMatrix(0, 2)
+	sub := m.SubMatrix(0, 2, scratch)
 
 	if !sm.Equals(sub) {
 		t.Fatal("SubMatrix for 3x3 matrices is wrong")
@@ -162,8 +163,9 @@ func TestSubmatrixOf4x4Is3x3(t *testing.T) {
 		[]float64{-6, 1, 1, 6, -8, 5, 8, 6, -1, 0,
 			8, 2, -7, 1, -1, 1})
 	sm := NewMatrix(3, 3, []float64{-6, 1, 6, -8, 8, 6, -7, -1, 1})
+	scratch := NewMatrix(3, 3, make([]float64, 9))
 
-	sub := m.SubMatrix(2, 1)
+	sub := m.SubMatrix(2, 1, scratch)
 
 	if !sm.Equals(sub) {
 		t.Fatal("SubMatrix for 4x4 matrices is wrong")
@@ -172,10 +174,11 @@ func TestSubmatrixOf4x4Is3x3(t *testing.T) {
 
 func TestMinor3x3(t *testing.T) {
 	m := NewMatrix(3, 3, []float64{3, 5, 0, 2, -1, -7, 6, -1, 5})
-	sm := m.SubMatrix(1, 0)
+	scratch := NewMatrix(2, 2, make([]float64, 4))
+	sm := m.SubMatrix(1, 0, scratch)
 
 	subDet := sm.Det()
-	mMinor := m.Minor(1, 0)
+	mMinor := m.Minor(1, 0, scratch)
 
 	if subDet != 25 {
 		t.Fatal("Sub determinant for 3x3 matrices is wrong")
@@ -187,11 +190,12 @@ func TestMinor3x3(t *testing.T) {
 
 func TestCofactor3x3(t *testing.T) {
 	m := NewMatrix(3, 3, []float64{3, 5, 0, 2, -1, -7, 6, -1, 5})
+	scratch := NewMatrix(2, 2, make([]float64, 4))
 
-	mMinor1 := m.Minor(0, 0)
-	mMinor2 := m.Minor(1, 0)
-	mCofactor1 := m.Cofactor(0, 0)
-	mCofactor2 := m.Cofactor(1, 0)
+	mMinor1 := m.Minor(0, 0, scratch)
+	mMinor2 := m.Minor(1, 0, scratch)
+	mCofactor1 := m.Cofactor(0, 0, scratch)
+	mCofactor2 := m.Cofactor(1, 0, scratch)
 
 	if mMinor1 != -12 {
 		t.Fatal("Minor for 3x3 matrices is wrong")
@@ -209,10 +213,11 @@ func TestCofactor3x3(t *testing.T) {
 
 func TestDeterminant3x3(t *testing.T) {
 	m := NewMatrix(3, 3, []float64{1, 2, 6, -5, 8, -4, 2, 6, 4})
+	scratch := NewMatrix(2, 2, make([]float64, 4))
 
-	mCofactor1 := m.Cofactor(0, 0)
-	mCofactor2 := m.Cofactor(0, 1)
-	mCofactor3 := m.Cofactor(0, 2)
+	mCofactor1 := m.Cofactor(0, 0, scratch)
+	mCofactor2 := m.Cofactor(0, 1, scratch)
+	mCofactor3 := m.Cofactor(0, 2, scratch)
 	det := m.Det()
 
 	if mCofactor1 != 56 {
@@ -231,11 +236,12 @@ func TestDeterminant3x3(t *testing.T) {
 
 func TestDeterminant4x4(t *testing.T) {
 	m := NewMatrix(4, 4, []float64{-2, -8, 3, 5, -3, 1, 7, 3, 1, 2, -9, 6, -6, 7, 7, -9})
+	scratch := NewMatrix(3, 3, make([]float64, 9))
 
-	mCofactor1 := m.Cofactor(0, 0)
-	mCofactor2 := m.Cofactor(0, 1)
-	mCofactor3 := m.Cofactor(0, 2)
-	mCofactor4 := m.Cofactor(0, 3)
+	mCofactor1 := m.Cofactor(0, 0, scratch)
+	mCofactor2 := m.Cofactor(0, 1, scratch)
+	mCofactor3 := m.Cofactor(0, 2, scratch)
+	mCofactor4 := m.Cofactor(0, 3, scratch)
 	det := m.Det()
 
 	if mCofactor1 != 690 {
@@ -279,6 +285,7 @@ func TestInvertible_no(t *testing.T) {
 
 func TestInverse(t *testing.T) {
 	m := NewMatrix(4, 4, []float64{-5, 2, 6, -8, 1, -5, 1, 8, 7, 7, -6, -7, 1, -3, 7, 4})
+	scratch := NewMatrix(3, 3, make([]float64, 9))
 	invExp := NewMatrix(4, 4, []float64{0.21805, 0.45113, 0.24060, -0.04511,
 		-0.80827, -1.45677, -0.44361, 0.52068,
 		-0.07895, -0.22368, -0.05263, 0.19737,
@@ -292,13 +299,13 @@ func TestInverse(t *testing.T) {
 	if m.Det() != 532 {
 		t.Fatal("Determinant is wrong")
 	}
-	if m.Cofactor(2, 3) != -160 {
+	if m.Cofactor(2, 3, scratch) != -160 {
 		t.Fatal("Cofactor is wrong")
 	}
 	if mInv.get(3, 2) != -160.0/532 {
 		t.Fatal("Inverse is wrong")
 	}
-	if m.Cofactor(3, 2) != 105 {
+	if m.Cofactor(3, 2, scratch) != 105 {
 		t.Fatal("Cofactor is wrong")
 	}
 	if mInv.get(2, 3) != 105.0/532 {
