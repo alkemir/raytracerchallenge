@@ -72,8 +72,9 @@ func (i *Intersection) Precompute(ray *Ray, xs []*Intersection) *Comps {
 		inside = true
 		normal = normal.Mul(-1)
 	}
-	overPoint := point.Add(normal.Mul(EPSILON))
-	underPoint := point.Sub(normal.Mul(EPSILON))
+	epsilonN := normal.Mul(EPSILON)
+	overPoint := point.Add(epsilonN)
+	underPoint := point.Sub(epsilonN)
 	reflectv := ray.direction.Reflect(normal)
 
 	containers := make([]Shape, 0, len(xs))

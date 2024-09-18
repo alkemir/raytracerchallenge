@@ -26,7 +26,7 @@ func (s *Cube) Includes(o Shape) bool {
 }
 
 func (s *Cube) concreteNormal(p Tuple, i *Intersection) Tuple {
-	maxC := math.Max(math.Max(math.Abs(p.x), math.Abs(p.y)), math.Abs(p.z))
+	maxC := max(math.Abs(p.x), math.Abs(p.y), math.Abs(p.z))
 	if math.Abs(p.x) == maxC {
 		return NewVector(p.x, 0, 0)
 	}
@@ -41,8 +41,8 @@ func (s *Cube) concreteIntersect(tr *Ray) []*Intersection {
 	ytMin, ytMax := checkAxis(tr.origin.y, tr.direction.y)
 	ztMin, ztMax := checkAxis(tr.origin.z, tr.direction.z)
 
-	tMin := math.Max(math.Max(xtMin, ytMin), ztMin)
-	tMax := math.Min(math.Min(xtMax, ytMax), ztMax)
+	tMin := max(xtMin, ytMin, ztMin)
+	tMax := min(xtMax, ytMax, ztMax)
 
 	if tMin > tMax {
 		return nil
